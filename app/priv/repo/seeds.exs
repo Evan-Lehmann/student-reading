@@ -9,3 +9,18 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias App.Repo
+alias App.Avatars.Avatar
+
+%Avatar{
+  id: 1,
+  image: "/images/astronaut.png",
+}
+|> Repo.insert!()
+
+%Avatar{
+  id: 2,
+  image: "/images/alien.png",
+}
+|> Repo.insert!()

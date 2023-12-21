@@ -136,6 +136,7 @@ defmodule AppWeb.UserSettingsLive do
   end
 
   def handle_event("validate_password", params, socket) do
+    IO.inspect(params)
     %{"current_password" => password, "user" => user_params} = params
 
     password_form =

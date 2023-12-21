@@ -21,6 +21,7 @@ defmodule AppWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/avatar_selection", AvatarSelection
   end
 
   # Other scopes may use custom stacks.
