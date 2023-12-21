@@ -38,9 +38,9 @@ defmodule App.Accounts do
       nil
 
   """
-  def get_user_by_email_and_password(email, password)
+  def get_user_by_username_and_email_and_password(username, email, password)
       when is_binary(email) and is_binary(password) do
-    user = Repo.get_by(User, email: email)
+    user = Repo.get_by(User, email: email, username: username)
     if User.valid_password?(user, password), do: user
   end
 
@@ -90,7 +90,7 @@ defmodule App.Accounts do
 
   """
   def change_user_registration(%User{} = user, attrs \\ %{}) do
-    User.registration_changeset(user, attrs, hash_password: false, validate_email: false)
+    User.registration_changeset(user, attrs, hash_password: false, validate_email: false, validate_username: false)
   end
 
   ## Settings

@@ -31,8 +31,13 @@ defmodule AppWeb.UserRegistrationLive do
           Oops, something went wrong! Please check the errors below.
         </.error>
 
+        <.input field={@form[:username]} type="text" label="Username" required />
         <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
+        <.input field={@form[:type]} type="select" label="Account Type" required value={"student"}
+          options={[{"Student", "student"}, {"Teacher", "teacher"}]}>
+        </.input>
+
 
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>

@@ -4,6 +4,8 @@ defmodule App.Accounts.User do
 
   schema "users" do
     field :email, :string
+    field :username, :string
+    field :type, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -36,9 +38,19 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:username, :email, :password, :type])
+    |> validate_username(opts)
     |> validate_email(opts)
     |> validate_password(opts)
+    |> validate_type(opts)
+  end
+
+  defp validate_username(changeset, opts) do
+    changeset
+    |> validate_required([:username])
+    |> validate_format(:username, ~r/^[^\s]+$/, message: "may not contain spaces")
+    |> validate_length(:username, max: 15)
+    |> maybe_validate_unique_username(opts)
   end
 
   defp validate_email(changeset, opts) do
@@ -60,6 +72,14 @@ defmodule App.Accounts.User do
     |> maybe_hash_password(opts)
   end
 
+  defp validate_type(changeset, opts) do
+    changeset
+    |> validate_required([:type])
+    |> validate_inclusion(:type, ["student", "teacher"])
+    |> maybe_validate_unique_email(opts)
+  end
+
+
   defp maybe_hash_password(changeset, opts) do
     hash_password? = Keyword.get(opts, :hash_password, true)
     password = get_change(changeset, :password)
@@ -70,6 +90,16 @@ defmodule App.Accounts.User do
       # would keep the database transaction open longer and hurt performance.
       |> put_change(:hashed_password, Pbkdf2.hash_pwd_salt(password))
       |> delete_change(:password)
+    else
+      changeset
+    end
+  end
+
+  defp maybe_validate_unique_username(changeset, opts) do
+    if Keyword.get(opts, :validate_username, true) do
+      changeset
+      |> unsafe_validate_unique(:username, App.Repo)
+      |> unique_constraint(:username)
     else
       changeset
     end
