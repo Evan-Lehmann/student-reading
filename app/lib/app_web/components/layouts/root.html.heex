@@ -12,39 +12,57 @@
     </script>
   </head>
   <body class="bg-white antialiased">
-    <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
-      <%= if @current_user do %>
-        <li class="text-[0.8125rem] leading-6 text-zinc-900">
-          <%= @current_user.username %>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/log_out"}
-            method="delete"
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Log out
-          </.link>
-        </li>
-      <% else %>
-        <li>
-          <.link
-            href={~p"/users/register"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Register
-          </.link>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/log_in"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Log in
-          </.link>
-        </li>
-      <% end %>
-    </ul>
+    <%= if @current_user do %>
+      <header class="px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+          <div class="flex items-center gap-4">
+            <a href="/">
+              <img src={~p"/images/logo.svg"} width="36" />
+            </a>
+            <p class="bg-green-800/5 text-green-700 rounded-full px-2 font-medium leading-6">
+              $<%= @current_user.cash %>
+            </p>
+            <a href="/avatar_selection">
+              <img class="rounded-full" src={~p"/images/astronaut.png"} width="36" />
+            </a>
+            <p><%= @current_user.username %></p>
+            <.link
+              href={~p"/users/log_out"}
+              method="delete"
+              class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+            >
+              Log out
+            </.link>
+          </div>
+          <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+          </div>
+        </div>
+      </header>
+    <% else %>
+      <header class="px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+          <div class="flex items-center gap-4">
+            <a href="/">
+              <img src={~p"/images/logo.svg"} width="36" />
+            </a>
+            <.link
+              href={~p"/users/log_in"}
+              class="rounded-lg"
+            >
+              Log in
+            </.link>
+            <.link
+              href={~p"/users/register"}
+              class="rounded-lg"
+            >
+              Register
+            </.link>
+          </div>
+          <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+          </div>
+        </div>
+      </header>
+    <% end %>
     <%= @inner_content %>
   </body>
 </html>

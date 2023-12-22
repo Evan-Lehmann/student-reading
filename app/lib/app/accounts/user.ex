@@ -4,7 +4,7 @@ defmodule App.Accounts.User do
 
   schema "users" do
     field :username, :string
-    field :type, :string
+    field :cash, :integer
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -37,10 +37,10 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :password, :type])
+    |> cast(attrs, [:username, :password, :cash])
     |> validate_username(opts)
     |> validate_password(opts)
-    |> validate_type(opts)
+    |> validate_cash(opts)
   end
 
   defp validate_username(changeset, opts) do
@@ -62,10 +62,9 @@ defmodule App.Accounts.User do
     |> maybe_hash_password(opts)
   end
 
-  defp validate_type(changeset, _opts) do
+  defp validate_cash(changeset, _opts) do
     changeset
-    |> validate_required([:type])
-    |> validate_inclusion(:type, ["student", "teacher"])
+    |> validate_required([:cash])
   end
 
 

@@ -33,9 +33,7 @@ defmodule AppWeb.UserRegistrationLive do
 
         <.input field={@form[:username]} type="text" label="Username" required />
         <.input field={@form[:password]} type="password" label="Password" required />
-        <.input field={@form[:type]} type="select" label="Account Type" required value={"student"}
-          options={[{"Student", "student"}, {"Teacher", "teacher"}]}>
-        </.input>
+        <.input field={@form[:cash]} type="number" label="Cash" value={500} readonly required />
 
 
         <:actions>
