@@ -3,7 +3,6 @@ defmodule App.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
-    field :email, :string
     field :username, :string
     field :type, :string
     field :password, :string, virtual: true, redact: true
@@ -38,9 +37,8 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :email, :password, :type])
+    |> cast(attrs, [:username, :password, :type])
     |> validate_username(opts)
-    |> validate_email(opts)
     |> validate_password(opts)
     |> validate_type(opts)
   end
@@ -48,17 +46,9 @@ defmodule App.Accounts.User do
   defp validate_username(changeset, opts) do
     changeset
     |> validate_required([:username])
-    |> validate_format(:username, ~r/^[^\s]+$/, message: "may not contain spaces")
+    |> validate_format(:username, ~r/^[^\s]+$/, message: "no spaces")
     |> validate_length(:username, max: 15)
     |> maybe_validate_unique_username(opts)
-  end
-
-  defp validate_email(changeset, opts) do
-    changeset
-    |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
-    |> validate_length(:email, max: 160)
-    |> maybe_validate_unique_email(opts)
   end
 
   defp validate_password(changeset, opts) do
@@ -72,11 +62,10 @@ defmodule App.Accounts.User do
     |> maybe_hash_password(opts)
   end
 
-  defp validate_type(changeset, opts) do
+  defp validate_type(changeset, _opts) do
     changeset
     |> validate_required([:type])
     |> validate_inclusion(:type, ["student", "teacher"])
-    |> maybe_validate_unique_email(opts)
   end
 
 
@@ -105,31 +94,6 @@ defmodule App.Accounts.User do
     end
   end
 
-  defp maybe_validate_unique_email(changeset, opts) do
-    if Keyword.get(opts, :validate_email, true) do
-      changeset
-      |> unsafe_validate_unique(:email, App.Repo)
-      |> unique_constraint(:email)
-    else
-      changeset
-    end
-  end
-
-  @doc """
-  A user changeset for changing the email.
-
-  It requires the email to change otherwise an error is added.
-  """
-  def email_changeset(user, attrs, opts \\ []) do
-    user
-    |> cast(attrs, [:email])
-    |> validate_email(opts)
-    |> case do
-      %{changes: %{email: _}} = changeset -> changeset
-      %{} = changeset -> add_error(changeset, :email, "did not change")
-    end
-  end
-
   @doc """
   A user changeset for changing the password.
 
@@ -148,6 +112,7 @@ defmodule App.Accounts.User do
     |> validate_confirmation(:password, message: "does not match password")
     |> validate_password(opts)
   end
+
 
   @doc """
   Confirms the account by setting `confirmed_at`.

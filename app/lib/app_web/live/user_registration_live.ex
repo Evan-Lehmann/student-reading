@@ -32,7 +32,6 @@ defmodule AppWeb.UserRegistrationLive do
         </.error>
 
         <.input field={@form[:username]} type="text" label="Username" required />
-        <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
         <.input field={@form[:type]} type="select" label="Account Type" required value={"student"}
           options={[{"Student", "student"}, {"Teacher", "teacher"}]}>
@@ -61,12 +60,6 @@ defmodule AppWeb.UserRegistrationLive do
   def handle_event("save", %{"user" => user_params}, socket) do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
-        {:ok, _} =
-          Accounts.deliver_user_confirmation_instructions(
-            user,
-            &url(~p"/users/confirm/#{&1}")
-          )
-
         changeset = Accounts.change_user_registration(user)
         {:noreply, socket |> assign(trigger_submit: true) |> assign_form(changeset)}
 
