@@ -505,4 +505,58 @@ defmodule App.AccountsTest do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
   end
+
+  describe "user_avatars" do
+    alias App.Accounts.UserAvatars
+
+    import App.AccountsFixtures
+
+    @invalid_attrs %{is_unlocked: nil}
+
+    test "list_user_avatars/0 returns all user_avatars" do
+      user_avatars = user_avatars_fixture()
+      assert Accounts.list_user_avatars() == [user_avatars]
+    end
+
+    test "get_user_avatars!/1 returns the user_avatars with given id" do
+      user_avatars = user_avatars_fixture()
+      assert Accounts.get_user_avatars!(user_avatars.id) == user_avatars
+    end
+
+    test "create_user_avatars/1 with valid data creates a user_avatars" do
+      valid_attrs = %{is_unlocked: true}
+
+      assert {:ok, %UserAvatars{} = user_avatars} = Accounts.create_user_avatars(valid_attrs)
+      assert user_avatars.is_unlocked == true
+    end
+
+    test "create_user_avatars/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user_avatars(@invalid_attrs)
+    end
+
+    test "update_user_avatars/2 with valid data updates the user_avatars" do
+      user_avatars = user_avatars_fixture()
+      update_attrs = %{is_unlocked: false}
+
+      assert {:ok, %UserAvatars{} = user_avatars} = Accounts.update_user_avatars(user_avatars, update_attrs)
+      assert user_avatars.is_unlocked == false
+    end
+
+    test "update_user_avatars/2 with invalid data returns error changeset" do
+      user_avatars = user_avatars_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user_avatars(user_avatars, @invalid_attrs)
+      assert user_avatars == Accounts.get_user_avatars!(user_avatars.id)
+    end
+
+    test "delete_user_avatars/1 deletes the user_avatars" do
+      user_avatars = user_avatars_fixture()
+      assert {:ok, %UserAvatars{}} = Accounts.delete_user_avatars(user_avatars)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user_avatars!(user_avatars.id) end
+    end
+
+    test "change_user_avatars/1 returns a user_avatars changeset" do
+      user_avatars = user_avatars_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_user_avatars(user_avatars)
+    end
+  end
 end

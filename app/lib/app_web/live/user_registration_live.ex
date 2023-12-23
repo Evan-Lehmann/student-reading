@@ -36,7 +36,11 @@ defmodule AppWeb.UserRegistrationLive do
         <.input field={@form[:type]} type="select" label="Account Type" required value={"student"}
           options={[{"Student", "student"}, {"Teacher", "teacher"}]}>
         </.input>
-        <.input :if={@form[:type].value != "teacher"} field={@form[:cash]} type="number" label="Cash" value={500} readonly required />
+
+        <.input :if={@form[:type].value == "student"} field={@form[:cash]} type="number" label="Cash" value={500} readonly required />
+        <.input :if={@form[:type].value == "student"} field={@form[:avatar]}  type="select" label="Avatar" required
+          options={[{"Astronaut", "/images/astronaut.png"}, {"Alien", "/images/alien.png"}]}>
+        </.input>
 
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>

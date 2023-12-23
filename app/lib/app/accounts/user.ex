@@ -6,6 +6,7 @@ defmodule App.Accounts.User do
     field :username, :string
     field :cash, :integer
     field :type, :string
+    field :avatar, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -38,7 +39,7 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :password, :type, :cash])
+    |> cast(attrs, [:username, :password, :type, :cash, :avatar])
     |> validate_username(opts)
     |> validate_password(opts)
     |> validate_type(opts)

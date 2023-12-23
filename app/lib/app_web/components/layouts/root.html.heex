@@ -26,7 +26,7 @@
                 $<%= @current_user.cash %>
               </p>
               <a href="/avatar_selection">
-                <img class="rounded-full" src={~p"/images/astronaut.png"} width="36" />
+                <img class="rounded-full border-2 border-dashed border-orange-500" src={@current_user.avatar} width="36" />
               </a>
             <% end %>
             <.link
@@ -34,7 +34,7 @@
               method="delete"
               class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
             >
-              Log out
+              Log Out
             </.link>
           </div>
           <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">

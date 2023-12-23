@@ -28,4 +28,18 @@ defmodule App.AccountsFixtures do
     [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
   end
+
+  @doc """
+  Generate a user_avatars.
+  """
+  def user_avatars_fixture(attrs \\ %{}) do
+    {:ok, user_avatars} =
+      attrs
+      |> Enum.into(%{
+        is_unlocked: true
+      })
+      |> App.Accounts.create_user_avatars()
+
+    user_avatars
+  end
 end
