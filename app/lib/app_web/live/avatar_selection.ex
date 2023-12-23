@@ -3,16 +3,15 @@ defmodule AppWeb.AvatarSelection do
   alias App.Avatars
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, astronaut: Avatars.get_avatar!(1), alien: Avatars.get_avatar!(2))
+    socket = assign(socket, avatars: Avatars.list_avatars)
 
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
-    <img class="rounded-full w-20 h-20" src={@astronaut.image} />
-    <br>
-    <img class="rounded-full w-20 h-20 opacity-50" src={@alien.image} />
+    <img :for={avatar <- @avatars} class="rounded-full w-20 h-20 border-solid" src={avatar.image} />
+
 
 
     """

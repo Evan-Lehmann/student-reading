@@ -3,7 +3,7 @@ defmodule App.Repo.Migrations.CreateUsersCashCol do
 
   def change do
     alter table("users") do
-      add :cash, :integer, null: false
+      add :cash, :integer
     end
   end
 end

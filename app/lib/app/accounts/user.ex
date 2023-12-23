@@ -5,6 +5,7 @@ defmodule App.Accounts.User do
   schema "users" do
     field :username, :string
     field :cash, :integer
+    field :type, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -37,10 +38,10 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :password, :cash])
+    |> cast(attrs, [:username, :password, :type, :cash])
     |> validate_username(opts)
     |> validate_password(opts)
-    |> validate_cash(opts)
+    |> validate_type(opts)
   end
 
   defp validate_username(changeset, opts) do
@@ -62,11 +63,11 @@ defmodule App.Accounts.User do
     |> maybe_hash_password(opts)
   end
 
-  defp validate_cash(changeset, _opts) do
+  defp validate_type(changeset, _opts) do
     changeset
-    |> validate_required([:cash])
+    |> validate_required([:type])
+    |> validate_inclusion(:type, ["student", "teacher"])
   end
-
 
   defp maybe_hash_password(changeset, opts) do
     hash_password? = Keyword.get(opts, :hash_password, true)

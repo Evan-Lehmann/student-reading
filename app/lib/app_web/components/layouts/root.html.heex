@@ -19,13 +19,16 @@
             <a href="/">
               <img src={~p"/images/logo.svg"} width="36" />
             </a>
-            <p class="bg-green-800/5 text-green-700 rounded-full px-2 font-medium leading-6">
-              $<%= @current_user.cash %>
-            </p>
-            <a href="/avatar_selection">
-              <img class="rounded-full" src={~p"/images/astronaut.png"} width="36" />
-            </a>
             <p><%= @current_user.username %></p>
+            <p><%= @current_user.type %></p>
+            <%= if @current_user.type == "student" do %>
+              <p class="bg-green-800/5 text-green-700 rounded-full px-2 font-medium leading-6">
+                $<%= @current_user.cash %>
+              </p>
+              <a href="/avatar_selection">
+                <img class="rounded-full" src={~p"/images/astronaut.png"} width="36" />
+              </a>
+            <% end %>
             <.link
               href={~p"/users/log_out"}
               method="delete"
