@@ -114,6 +114,16 @@ defmodule App.Accounts.User do
     |> validate_password(opts)
   end
 
+  def avatar_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:avatar])
+    |> case do
+      %{changes: %{avatar: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :avatar, "did not change")
+    end
+  end
+
+
 
   @doc """
   Confirms the account by setting `confirmed_at`.

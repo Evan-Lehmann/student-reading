@@ -172,6 +172,21 @@ defmodule AppWeb.UserAuth do
     end
   end
 
+  def on_mount(:require_student, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user && socket.assigns.current_user.type == "student" do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "Only students can access this page!")
+        |> Phoenix.LiveView.redirect(to: ~p"/")
+
+      {:halt, socket}
+    end
+  end
+
   defp mount_current_user(socket, session) do
     Phoenix.Component.assign_new(socket, :current_user, fn ->
       if user_token = session["user_token"] do
@@ -192,6 +207,20 @@ defmodule AppWeb.UserAuth do
       conn
     end
   end
+
+
+  def require_student(conn, _opts) do
+    if conn.assigns[:current_user] && conn.assigns[:current_user].type == "student" do
+      conn
+    else
+      conn
+      |> put_flash(:error, "Only students can access this page!")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
 
   @doc """
   Used for routes that require the user to be authenticated.

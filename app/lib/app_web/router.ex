@@ -21,7 +21,6 @@ defmodule AppWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    live "/avatar_selection", AvatarSelection
   end
 
   # Other scopes may use custom stacks.
@@ -61,7 +60,14 @@ defmodule AppWeb.Router do
   end
 
   scope "/", AppWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through [:browser, :require_student]
+
+
+    live_session :require_student,
+      on_mount: [{AppWeb.UserAuth, :require_student}] do
+      live "/avatar_selection", AvatarSelection
+    end
+
   end
 
   scope "/", AppWeb do

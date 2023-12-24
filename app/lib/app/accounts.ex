@@ -44,6 +44,7 @@ defmodule App.Accounts do
     if User.valid_password?(user, password), do: user
   end
 
+
   @doc """
   Gets a single user.
 
@@ -109,6 +110,13 @@ defmodule App.Accounts do
   end
 
   @doc """
+
+  """
+  def change_user_avatar(user, attrs \\ %{}) do
+    User.avatar_changeset(user, attrs)
+  end
+
+  @doc """
   Updates the user password.
 
   ## Examples
@@ -134,6 +142,14 @@ defmodule App.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  @doc """
+  """
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.avatar_changeset(attrs)
+    |> Repo.update()
   end
 
   ## Session
