@@ -7,6 +7,7 @@ defmodule App.Accounts.User do
     field :cash, :integer
     field :type, :string
     field :avatar, :string
+    field :last_score, :integer
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -114,12 +115,21 @@ defmodule App.Accounts.User do
     |> validate_password(opts)
   end
 
-  def avatar_changeset(user, attrs, opts \\ []) do
+  def avatar_changeset(user, attrs) do
     user
     |> cast(attrs, [:avatar])
     |> case do
       %{changes: %{avatar: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :avatar, "did not change")
+    end
+  end
+
+  def last_score_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:last_score])
+    |> case do
+      %{changes: %{last_score: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :last_score, "did not change")
     end
   end
 

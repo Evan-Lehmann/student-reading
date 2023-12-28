@@ -30,7 +30,7 @@ defmodule AppWeb.AvatarSelection do
 
     <.simple_form for={@avatar_form} phx-submit="update_avatar">
       <%= if @current_avatar != @selected_avatar do %>
-        <.input field={@avatar_form[:avatar]} type="textf" value={@selected_avatar} readonly required />
+        <.input field={@avatar_form[:avatar]} type="text" value={@selected_avatar} readonly required />
         <.button phx-disable-with="Changing" class="w-full">
           Change Avatar
         </.button>
@@ -49,12 +49,12 @@ defmodule AppWeb.AvatarSelection do
     {:noreply, socket}
   end
 
-  def handle_event("update_avatar", params, socket) do
+  def handle_event("update_avatar", _params, socket) do
     user = socket.assigns.current_user
     selected_avatar = socket.assigns.selected_avatar
 
     case Accounts.update_user(user, %{avatar: selected_avatar}) do
-      {:ok, user} ->
+      {:ok, _user} ->
         {:noreply,
          socket
          |> redirect(to: ~p"/")

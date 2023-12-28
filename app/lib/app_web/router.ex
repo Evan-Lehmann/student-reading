@@ -66,6 +66,7 @@ defmodule AppWeb.Router do
     live_session :require_student,
       on_mount: [{AppWeb.UserAuth, :require_student}] do
       live "/avatar_selection", AvatarSelection
+      live "/quiz_live", QuizLive
     end
 
   end
