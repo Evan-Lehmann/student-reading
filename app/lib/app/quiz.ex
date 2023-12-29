@@ -299,6 +299,10 @@ defmodule App.Quiz do
       where: a.question_id == ^question_id)
   end
 
-
+  def get_questions_of_story(story_id) do
+    Repo.all(from q in Question,
+      where: q.story_id == ^story_id,
+      select: q.id)
+  end
 
 end

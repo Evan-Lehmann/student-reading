@@ -56,7 +56,6 @@ alias App.Quiz.{Story, Question, Answer}
 |> Repo.insert!()
 
 %Answer{
-  id: 1,
   question_id: 1,
   content: "Latin",
   is_correct: true
@@ -64,7 +63,6 @@ alias App.Quiz.{Story, Question, Answer}
 |> Repo.insert!()
 
 %Answer{
-  id: 2,
   question_id: 1,
   content: "French",
   is_correct: false
@@ -72,9 +70,64 @@ alias App.Quiz.{Story, Question, Answer}
 |> Repo.insert!()
 
 %Answer{
-  id: 3,
   question_id: 1,
   content: "Italian",
   is_correct: false
+}
+|> Repo.insert!()
+
+%Question{
+  id: 2,
+  story_id: 1,
+  content: "When is the excerpt thought to have originated?"
+}
+|> Repo.insert!()
+
+%Answer{
+  question_id: 2,
+  content: "5th century CE",
+  is_correct: false
+}
+|> Repo.insert!()
+
+%Answer{
+  question_id: 2,
+  content: "1st century BC",
+  is_correct: true
+}
+|> Repo.insert!()
+
+%Answer{
+  question_id: 2,
+  content: "2nd century CE",
+  is_correct: false
+}
+|> Repo.insert!()
+
+%Question{
+  id: 3,
+  story_id: 1,
+  content: "Who is thought to be the author?"
+}
+|> Repo.insert!()
+
+%Answer{
+  question_id: 3,
+  content: "Socrates",
+  is_correct: false
+}
+|> Repo.insert!()
+
+%Answer{
+  question_id: 3,
+  content: "Diogenes",
+  is_correct: false
+}
+|> Repo.insert!()
+
+%Answer{
+  question_id: 3,
+  content: "Cicero",
+  is_correct: true
 }
 |> Repo.insert!()
