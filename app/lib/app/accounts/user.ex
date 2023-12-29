@@ -2,11 +2,15 @@ defmodule App.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias App.Accounts
+
   schema "users" do
     field :username, :string
     field :cash, :integer
     field :type, :string
     field :avatar, :string
+    field :join_code, :string
+    field :class, :string
     field :last_score, :integer
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
@@ -40,10 +44,11 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :password, :type, :cash, :avatar])
+    |> cast(attrs, [:username, :password, :type, :cash, :avatar, :join_code, :class])
     |> validate_username(opts)
     |> validate_password(opts)
     |> validate_type(opts)
+    |> validate_join_code(opts)
   end
 
   defp validate_username(changeset, opts) do
@@ -70,6 +75,18 @@ defmodule App.Accounts.User do
     |> validate_required([:type])
     |> validate_inclusion(:type, ["student", "teacher"])
   end
+
+  defp validate_join_code(changeset, _opts) do
+    changeset
+    |> unsafe_validate_unique(:join_code, App.Repo)
+    |> unique_constraint(:join_code)
+  end
+
+  defp validate_class(changeset) do
+    changeset
+    |> validate_inclusion(:type, Accounts.list_teacher_names)
+  end
+
 
   defp maybe_hash_password(changeset, opts) do
     hash_password? = Keyword.get(opts, :hash_password, true)
@@ -121,6 +138,16 @@ defmodule App.Accounts.User do
     |> case do
       %{changes: %{avatar: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :avatar, "did not change")
+    end
+  end
+
+  def class_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:class])
+    |> validate_class
+    |> case do
+      %{changes: %{class: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :class, "did not change")
     end
   end
 

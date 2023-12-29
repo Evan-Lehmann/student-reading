@@ -1,35 +1,37 @@
 defmodule AppWeb.QuizLive do
   use AppWeb, :live_view
-  alias App.Quiz
-  import AppWeb.CustomComponents
+  #alias App.Quiz
+  #import AppWeb.CustomComponents
 
   def mount(_params, _session, socket) do
-    form = to_form(%{}, as: "quiz_attempt")
+    #form = to_form(%{}, as: "quiz_attempt")
 
-    if connected?(socket) do
-      {q_ids, rand} = get_next_question_id(Quiz.get_questions_of_story(1))
-      socket = assign(socket,
-        story: Quiz.get_story!(1),
-        form: form,
-        q_ids: q_ids,
-        question: Quiz.get_question!(rand),
-        answers: Quiz.get_answers_of_question(rand),
-      )
-      {:ok, socket}
-    else
-      socket = assign(socket,
-        story: nil,
-        form: form,
-        q_ids: nil,
-        question: nil,
-        answers: nil,
-      )
-      {:ok, socket}
-    end
+    #if connected?(socket) do
+    #  {q_ids, rand} = get_next_question_id(Quiz.get_questions_of_story(1))
+    #  socket = assign(socket,
+    #    story: Quiz.get_story!(1),
+    #    form: form,
+    #    q_ids: q_ids,
+    #    question: Quiz.get_question!(rand),
+    #    answers: Quiz.get_answers_of_question(rand),
+    #  )
+    #  {:ok, socket}
+    #else
+    #  socket = assign(socket,
+    #    story: nil,
+    #    form: form,
+    #    q_ids: nil,
+    #    question: nil,
+    #    answers: nil,
+    #  )
+    #  {:ok, socket}
+    #end
+    {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
+    <!--
     <div :if={@question != nil} class="flex flex-row">
       <div class="bg-slate-200 overflow-y-auto h-64 basis-1/2">
         <h2 class="text-xl font-bold">Placeholder Title</h2>
@@ -47,9 +49,11 @@ defmodule AppWeb.QuizLive do
         <% end %>
       </div>
     </div>
+    -->
     """
   end
 
+  @doc"""
   def handle_event("next", _params, socket) do
     case get_next_question_id(socket.assigns.q_ids) do
       {q_ids, rand} ->
@@ -68,4 +72,5 @@ defmodule AppWeb.QuizLive do
       {:error}
     end
   end
+  """
 end

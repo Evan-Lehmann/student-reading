@@ -37,10 +37,13 @@ defmodule AppWeb.UserRegistrationLive do
           options={[{"Student", "student"}, {"Teacher", "teacher"}]}>
         </.input>
 
+        <.input :if={@form[:type].value == "teacher"} field={@form[:join_code]} type="text" label="Class Join Code" required />
         <.input :if={@form[:type].value == "student"} field={@form[:cash]} type="number" label="Cash" value={500} readonly required />
         <.input :if={@form[:type].value == "student"} field={@form[:avatar]}  type="select" label="Avatar" required
           options={[{"Astronaut", "/images/astronaut.png"}, {"Alien", "/images/alien.png"}]}>
         </.input>
+
+
 
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>

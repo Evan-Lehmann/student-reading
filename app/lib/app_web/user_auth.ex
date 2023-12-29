@@ -208,7 +208,6 @@ defmodule AppWeb.UserAuth do
     end
   end
 
-
   def require_student(conn, _opts) do
     if conn.assigns[:current_user] && conn.assigns[:current_user].type == "student" do
       conn
@@ -220,7 +219,6 @@ defmodule AppWeb.UserAuth do
       |> halt()
     end
   end
-
 
   @doc """
   Used for routes that require the user to be authenticated.

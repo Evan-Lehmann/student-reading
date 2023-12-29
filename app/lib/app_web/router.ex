@@ -62,11 +62,9 @@ defmodule AppWeb.Router do
   scope "/", AppWeb do
     pipe_through [:browser, :require_student]
 
-
     live_session :require_student,
       on_mount: [{AppWeb.UserAuth, :require_student}] do
-      live "/avatar_selection", AvatarSelection
-      live "/quiz_live", QuizLive
+      live "/class", ClassLive
     end
 
   end

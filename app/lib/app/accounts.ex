@@ -26,6 +26,17 @@ defmodule App.Accounts do
     Repo.get_by(User, username: username)
   end
 
+  def list_teacher_names do
+    Repo.all(from u in User,
+      where: u.type == "teacher",
+      select: u.username)
+  end
+
+  def list_students_in_class(class) do
+    Repo.all(from u in User,
+      where: u.type == "student" and u.class == ^class,
+      select: u.username)
+  end
   @doc """
   Gets a user by email and password.
 
@@ -116,6 +127,11 @@ defmodule App.Accounts do
     User.avatar_changeset(user, attrs)
   end
 
+
+  def change_user_class(user, attrs \\ %{}) do
+    User.class_changeset(user, attrs)
+  end
+
   @doc """
   Updates the user password.
 
@@ -149,6 +165,18 @@ defmodule App.Accounts do
   def update_user(%User{} = user, attrs) do
     user
     |> User.avatar_changeset(attrs)
+    |> Repo.update()
+  end
+
+  def get_teacher_name_by_join_code(join_code) do
+    Repo.one(from u in User,
+      where: u.join_code == ^join_code,
+      select: u.username)
+  end
+
+  def update_user_class(%User{} = user, attrs) do
+    user
+    |> User.class_changeset(attrs)
     |> Repo.update()
   end
 
