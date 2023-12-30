@@ -1,4 +1,4 @@
-defmodule AppWeb.StudentClassLive do
+defmodule AppWeb.ClassSettingsLive do
   use AppWeb, :live_view
   alias App.Accounts
 

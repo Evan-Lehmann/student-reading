@@ -187,18 +187,17 @@ defmodule AppWeb.UserAuth do
     end
   end
 
-  def on_mount(:require_student_and_class, _params, session, socket) do
+  def on_mount(:require_teacher_or_student_in_class, _params, session, socket) do
     socket = mount_current_user(socket, session)
 
-    if socket.assigns.current_user && socket.assigns.current_user.type == "student" && socket.assigns.current_user.class != nil do
+    if socket.assigns.current_user && ((socket.assigns.current_user.type == "student" && socket.assigns.current_user.class != nil) || socket.assigns.current_user.type == "teacher") do
       {:cont, socket}
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "Must be student and in a class!")
+        |> Phoenix.LiveView.put_flash(:error, "Must be teacher or student in a class!")
         |> Phoenix.LiveView.redirect(to: ~p"/")
-
-      {:halt, socket}
+          {:halt, socket}
     end
   end
 
@@ -235,12 +234,12 @@ defmodule AppWeb.UserAuth do
     end
   end
 
-  def require_student_and_class(conn, _opts) do
-    if conn.assigns[:current_user] && conn.assigns[:current_user].type == "student" && conn.assigns[:current_user].class != nil do
+  def require_teacher_or_student_in_class(conn, _opts) do
+    if conn.assigns[:current_user] && ((conn.assigns[:current_user].type == "student" && conn.assigns[:current_user].class != nil) || conn.assigns[:current_user].type == "teacher") do
       conn
     else
       conn
-      |> put_flash(:error, "Must be student and in a class!")
+      |> put_flash(:error, "Must be teacher or student in a class!")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
       |> halt()

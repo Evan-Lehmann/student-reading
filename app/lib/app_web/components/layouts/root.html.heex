@@ -32,7 +32,7 @@
           <div class="flex items-center gap-4 font-semibold leading-6">
             <%= if @current_user.type == "student" do %>
               <.link
-                href={~p"/student/class"}
+                href={~p"/class_settings"}
                 class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
               >
                 Manage Class
@@ -40,17 +40,17 @@
               <p class="text-blue-600" :if={@current_user.class != nil}> Class: <%= @current_user.class %> </p>
               <.link
                 :if={@current_user.class != nil}
-                href={~p"/leaderboard"}
+                href={~p"/class_index"}
                 class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80 text-orange-800"
               >
-                Leaderboard
+                Class Index
               </.link>
             <% else %>
               <.link
-                href={~p"/"}
+                href={~p"/class_index"}
                 class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
               >
-                Manage Class
+                Class Index
               </.link>
             <% end %>
           </div>
