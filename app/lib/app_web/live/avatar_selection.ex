@@ -1,13 +1,13 @@
 defmodule AppWeb.AvatarSelection do
   use AppWeb, :live_view
-  #alias App.Avatars
-  #alias App.Accounts
+  alias App.Avatars
+  alias App.Accounts
 
   def mount(_params, _session, socket) do
-    #user = socket.assigns.current_user
-    #avatar_changeset = Accounts.change_user_avatar(user)
+    user = socket.assigns.current_user
+    avatar_changeset = Accounts.change_user_avatar(user)
 
-    #socket = assign(socket, avatars: Avatars.list_avatars, current_avatar: user.avatar, selected_avatar: user.avatar, avatar_form: to_form(avatar_changeset))
+    socket = assign(socket, avatars: Avatars.list_avatars, current_avatar: user.avatar, selected_avatar: user.avatar, avatar_form: to_form(avatar_changeset))
 
     {:ok, socket}
   end
@@ -16,7 +16,6 @@ defmodule AppWeb.AvatarSelection do
     ~H"""
     <h1>Avatars</h1>
 
-    <!--
     <%= for avatar <- @avatars do %>
       <%= if @selected_avatar == avatar.image do %>
         <button disabled>
@@ -41,11 +40,9 @@ defmodule AppWeb.AvatarSelection do
         </.button>
       <% end %>
     </.simple_form>
-    -->
     """
   end
 
-  @doc"""
   def handle_event("change", %{"avatar" => avatar}, socket) do
     socket = assign(socket, selected_avatar: avatar)
 
@@ -68,5 +65,4 @@ defmodule AppWeb.AvatarSelection do
         {:noreply, socket}
     end
   end
-  """
 end

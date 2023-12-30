@@ -2,10 +2,6 @@ defmodule AppWeb.CustomComponents do
   use Phoenix.Component
   use AppWeb, :html
 
-
-  alias Phoenix.LiveView.JS
-  import AppWeb.Gettext
-
   ## RadioInput
   attr :answer_id, :string, required: true
   attr :answer_content, :string, required: true

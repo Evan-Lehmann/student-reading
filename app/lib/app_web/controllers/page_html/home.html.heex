@@ -1,1 +1,13 @@
 <.flash_group flash={@flash} />
+
+<%= if @current_user && @current_user.type == "student" && @current_user.class == nil do %>
+    <div class="p-5">
+        <.link href={~p"/class_settings"} class="text-xl text-blue-700">Join a class to start playing!</.link>
+    </div>
+<% end %>
+
+<%= if @current_user && @current_user.type == "student" && @current_user.class != nil do %>
+    <div class="p-5">
+        <.link href={~p"/quiz_live"} class="rounded-lg bg-zinc-800 px-2 py-1 hover:bg-zinc-800/80 text-white">Join a Game</.link>
+    </div>
+<% end %> 

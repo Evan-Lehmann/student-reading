@@ -16,7 +16,7 @@ defmodule AppWeb.ClassIndexLive do
   def render(assigns) do
     ~H"""
     <.table id="students" rows={@students}>
-      <:col :let={student} class="font-bold" label="username"><%= student.username %></:col>
+      <:col :let={student} label="username"><%= student.username %></:col>
       <:col :let={student} label="cash"><%= student.cash %></:col>
       <:col :if={@current_user.type == "teacher"} :let={student}>
         <button class="rounded-lg bg-red-600 px-2 py-1 hover:bg-red-600/80 text-white" phx-click="remove" value={student.id}>
@@ -35,8 +35,7 @@ defmodule AppWeb.ClassIndexLive do
         socket = assign(socket, students: students)
         {:noreply, socket}
 
-      {:error, _} ->
-        socket
+      {:error, _changeset} ->
         {:noreply, socket
          |> put_flash(:error, "Something went wrong!")}
     end

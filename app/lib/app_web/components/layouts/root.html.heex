@@ -21,6 +21,14 @@
             </a>
             <p><%= @current_user.username %></p>
             <p><%= @current_user.type %></p>
+            <%= if @current_user.type == "student" do %>
+              <p class="bg-green-800/5 text-green-700 rounded-full px-2 font-medium leading-6">
+                $<%= @current_user.cash %>
+              </p>
+              <a href="/avatar_selection">
+                <img class="rounded-full border-2 border-dashed border-orange-500" src={@current_user.avatar} width="36" />
+              </a>
+            <% end %>
             <.link
               href={~p"/users/log_out"}
               method="delete"
@@ -48,7 +56,7 @@
             <% else %>
               <.link
                 href={~p"/class_index"}
-                class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+                class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80 text-orange-800"
               >
                 Class Index
               </.link>
