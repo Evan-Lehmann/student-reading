@@ -1,4 +1,4 @@
-defmodule AppWeb.ClassLive do
+defmodule AppWeb.StudentClassLive do
   use AppWeb, :live_view
   alias App.Accounts
 
@@ -16,12 +16,6 @@ defmodule AppWeb.ClassLive do
   def render(assigns) do
     ~H"""
     <span class="font-bold text-red-900">Current Class: <%= @current_class %> </span>
-    <%= if @current_class != nil do %>
-      <p>Students in class:</p>
-      <ul>
-        <li :for={student <- Accounts.list_students_in_class(@current_class)}> <%= student %> </li>
-      </ul>
-    <% end %>
 
     <.simple_form for={@code_form} phx-submit="check" >
       <.input field={@code_form[:code]} type="text" required/>

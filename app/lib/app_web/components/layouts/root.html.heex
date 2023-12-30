@@ -30,7 +30,29 @@
             </.link>
           </div>
           <div class="flex items-center gap-4 font-semibold leading-6">
-            <p class="text-blue-600" :if={@current_user.class != nil}> Class: <%= @current_user.class %> </p>
+            <%= if @current_user.type == "student" do %>
+              <.link
+                href={~p"/student/class"}
+                class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+              >
+                Manage Class
+              </.link>
+              <p class="text-blue-600" :if={@current_user.class != nil}> Class: <%= @current_user.class %> </p>
+              <.link
+                :if={@current_user.class != nil}
+                href={~p"/leaderboard"}
+                class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80 text-orange-800"
+              >
+                Leaderboard
+              </.link>
+            <% else %>
+              <.link
+                href={~p"/"}
+                class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+              >
+                Manage Class
+              </.link>
+            <% end %>
           </div>
         </div>
       </header>

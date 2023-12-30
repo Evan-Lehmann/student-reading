@@ -32,10 +32,16 @@ defmodule App.Accounts do
       select: u.username)
   end
 
-  def list_students_in_class(class) do
+  def list_student_names_in_class(class) do
     Repo.all(from u in User,
       where: u.type == "student" and u.class == ^class,
       select: u.username)
+  end
+
+  def list_students_in_class(class) do
+    Repo.all(from u in User,
+      where: u.type == "student" and u.class == ^class,
+      order_by: u.cash)
   end
   @doc """
   Gets a user by email and password.
