@@ -26,7 +26,7 @@
                 $<%= @current_user.cash %>
               </p>
               <a href="/avatar_selection">
-                <img class="rounded-full border-2 border-dashed border-orange-500" src={@current_user.avatar} width="36" />
+                <.avatar src={Accounts.get_avatar_image_by_user(@current_user)} rarity={Accounts.get_avatar_rarity_by_user(@current_user)} width="36" />
               </a>
             <% end %>
             <.link

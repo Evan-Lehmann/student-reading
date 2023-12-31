@@ -61,6 +61,20 @@ defmodule App.Accounts do
     if User.valid_password?(user, password), do: user
   end
 
+  def get_avatar_image_by_user(user) do
+    Ecto.assoc(user, :avatar)
+
+    Repo.one(from u in Ecto.assoc(user, :avatar),
+      select: u.image)
+  end
+
+  def get_avatar_rarity_by_user(user) do
+    Ecto.assoc(user, :avatar)
+
+    Repo.one(from u in Ecto.assoc(user, :avatar),
+      select: u.rarity)
+  end
+
 
   @doc """
   Gets a single user.
@@ -130,7 +144,7 @@ defmodule App.Accounts do
 
   """
   def change_user_avatar(user, attrs \\ %{}) do
-    User.avatar_changeset(user, attrs)
+    User.avatar_id_changeset(user, attrs)
   end
 
 
@@ -170,7 +184,7 @@ defmodule App.Accounts do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> User.avatar_changeset(attrs)
+    |> User.avatar_id_changeset(attrs)
     |> Repo.update()
   end
 

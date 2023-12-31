@@ -15,4 +15,37 @@ defmodule AppWeb.CustomComponents do
     </div>
     """
   end
+
+
+  attr :class, :string, default: nil
+  attr :src, :string, required: true
+  attr :rarity, :string, required: true
+  attr :width, :string, default: nil
+
+  def avatar(assigns) do
+    ~H"""
+    <img
+      class={[
+        "rounded-full border-4 border-solid
+        #{get_avatar_color(@rarity)}",
+        @class
+      ]}
+      src={@src}
+      width={@width}
+    />
+    """
+  end
+
+  defp get_avatar_color(rarity) do
+    case rarity do
+      "common" ->
+        "border-slate-500"
+      "uncommon" ->
+        "border-teal-500"
+      "rare" ->
+        "border-blue-500"
+      "epic" ->
+        "border-indigo-900"
+    end
+  end
 end

@@ -38,13 +38,14 @@ alias App.Quiz.{Story, Question, Answer}
 %Avatar{
   id: 4,
   image: "/images/asteroid.png",
-  rarity: "epic"
+  rarity: "rare"
 }
 |> Repo.insert!()
 
 ## 'easy' stories
 %Story{
   id: 1,
+  title: "The Pelicans",
   difficulty: "easy",
   content: "In a coastal town, a friendly family of pelicans lived near the shimmering shore. Papa Pelican, Mama Pelican, and their three fluffy chicks spent their days soaring through the sky and diving into the ocean to catch delicious fish. One day, the pelican family organized a friendly fishing competition to see who could catch the most fish. The fluffy chicks, with their clumsy yet adorable attempts, made everyone laugh as they learned the art of fishing from their wise parents."
 }
@@ -192,6 +193,7 @@ alias App.Quiz.{Story, Question, Answer}
 
 %Story{
   id: 2,
+  title: "The Johnsons' Thanksgiving",
   difficulty: "easy",
   content: "In a cozy town, the Johnson family eagerly prepared for Thanksgiving. Mom baked a golden turkey, and the aroma filled the air. Dad decorated the table with vibrant autumn colors, and the children crafted handmade decorations. As they gathered around to feast, they took turns expressing gratitude. Each family member shared what they were thankful for, creating a heartwarming atmosphere of love and appreciation."
 }
@@ -339,6 +341,7 @@ alias App.Quiz.{Story, Question, Answer}
 
 %Story{
   id: 3,
+  title: "The Park",
   difficulty: "easy",
   content: "In the heart of the town, there was a lively park where families gathered for fun. Children swung on swings, parents enjoyed picnics on checkered blankets, and friends played a spirited game of frisbee. The laughter of kids echoed as they took turns on the colorful carousel, and the ice cream truck's jingle added a sweet melody to the cheerful atmosphere."
 }
@@ -487,6 +490,7 @@ alias App.Quiz.{Story, Question, Answer}
 ## 'medium' stories
 %Story{
   id: 4,
+  title: "Max and His Dog",
   difficulty: "medium",
   content: "On a sunny day, a lively boy named Tommy and his energetic dog, Max, decided to play fetch in the neighborhood park. Tommy grabbed a bright red ball and gave it a mighty throw. Max, with his wagging tail and eager eyes, sprinted joyfully, retrieving the ball with enthusiasm. The two friends continued their game, laughing and enjoying the simple pleasure of companionship under the warm sun."
 }
@@ -634,6 +638,7 @@ alias App.Quiz.{Story, Question, Answer}
 
 %Story{
   id: 5,
+  title: "The Antarctica Explorer",
   difficulty: "medium",
   content: "In the icy expanse of Antarctica, an intrepid explorer named Alex embarked on a daring journey. Equipped with warm gear, Alex trekked across the snow-covered landscape, encountering vast glaciers and stunning ice formations. As the days went by, Alex marveled at the incredible wildlife, from penguins waddling along the coast to seals basking on the ice. The explorer faced challenges like icy winds and freezing temperatures but pressed on, driven by the thrill of discovery and the desire to unveil the secrets of this frozen wonderland."
 }
@@ -781,6 +786,7 @@ alias App.Quiz.{Story, Question, Answer}
 
 %Story{
   id: 6,
+  title: "Baking Bread",
   difficulty: "medium",
   content: "In a cozy kitchen, Emma and her grandmother embarked on a delightful adventure of baking bread. The scent of yeast filled the air as they measured flour, mixed ingredients, and kneaded the dough with love. Emma giggled as flour dusted her nose, and her grandmother shared stories passed down through generations. The dough rose, filling the room with anticipation. As they pulled the golden loaf from the oven, the warm aroma enveloped them. Together, they savored the joy of creating something delicious from scratch, a tradition that connected them in the heart of their home."
 }
@@ -929,6 +935,7 @@ alias App.Quiz.{Story, Question, Answer}
 ## `hard` stories
 %Story{
   id: 7,
+  title: "The Meteor Shower",
   difficulty: "hard",
   content: "In the remote observatory, Dr. Rodriguez spent countless nights studying meteors. Armed with high-powered telescopes, Dr. Rodriguez observed the celestial dance of meteors streaking across the night sky. The scientist meticulously recorded data, noting the size, composition, and trajectory of each meteor. One fateful night, a rare meteor shower illuminated the heavens. Dr. Rodriguez marveled at the spectacular display, capturing the celestial event in meticulous detail. The findings expanded our understanding of these cosmic wonders, uncovering secrets hidden in the vastness of space."
 }
@@ -1076,6 +1083,7 @@ alias App.Quiz.{Story, Question, Answer}
 
 %Story{
   id: 8,
+  title: "Prince",
   difficulty: "hard",
   content: "Prince was a famous singer. He was born in Minnesota in 1958. He left a lasting impact on funk, R&B, and rock, winning many awards throughout his career. Prince was also a vegetarian for much of his life. He had a prolific career, recording over 40 studio albums. On top of critical praise, Prince was loved by the general public."
 }

@@ -8,13 +8,14 @@ defmodule App.Accounts.User do
     field :username, :string
     field :cash, :integer
     field :type, :string
-    field :avatar, :string
     field :join_code, :string
     field :class, :string
     field :last_score, :integer
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+
+    belongs_to :avatar, App.Avatars.Avatar
 
     timestamps()
   end
@@ -44,7 +45,7 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :password, :type, :cash, :avatar, :join_code, :class])
+    |> cast(attrs, [:username, :password, :type, :avatar_id, :cash, :join_code, :class])
     |> validate_username(opts)
     |> validate_password(opts)
     |> validate_type(opts)
@@ -132,12 +133,12 @@ defmodule App.Accounts.User do
     |> validate_password(opts)
   end
 
-  def avatar_changeset(user, attrs) do
+  def avatar_id_changeset(user, attrs) do
     user
-    |> cast(attrs, [:avatar])
+    |> cast(attrs, [:avatar_id])
     |> case do
-      %{changes: %{avatar: _}} = changeset -> changeset
-      %{} = changeset -> add_error(changeset, :avatar, "did not change")
+      %{changes: %{avatar_id: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :avatar_id, "did not change")
     end
   end
 

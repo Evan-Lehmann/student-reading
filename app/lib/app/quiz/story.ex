@@ -4,6 +4,7 @@ defmodule App.Quiz.Story do
 
   schema "stories" do
     field :content, :string
+    field :title, :string
     field :difficulty, :string
 
     has_many :questions, App.Quiz.Question
@@ -14,8 +15,9 @@ defmodule App.Quiz.Story do
   @doc false
   def changeset(story, attrs) do
     story
-    |> cast(attrs, [:content, :difficulty])
+    |> cast(attrs, [:content, :title, :difficulty])
     |> validate_required([:content])
+    |> validate_required([:title])
     |> validate_difficulty
   end
 

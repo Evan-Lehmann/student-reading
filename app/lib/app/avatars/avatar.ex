@@ -6,13 +6,24 @@ defmodule App.Avatars.Avatar do
     field :image, :string
     field :rarity, :string
 
+    has_many :answers, App.Accounts.User
+
     timestamps()
   end
 
   @doc false
   def changeset(avatar, attrs) do
     avatar
-    |> cast(attrs, [:image])
+    |> cast(attrs, [:image, :rarity])
     |> validate_required([:image])
+    |> validate_rarity
   end
+
+  defp validate_rarity(changeset) do
+    changeset
+    |> validate_required([:rarity])
+    |> validate_inclusion(:rarity, ["common", "uncommon", "rare", "epic"])
+  end
+
+
 end

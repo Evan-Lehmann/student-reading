@@ -39,8 +39,8 @@ defmodule AppWeb.UserRegistrationLive do
 
         <.input :if={@form[:type].value == "teacher"} field={@form[:join_code]} type="text" label="Class Join Code" required />
         <.input :if={@form[:type].value == "student"} field={@form[:cash]} type="number" label="Cash" value={500} readonly required />
-        <.input :if={@form[:type].value == "student"} field={@form[:avatar]}  type="select" label="Avatar" required
-          options={[{"Astronaut", "/images/astronaut.png"}, {"Alien", "/images/alien.png"}]}>
+        <.input :if={@form[:type].value == "student"} field={@form[:avatar_id]}  type="select" label="Avatar" required
+          options={[{"Astronaut", "1"}, {"Alien", "2"}]}>
         </.input>
 
 
