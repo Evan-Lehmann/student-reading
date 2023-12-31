@@ -19,7 +19,7 @@ defmodule AppWeb.CustomComponents do
 
   attr :class, :string, default: nil
   attr :src, :string, required: true
-  attr :rarity, :string, required: true
+  attr :rarity, :string, default: nil
   attr :width, :string, default: nil
 
   def avatar(assigns) do
@@ -46,6 +46,8 @@ defmodule AppWeb.CustomComponents do
         "border-blue-500"
       "epic" ->
         "border-indigo-900"
+      nil ->
+        ""
     end
   end
 end

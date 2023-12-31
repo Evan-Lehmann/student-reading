@@ -17,4 +17,18 @@ defmodule App.AvatarsFixtures do
 
     avatar
   end
+
+  @doc """
+  Generate a avatar_access.
+  """
+  def avatar_access_fixture(attrs \\ %{}) do
+    {:ok, avatar_access} =
+      attrs
+      |> Enum.into(%{
+        is_unlocked: true
+      })
+      |> App.Avatars.create_avatar_access()
+
+    avatar_access
+  end
 end

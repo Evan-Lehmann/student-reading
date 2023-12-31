@@ -7,6 +7,7 @@ defmodule App.Accounts do
   alias App.Repo
 
   alias App.Accounts.{User, UserToken}
+  alias App.Avatars.AvatarAccess
 
   ## Database getters
 
@@ -107,9 +108,28 @@ defmodule App.Accounts do
 
   """
   def register_user(attrs) do
-    %User{}
+    %{"type" => type, "username" => username} = attrs
+
+    result = %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+
+    if type == "student" do
+      Enum.each(1..2, fn(x) ->
+        user_id = get_user_by_username(username).id
+        %AvatarAccess{}
+        |> AvatarAccess.changeset(%{"avatar_id" => Integer.to_string(x), "user_id" => Integer.to_string(user_id), "is_unlocked" => "true"})
+        |> Repo.insert()
+      end)
+
+      Enum.each(3..4, fn(x) ->
+        user_id = get_user_by_username(username).id
+        %AvatarAccess{}
+        |> AvatarAccess.changeset(%{"avatar_id" => Integer.to_string(x), "user_id" => Integer.to_string(user_id), "is_unlocked" => "false"})
+        |> Repo.insert()
+      end)
+    end
+    result
   end
 
   @doc """

@@ -8,15 +8,31 @@ defmodule AppWeb.AvatarSelection do
   def mount(_params, _session, socket) do
     user = socket.assigns.current_user
     avatar_id_changeset = Accounts.change_user_avatar(user)
+    unlocked_avatars = Avatars.list_users_avatars(user.id)
 
-    socket = assign(socket, avatars: Avatars.list_avatars, current_avatar_id: user.avatar_id, selected_avatar_id: user.avatar_id, avatar_form: to_form(avatar_id_changeset))
-
+    socket = assign(socket, avatars: Avatars.list_avatars, current_avatar_id: user.avatar_id, selected_avatar_id: user.avatar_id, unlocked_avatars: unlocked_avatars, avatar_form: to_form(avatar_id_changeset))
+    IO.inspect(unlocked_avatars)
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
     <h1>Avatars</h1>
+
+    <%= for avatar <- @unlocked_avatars do %>
+      <%= if avatar.is_unlocked == true do %>
+        <button disabled>
+          <.avatar src="/images/alien.png" class="w-20 h-20" rarity="epic"  />
+        </button>
+      <% else %>
+        <button disabled>
+          <.avatar src="/images/locked.png" class="w-20 h-20"  />
+        </button>
+      <% end %>
+    <% end %>
+
+    <hr>
+    <br>
 
     <%= for avatar <- @avatars do %>
       <%= if @selected_avatar_id == avatar.id do %>

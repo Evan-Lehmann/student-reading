@@ -101,4 +101,105 @@ defmodule App.Avatars do
   def change_avatar(%Avatar{} = avatar, attrs \\ %{}) do
     Avatar.changeset(avatar, attrs)
   end
+
+  alias App.Avatars.AvatarAccess
+
+  @doc """
+  Returns the list of avatars_access.
+
+  ## Examples
+
+      iex> list_avatars_access()
+      [%AvatarAccess{}, ...]
+
+  """
+  def list_avatars_access do
+    Repo.all(AvatarAccess)
+  end
+
+  def list_users_avatars(user_id) do
+    Repo.all(from a in AvatarAccess,
+      where: a.user_id == ^user_id)
+  end
+
+  @doc """
+  Gets a single avatar_access.
+
+  Raises `Ecto.NoResultsError` if the Avatar access does not exist.
+
+  ## Examples
+
+      iex> get_avatar_access!(123)
+      %AvatarAccess{}
+
+      iex> get_avatar_access!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_avatar_access!(id), do: Repo.get!(AvatarAccess, id)
+
+  @doc """
+  Creates a avatar_access.
+
+  ## Examples
+
+      iex> create_avatar_access(%{field: value})
+      {:ok, %AvatarAccess{}}
+
+      iex> create_avatar_access(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_avatar_access(attrs \\ %{}) do
+    %AvatarAccess{}
+    |> AvatarAccess.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a avatar_access.
+
+  ## Examples
+
+      iex> update_avatar_access(avatar_access, %{field: new_value})
+      {:ok, %AvatarAccess{}}
+
+      iex> update_avatar_access(avatar_access, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_avatar_access(%AvatarAccess{} = avatar_access, attrs) do
+    avatar_access
+    |> AvatarAccess.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a avatar_access.
+
+  ## Examples
+
+      iex> delete_avatar_access(avatar_access)
+      {:ok, %AvatarAccess{}}
+
+      iex> delete_avatar_access(avatar_access)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_avatar_access(%AvatarAccess{} = avatar_access) do
+    Repo.delete(avatar_access)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking avatar_access changes.
+
+  ## Examples
+
+      iex> change_avatar_access(avatar_access)
+      %Ecto.Changeset{data: %AvatarAccess{}}
+
+  """
+  def change_avatar_access(%AvatarAccess{} = avatar_access, attrs \\ %{}) do
+    AvatarAccess.changeset(avatar_access, attrs)
+  end
 end
