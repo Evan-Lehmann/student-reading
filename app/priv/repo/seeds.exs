@@ -1216,14 +1216,14 @@ alias App.Quiz.{Story, Question, Answer}
                     |> Repo.insert!()
 
                     %Answer{
-                      question_id: 31,
+                      question_id: 32,
                       content: "Michigan",
                       is_correct: false
                     }
                     |> Repo.insert!()
 
                     %Answer{
-                      question_id: 31,
+                      question_id: 32,
                       content: "Idaho",
                       is_correct: false
                     }
