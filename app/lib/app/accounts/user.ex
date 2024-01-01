@@ -161,6 +161,15 @@ defmodule App.Accounts.User do
     end
   end
 
+  def cash_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:cash])
+    |> case do
+      %{changes: %{cash: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :last_score, "did not change")
+    end
+  end
+
 
 
   @doc """

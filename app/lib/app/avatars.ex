@@ -118,8 +118,21 @@ defmodule App.Avatars do
   end
 
   def list_users_avatars(user_id) do
-    Repo.all(from a in AvatarAccess,
-      where: a.user_id == ^user_id)
+    from(a in AvatarAccess, where: a.user_id == ^user_id)
+    |> Repo.all()
+    |> Repo.preload(:avatar)
+  end
+
+  def list_users_locked_avatars(user_id) do
+    from(a in AvatarAccess, where: a.user_id == ^user_id and a.is_unlocked == false, select: a.avatar_id)
+    |> Repo.all()
+    #|> Repo.preload(:avatar)
+  end
+
+  def get_avatar_access_by_avatar_id(user_id, avatar_id) do
+    from(a in AvatarAccess, where: a.user_id == ^user_id and a.avatar_id == ^avatar_id)
+    |> Repo.one()
+    |> Repo.preload(:avatar)
   end
 
   @doc """

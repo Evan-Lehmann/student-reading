@@ -67,6 +67,7 @@ defmodule AppWeb.Router do
       live "/class_settings", ClassSettingsLive
       live "/avatar_selection", AvatarSelection
       live "/quiz_live", QuizLive
+      live "/shop", ShopLive
     end
   end
 

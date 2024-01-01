@@ -8,6 +8,7 @@ defmodule App.Accounts do
 
   alias App.Accounts.{User, UserToken}
   alias App.Avatars.AvatarAccess
+  alias App.Avatars
 
   ## Database getters
 
@@ -130,6 +131,26 @@ defmodule App.Accounts do
       end)
     end
     result
+  end
+
+  def unlock_avatar(user, locked_avatars_ids) do
+    updated_user = {:error}
+    updated_avatars_access = {:error}
+
+    if user.cash >= 500 && length(locked_avatars_ids) > 0 do
+
+      rand = Enum.random(Enum.to_list(locked_avatars_ids))
+      avatar_access = Avatars.get_avatar_access_by_avatar_id(user.id, rand)
+      updated_avatars_access = Avatars.update_avatar_access(avatar_access, %{"is_unlocked" => "true"})
+
+      updated_user = user
+      |> User.cash_changeset(%{cash: (user.cash-500)})
+      |> Repo.update()
+
+      {updated_user, updated_avatars_access}
+    else
+      {:error, :error}
+    end
   end
 
   @doc """

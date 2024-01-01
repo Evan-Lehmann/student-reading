@@ -11,7 +11,6 @@ defmodule AppWeb.AvatarSelection do
     unlocked_avatars = Avatars.list_users_avatars(user.id)
 
     socket = assign(socket, avatars: Avatars.list_avatars, current_avatar_id: user.avatar_id, selected_avatar_id: user.avatar_id, unlocked_avatars: unlocked_avatars, avatar_form: to_form(avatar_id_changeset))
-    IO.inspect(unlocked_avatars)
     {:ok, socket}
   end
 
@@ -21,27 +20,18 @@ defmodule AppWeb.AvatarSelection do
 
     <%= for avatar <- @unlocked_avatars do %>
       <%= if avatar.is_unlocked == true do %>
-        <button disabled>
-          <.avatar src="/images/alien.png" class="w-20 h-20" rarity="epic"  />
-        </button>
+        <%= if @selected_avatar_id == avatar.avatar.id do %>
+          <button disabled>
+            <.avatar src={avatar.avatar.image} class="w-20 h-20" rarity={avatar.avatar.rarity}  />
+          </button>
+        <% else %>
+          <button phx-click="change" phx-value-avatar_id={avatar.avatar.id}>
+            <.avatar src={avatar.avatar.image} class="w-20 h-20 opacity-30 hover:opacity-100" rarity={avatar.avatar.rarity}  />
+          </button>
+        <% end %>
       <% else %>
         <button disabled>
           <.avatar src="/images/locked.png" class="w-20 h-20"  />
-        </button>
-      <% end %>
-    <% end %>
-
-    <hr>
-    <br>
-
-    <%= for avatar <- @avatars do %>
-      <%= if @selected_avatar_id == avatar.id do %>
-        <button disabled>
-          <.avatar src={avatar.image} class="w-20 h-20" rarity={avatar.rarity}  />
-        </button>
-      <% else %>
-        <button phx-click="change" phx-value-avatar_id={avatar.id}>
-          <.avatar src={avatar.image} rarity={avatar.rarity} class="opacity-30 hover:opacity-100 w-20 h-20" />
         </button>
       <% end %>
     <% end %>

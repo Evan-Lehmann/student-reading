@@ -6,8 +6,6 @@ defmodule App.Avatars.Avatar do
     field :image, :string
     field :rarity, :string
 
-    has_many :answers, App.Accounts.User
-
     timestamps()
   end
 
