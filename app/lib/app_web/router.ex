@@ -68,6 +68,7 @@ defmodule AppWeb.Router do
       live "/avatar_selection", AvatarSelection
       live "/quiz_live", QuizLive
       live "/shop", ShopLive
+      live "/practice", Practice
     end
   end
 

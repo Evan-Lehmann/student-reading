@@ -220,4 +220,112 @@ defmodule App.QuizTest do
       assert %Ecto.Changeset{} = Quiz.change_completed_story(completed_story)
     end
   end
+
+  describe "mcqs" do
+    alias App.Quiz.Mcq
+
+    import App.QuizFixtures
+
+    @invalid_attrs %{content: nil}
+
+    test "list_mcqs/0 returns all mcqs" do
+      mcq = mcq_fixture()
+      assert Quiz.list_mcqs() == [mcq]
+    end
+
+    test "get_mcq!/1 returns the mcq with given id" do
+      mcq = mcq_fixture()
+      assert Quiz.get_mcq!(mcq.id) == mcq
+    end
+
+    test "create_mcq/1 with valid data creates a mcq" do
+      valid_attrs = %{content: "some content"}
+
+      assert {:ok, %Mcq{} = mcq} = Quiz.create_mcq(valid_attrs)
+      assert mcq.content == "some content"
+    end
+
+    test "create_mcq/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Quiz.create_mcq(@invalid_attrs)
+    end
+
+    test "update_mcq/2 with valid data updates the mcq" do
+      mcq = mcq_fixture()
+      update_attrs = %{content: "some updated content"}
+
+      assert {:ok, %Mcq{} = mcq} = Quiz.update_mcq(mcq, update_attrs)
+      assert mcq.content == "some updated content"
+    end
+
+    test "update_mcq/2 with invalid data returns error changeset" do
+      mcq = mcq_fixture()
+      assert {:error, %Ecto.Changeset{}} = Quiz.update_mcq(mcq, @invalid_attrs)
+      assert mcq == Quiz.get_mcq!(mcq.id)
+    end
+
+    test "delete_mcq/1 deletes the mcq" do
+      mcq = mcq_fixture()
+      assert {:ok, %Mcq{}} = Quiz.delete_mcq(mcq)
+      assert_raise Ecto.NoResultsError, fn -> Quiz.get_mcq!(mcq.id) end
+    end
+
+    test "change_mcq/1 returns a mcq changeset" do
+      mcq = mcq_fixture()
+      assert %Ecto.Changeset{} = Quiz.change_mcq(mcq)
+    end
+  end
+
+  describe "mcqs_answers" do
+    alias App.Quiz.McqAnswer
+
+    import App.QuizFixtures
+
+    @invalid_attrs %{content: nil}
+
+    test "list_mcqs_answers/0 returns all mcqs_answers" do
+      mcq_answer = mcq_answer_fixture()
+      assert Quiz.list_mcqs_answers() == [mcq_answer]
+    end
+
+    test "get_mcq_answer!/1 returns the mcq_answer with given id" do
+      mcq_answer = mcq_answer_fixture()
+      assert Quiz.get_mcq_answer!(mcq_answer.id) == mcq_answer
+    end
+
+    test "create_mcq_answer/1 with valid data creates a mcq_answer" do
+      valid_attrs = %{content: "some content"}
+
+      assert {:ok, %McqAnswer{} = mcq_answer} = Quiz.create_mcq_answer(valid_attrs)
+      assert mcq_answer.content == "some content"
+    end
+
+    test "create_mcq_answer/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Quiz.create_mcq_answer(@invalid_attrs)
+    end
+
+    test "update_mcq_answer/2 with valid data updates the mcq_answer" do
+      mcq_answer = mcq_answer_fixture()
+      update_attrs = %{content: "some updated content"}
+
+      assert {:ok, %McqAnswer{} = mcq_answer} = Quiz.update_mcq_answer(mcq_answer, update_attrs)
+      assert mcq_answer.content == "some updated content"
+    end
+
+    test "update_mcq_answer/2 with invalid data returns error changeset" do
+      mcq_answer = mcq_answer_fixture()
+      assert {:error, %Ecto.Changeset{}} = Quiz.update_mcq_answer(mcq_answer, @invalid_attrs)
+      assert mcq_answer == Quiz.get_mcq_answer!(mcq_answer.id)
+    end
+
+    test "delete_mcq_answer/1 deletes the mcq_answer" do
+      mcq_answer = mcq_answer_fixture()
+      assert {:ok, %McqAnswer{}} = Quiz.delete_mcq_answer(mcq_answer)
+      assert_raise Ecto.NoResultsError, fn -> Quiz.get_mcq_answer!(mcq_answer.id) end
+    end
+
+    test "change_mcq_answer/1 returns a mcq_answer changeset" do
+      mcq_answer = mcq_answer_fixture()
+      assert %Ecto.Changeset{} = Quiz.change_mcq_answer(mcq_answer)
+    end
+  end
 end

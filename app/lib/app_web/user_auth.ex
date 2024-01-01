@@ -266,7 +266,7 @@ defmodule AppWeb.UserAuth do
     end
   end
 
-  def require_student_and_incompleted_quiz(conn, opts) do
+  def require_student_and_incompleted_quiz(conn, _opts) do
     user_id = conn.assigns[:current_user].id
     story_id = String.to_integer(conn.params["id"])
 

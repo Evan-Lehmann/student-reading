@@ -60,4 +60,32 @@ defmodule App.QuizFixtures do
 
     completed_story
   end
+
+  @doc """
+  Generate a mcq.
+  """
+  def mcq_fixture(attrs \\ %{}) do
+    {:ok, mcq} =
+      attrs
+      |> Enum.into(%{
+        content: "some content"
+      })
+      |> App.Quiz.create_mcq()
+
+    mcq
+  end
+
+  @doc """
+  Generate a mcq_answer.
+  """
+  def mcq_answer_fixture(attrs \\ %{}) do
+    {:ok, mcq_answer} =
+      attrs
+      |> Enum.into(%{
+        content: "some content"
+      })
+      |> App.Quiz.create_mcq_answer()
+
+    mcq_answer
+  end
 end

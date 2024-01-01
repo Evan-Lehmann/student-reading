@@ -8,6 +8,7 @@ defmodule App.Quiz do
 
   alias App.Quiz.Story
   alias App.Quiz.CompletedStory
+  alias App.Quiz.McqAnswer
 
   @doc """
   Returns the list of stories.
@@ -178,6 +179,17 @@ defmodule App.Quiz do
     question
     |> Question.changeset(attrs)
     |> Repo.update()
+  end
+
+  def get_answers_of_mcq(mcq_id) do
+    from(m in McqAnswer, where: m.mcq_id == ^mcq_id)
+    |> Repo.all()
+    |> Repo.preload(:mcq)
+  end
+
+  def is_mcq_answer_correct(id) do
+    from(m in McqAnswer, where: m.id == ^id, select: m.is_correct)
+    |> Repo.one()
   end
 
   @doc """
@@ -416,5 +428,198 @@ defmodule App.Quiz do
   """
   def change_completed_story(%CompletedStory{} = completed_story, attrs \\ %{}) do
     CompletedStory.changeset(completed_story, attrs)
+  end
+
+  alias App.Quiz.Mcq
+
+  @doc """
+  Returns the list of mcqs.
+
+  ## Examples
+
+      iex> list_mcqs()
+      [%Mcq{}, ...]
+
+  """
+  def list_mcqs do
+    Repo.all(Mcq)
+  end
+
+
+  @doc """
+  Gets a single mcq.
+
+  Raises `Ecto.NoResultsError` if the Mcq does not exist.
+
+  ## Examples
+
+      iex> get_mcq!(123)
+      %Mcq{}
+
+      iex> get_mcq!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_mcq!(id), do: Repo.get!(Mcq, id)
+
+  @doc """
+  Creates a mcq.
+
+  ## Examples
+
+      iex> create_mcq(%{field: value})
+      {:ok, %Mcq{}}
+
+      iex> create_mcq(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_mcq(attrs \\ %{}) do
+    %Mcq{}
+    |> Mcq.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a mcq.
+
+  ## Examples
+
+      iex> update_mcq(mcq, %{field: new_value})
+      {:ok, %Mcq{}}
+
+      iex> update_mcq(mcq, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_mcq(%Mcq{} = mcq, attrs) do
+    mcq
+    |> Mcq.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a mcq.
+
+  ## Examples
+
+      iex> delete_mcq(mcq)
+      {:ok, %Mcq{}}
+
+      iex> delete_mcq(mcq)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_mcq(%Mcq{} = mcq) do
+    Repo.delete(mcq)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking mcq changes.
+
+  ## Examples
+
+      iex> change_mcq(mcq)
+      %Ecto.Changeset{data: %Mcq{}}
+
+  """
+  def change_mcq(%Mcq{} = mcq, attrs \\ %{}) do
+    Mcq.changeset(mcq, attrs)
+  end
+
+  alias App.Quiz.McqAnswer
+
+  @doc """
+  Returns the list of mcqs_answers.
+
+  ## Examples
+
+      iex> list_mcqs_answers()
+      [%McqAnswer{}, ...]
+
+  """
+  def list_mcqs_answers do
+    Repo.all(McqAnswer)
+  end
+
+  @doc """
+  Gets a single mcq_answer.
+
+  Raises `Ecto.NoResultsError` if the Mcq answer does not exist.
+
+  ## Examples
+
+      iex> get_mcq_answer!(123)
+      %McqAnswer{}
+
+      iex> get_mcq_answer!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_mcq_answer!(id), do: Repo.get!(McqAnswer, id)
+
+  @doc """
+  Creates a mcq_answer.
+
+  ## Examples
+
+      iex> create_mcq_answer(%{field: value})
+      {:ok, %McqAnswer{}}
+
+      iex> create_mcq_answer(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_mcq_answer(attrs \\ %{}) do
+    %McqAnswer{}
+    |> McqAnswer.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a mcq_answer.
+
+  ## Examples
+
+      iex> update_mcq_answer(mcq_answer, %{field: new_value})
+      {:ok, %McqAnswer{}}
+
+      iex> update_mcq_answer(mcq_answer, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_mcq_answer(%McqAnswer{} = mcq_answer, attrs) do
+    mcq_answer
+    |> McqAnswer.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a mcq_answer.
+
+  ## Examples
+
+      iex> delete_mcq_answer(mcq_answer)
+      {:ok, %McqAnswer{}}
+
+      iex> delete_mcq_answer(mcq_answer)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_mcq_answer(%McqAnswer{} = mcq_answer) do
+    Repo.delete(mcq_answer)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking mcq_answer changes.
+
+  ## Examples
+
+      iex> change_mcq_answer(mcq_answer)
+      %Ecto.Changeset{data: %McqAnswer{}}
+
+  """
+  def change_mcq_answer(%McqAnswer{} = mcq_answer, attrs \\ %{}) do
+    McqAnswer.changeset(mcq_answer, attrs)
   end
 end
