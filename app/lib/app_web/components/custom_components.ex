@@ -5,17 +5,16 @@ defmodule AppWeb.CustomComponents do
   ## RadioInput
   attr :answer_id, :string, required: true
   attr :answer_content, :string, required: true
+
   def radio_input(assigns) do
     ~H"""
-    <div class="form-check">
       <input class="form-check-input" type="radio" name="answer_id" value={@answer_id} id={@answer_id}>
       <label class="form-check-label" for={@answer_id}>
         <%= @answer_content %>
       </label>
-    </div>
+      <br>
     """
   end
-
 
   attr :class, :string, default: nil
   attr :src, :string, required: true

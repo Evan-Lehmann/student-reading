@@ -1,7 +1,6 @@
 defmodule AppWeb.QuizIndex do
   use AppWeb, :live_view
   alias App.Quiz
-  import AppWeb.CustomComponents
 
   def mount(%{"id" => story_id}, _sesion, socket) do
     form = to_form(%{}, as: "quiz_attempt")
@@ -13,7 +12,10 @@ defmodule AppWeb.QuizIndex do
         form: form,
         q_ids: q_ids,
         question: Quiz.get_question!(rand),
-        answers: Quiz.get_answers_of_question(rand)
+        answers: Quiz.get_answers_of_question(rand),
+        results: [],
+        score: nil,
+        selected: nil
       )
       {:ok, socket}
     else
@@ -22,7 +24,9 @@ defmodule AppWeb.QuizIndex do
         form: form,
         q_ids: nil,
         question: nil,
-        answers: nil
+        answers: nil,
+        score: nil,
+        selected: nil
       )
       {:ok, socket}
     end
@@ -35,30 +39,78 @@ defmodule AppWeb.QuizIndex do
         <h2 class="text-xl font-bold">Placeholder Title</h2>
         <p> <%= @story.content %> </p>
       </div>
+
       <div class="basis-1/2 mx-6">
+
         <%= if @q_ids != nil do %>
-          <.form for={@form} phx-submit="next">
-            <p class="font-bold"> <%= @question.content %> </p>
-            <.radio_input :for={answer <- @answers} answer_content={answer.content} answer_id={Integer.to_string(answer.id)}/>
-            <.button>Check</.button>
-          </.form>
+          <p class="font-bold"> <%= @question.content %> </p>
+
+          <br>
+          <%= for answer <- @answers do %>
+            <%= if answer.id == @selected do %>
+              <.button disabled class="bg-stone-700">
+                <%= answer.content %>
+              </.button>
+              <br>
+              <hr>
+            <% else %>
+              <.button class="bg-stone-400" phx-click="select" phx-value-answer_id={answer.id}>
+                <%= answer.content %>
+              </.button>
+              <br>
+              <hr>
+            <% end %>
+          <% end %>
+
+          <.simple_form for={@form} phx-submit="next">
+            <%= if @selected != nil  do %>
+              <.input field={@form[:answer_id]} type="text" value={@selected} readonly required />
+              <.button phx-disable-with="Changing" class="w-full">
+                Submit
+              </.button>
+            <% else %>
+              <.button disabled class="w-full opacity-50">
+                Submit
+              </.button>
+            <% end %>
+          </.simple_form>
+
         <% else %>
-          <p class="text-xl text-blue-700">Finished!</p>
-          <a href={~p"/quiz_live"} class="rounded-lg bg-sky-600 px-2 py-1 hover:bg-sky-600/80 text-white">
+          <p class="text-xl text-blue-700 py-4">Finished!</p>
+          <%= if @score >= 80 do %>
+            <span class="text-lg font-bold text-emerald-700">Score: <%= @score %>% </span>
+          <% else %>
+            <span class="text-lg font-bold text-amber-700">Score: <%= @score %>% </span>
+          <% end %>
+          <a href={~p"/quiz_live"} class="rounded-lg bg-sky-600 px-2 py-1 hover:bg-sky-600/80 text-white my-4">
             Back to Menu
           </a>
         <% end %>
       </div>
+
     </div>
     """
   end
 
-  def handle_event("next", _params, socket) do
+  def handle_event("select", %{"answer_id" => answer_id}, socket) do
+    {:noreply, assign(socket, selected: String.to_integer(answer_id))}
+  end
+
+  def handle_event("next", %{"quiz_attempt" => %{"answer_id" => answer_id}}, socket) do
     case get_next_question_id(socket.assigns.q_ids) do
       {q_ids, rand} ->
-        {:noreply, assign(socket, q_ids: q_ids, question: Quiz.get_question!(rand), answers: Quiz.get_answers_of_question(rand))}
+        result = Quiz.get_answer!(answer_id).is_correct
+        updated_results = [result | socket.assigns.results]
+        {:noreply, assign(socket, results: updated_results, q_ids: q_ids, question: Quiz.get_question!(rand), answers: Quiz.get_answers_of_question(rand), selected: nil)}
       {:error} ->
-        {:noreply, assign(socket, q_ids: nil)}
+        result = Quiz.get_answer!(answer_id).is_correct
+        updated_results = [result | socket.assigns.results]
+
+        number_answered = length(updated_results)
+        number_correct = length(Enum.filter(updated_results, fn x -> x == true end))
+        score = (number_correct / number_answered) * 100
+
+        {:noreply, assign(socket, q_ids: nil, results: updated_results, score: score, selected: nil)}
     end
   end
 
