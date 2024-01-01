@@ -36,32 +36,32 @@ defmodule AppWeb.Practice do
       <%= for answer <- @curr_answers do %>
         <%= if @view == nil || @view == "changed" do %>
           <%= if answer.id == @selected do %>
-            <.button disabled class="bg-zinc-800">
+            <button disabled class="rounded-lg bg-slate-600 px-2 py-1 text-white">
               <%= answer.content %>
-            </.button>
+            </button>
             <hr>
           <% else %>
-            <.button class="bg-gray-400" phx-click="select" phx-value-answer_id={answer.id}>
+            <button class="rounded-lg bg-gray-400 px-2 py-1 hover:bg-slate-800/80 text-white" phx-click="select" phx-value-answer_id={answer.id}>
               <%= answer.content %>
-            </.button>
+            </button>
             <hr>
           <% end %>
         <% else %>
           <%= if answer.id == @selected do %>
             <%= if @result == true do %>
-              <.button disabled class="bg-emerald-800">
+              <button disabled class="rounded-lg bg-emerald-700 px-2 py-1 text-white">
                 <%= answer.content %>
-              </.button>
+              </button>
             <% else %>
-              <.button disabled class="bg-red-800">
+              <button disabled class="rounded-lg bg-red-700 px-2 py-1 text-white">
                 <%= answer.content %>
-              </.button>
+              </button>
             <% end %>
             <hr>
           <% else %>
-            <.button class="bg-gray-400" disabled>
+            <button class="rounded-lg bg-gray-400 px-2 py-1 text-white" disabled>
               <%= answer.content %>
-            </.button>
+            </button>
             <hr>
           <% end %>
         <% end %>
