@@ -384,6 +384,11 @@ defmodule App.Quiz do
     |> Repo.update()
   end
 
+  def get_completed_story_by_user_id_and_story_id(user_id, story_id) do
+    Repo.one(from c in CompletedStory,
+      where: c.user_id == ^user_id and c.story_id == ^story_id)
+  end
+
   @doc """
   Deletes a completed_story.
 

@@ -5,6 +5,7 @@ defmodule AppWeb.UserAuth do
   import Phoenix.Controller
 
   alias App.Accounts
+  alias App.Quiz
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -201,6 +202,25 @@ defmodule AppWeb.UserAuth do
     end
   end
 
+  def on_mount(:require_student_and_incompleted_quiz, params, session, socket) do
+    socket = mount_current_user(socket, session)
+    user_id = socket.assigns.current_user.id
+    story_id = String.to_integer(params["id"])
+
+
+    completed_story? = Quiz.get_completed_story_by_user_id_and_story_id(user_id, story_id).is_completed
+
+    if socket.assigns.current_user && socket.assigns.current_user.type == "student" && socket.assigns.current_user.class != nil && completed_story? == false do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You've already completed this quiz!")
+        |> Phoenix.LiveView.redirect(to: ~p"/quiz_live")
+          {:halt, socket}
+    end
+  end
+
   defp mount_current_user(socket, session) do
     Phoenix.Component.assign_new(socket, :current_user, fn ->
       if user_token = session["user_token"] do
@@ -242,6 +262,23 @@ defmodule AppWeb.UserAuth do
       |> put_flash(:error, "Must be teacher or student in a class!")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
+  def require_student_and_incompleted_quiz(conn, opts) do
+    user_id = conn.assigns[:current_user].id
+    story_id = String.to_integer(conn.params["id"])
+
+    completed_story? = Quiz.get_completed_story_by_user_id_and_story_id(user_id, story_id).is_completed
+
+    if conn.assigns[:current_user] && conn.assigns[:current_user].type == "student" && conn.assigns[:current_user].class != nil && completed_story? == false do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You've already completed this quiz!")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/quiz_live")
       |> halt()
     end
   end

@@ -1,6 +1,7 @@
 defmodule AppWeb.QuizIndex do
   use AppWeb, :live_view
   alias App.Quiz
+  alias App.Accounts
 
   def mount(%{"id" => story_id}, _sesion, socket) do
     form = to_form(%{}, as: "quiz_attempt")
@@ -9,6 +10,7 @@ defmodule AppWeb.QuizIndex do
       {q_ids, rand} = get_next_question_id(Quiz.get_questions_of_story(story_id))
       socket = assign(socket,
         story: Quiz.get_story!(story_id),
+        story_id: story_id,
         form: form,
         q_ids: q_ids,
         question: Quiz.get_question!(rand),
@@ -21,6 +23,7 @@ defmodule AppWeb.QuizIndex do
     else
       socket = assign(socket,
         story: nil,
+        story_id: nil,
         form: form,
         q_ids: nil,
         question: nil,
@@ -77,7 +80,7 @@ defmodule AppWeb.QuizIndex do
 
         <% else %>
           <p class="text-xl text-blue-700 py-4">Finished!</p>
-          <%= if @score >= 80 do %>
+          <%= if @score >= 70 do %>
             <span class="text-lg font-bold text-emerald-700">Score: <%= @score %>% </span>
           <% else %>
             <span class="text-lg font-bold text-amber-700">Score: <%= @score %>% </span>
@@ -109,6 +112,13 @@ defmodule AppWeb.QuizIndex do
         number_answered = length(updated_results)
         number_correct = length(Enum.filter(updated_results, fn x -> x == true end))
         score = (number_correct / number_answered) * 100
+
+        completed_story = Quiz.get_completed_story_by_user_id_and_story_id(socket.assigns.current_user.id, socket.assigns.story_id)
+        Quiz.update_completed_story(completed_story, %{is_completed: true})
+
+        if score >= 70 do
+          Accounts.update_user_cash(socket.assigns.current_user, %{"cash" => Integer.to_string(socket.assigns.current_user.cash + 300)})
+        end
 
         {:noreply, assign(socket, q_ids: nil, results: updated_results, score: score, selected: nil)}
     end

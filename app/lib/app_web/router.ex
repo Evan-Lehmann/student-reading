@@ -68,7 +68,14 @@ defmodule AppWeb.Router do
       live "/avatar_selection", AvatarSelection
       live "/quiz_live", QuizLive
       live "/shop", ShopLive
+    end
+  end
 
+  scope "/", AppWeb do
+    pipe_through [:browser, :require_student_and_incompleted_quiz]
+
+    live_session :require_student_and_incompleted_quiz,
+      on_mount: [{AppWeb.UserAuth, :require_student_and_incompleted_quiz}] do
       live "/quiz/:id", QuizIndex
     end
   end

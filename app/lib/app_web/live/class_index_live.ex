@@ -1,6 +1,7 @@
 defmodule AppWeb.ClassIndexLive do
   use AppWeb, :live_view
   alias App.Accounts
+  import AppWeb.CustomComponents
 
   def mount(_params, _session, socket) do
     current_user = socket.assigns.current_user
@@ -16,8 +17,15 @@ defmodule AppWeb.ClassIndexLive do
   def render(assigns) do
     ~H"""
     <.table id="students" rows={@students}>
+      <:col :let={student}>
+        <.avatar src={student.avatar.image} rarity={student.avatar.rarity} class="w-16 h-16" />
+      </:col>
       <:col :let={student} label="username"><%= student.username %></:col>
-      <:col :let={student} label="cash"><%= student.cash %></:col>
+      <:col :let={student} label="cash">
+        <p class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+          $<%= student.cash %>
+        </p>
+      </:col>
       <:col :if={@current_user.type == "teacher"} :let={student}>
         <button class="rounded-lg bg-red-600 px-2 py-1 hover:bg-red-600/80 text-white" phx-click="remove" value={student.id}>
           Delete

@@ -43,9 +43,9 @@ defmodule App.Accounts do
   end
 
   def list_students_in_class(class) do
-    Repo.all(from u in User,
-      where: u.type == "student" and u.class == ^class,
-      order_by: u.cash)
+    (from u in User, where: u.type == "student" and u.class == ^class, order_by: [desc: u.cash])
+    |> Repo.all()
+    |> Repo.preload(:avatar)
   end
   @doc """
   Gets a user by email and password.
@@ -248,6 +248,13 @@ defmodule App.Accounts do
     |> User.class_changeset(attrs)
     |> Repo.update()
   end
+
+  def update_user_cash(%User{} = user, attrs) do
+    user
+    |> User.cash_changeset(attrs)
+    |> Repo.update()
+  end
+
 
   ## Session
 
