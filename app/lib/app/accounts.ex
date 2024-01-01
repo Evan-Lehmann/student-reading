@@ -8,7 +8,9 @@ defmodule App.Accounts do
 
   alias App.Accounts.{User, UserToken}
   alias App.Avatars.AvatarAccess
+  alias App.Quiz.CompletedStory
   alias App.Avatars
+  alias App.Quiz
 
   ## Database getters
 
@@ -129,14 +131,20 @@ defmodule App.Accounts do
         |> AvatarAccess.changeset(%{"avatar_id" => Integer.to_string(x), "user_id" => Integer.to_string(user_id), "is_unlocked" => "false"})
         |> Repo.insert()
       end)
+
+      stories_ids = Quiz.list_stories_ids
+
+      Enum.each(stories_ids, fn(x) ->
+        user_id = get_user_by_username(username).id
+        %CompletedStory{}
+        |> CompletedStory.changeset(%{"story_id" => Integer.to_string(x), "user_id" => Integer.to_string(user_id), "is_completed" => "false"})
+        |> Repo.insert()
+      end)
     end
     result
   end
 
   def unlock_avatar(user, locked_avatars_ids) do
-    updated_user = {:error}
-    updated_avatars_access = {:error}
-
     if user.cash >= 500 && length(locked_avatars_ids) > 0 do
 
       rand = Enum.random(Enum.to_list(locked_avatars_ids))

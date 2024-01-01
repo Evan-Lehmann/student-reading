@@ -7,6 +7,7 @@ defmodule App.Quiz do
   alias App.Repo
 
   alias App.Quiz.Story
+  alias App.Quiz.CompletedStory
 
   @doc """
   Returns the list of stories.
@@ -19,6 +20,16 @@ defmodule App.Quiz do
   """
   def list_stories do
     Repo.all(Story)
+  end
+
+  def list_stories_ids do
+    Repo.all(from s in Story, select: s.id)
+  end
+
+  def list_user_stories(user_id) do
+    from(s in CompletedStory, where: s.user_id == ^user_id)
+    |> Repo.all()
+    |> Repo.preload(:story)
   end
 
   @doc """
@@ -305,4 +316,100 @@ defmodule App.Quiz do
       select: q.id)
   end
 
+
+  alias App.Quiz.CompletedStory
+
+  @doc """
+  Returns the list of completed_stories.
+
+  ## Examples
+
+      iex> list_completed_stories()
+      [%CompletedStory{}, ...]
+
+  """
+  def list_completed_stories do
+    Repo.all(CompletedStory)
+  end
+
+  @doc """
+  Gets a single completed_story.
+
+  Raises `Ecto.NoResultsError` if the Completed story does not exist.
+
+  ## Examples
+
+      iex> get_completed_story!(123)
+      %CompletedStory{}
+
+      iex> get_completed_story!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_completed_story!(id), do: Repo.get!(CompletedStory, id)
+
+  @doc """
+  Creates a completed_story.
+
+  ## Examples
+
+      iex> create_completed_story(%{field: value})
+      {:ok, %CompletedStory{}}
+
+      iex> create_completed_story(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_completed_story(attrs \\ %{}) do
+    %CompletedStory{}
+    |> CompletedStory.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a completed_story.
+
+  ## Examples
+
+      iex> update_completed_story(completed_story, %{field: new_value})
+      {:ok, %CompletedStory{}}
+
+      iex> update_completed_story(completed_story, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_completed_story(%CompletedStory{} = completed_story, attrs) do
+    completed_story
+    |> CompletedStory.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a completed_story.
+
+  ## Examples
+
+      iex> delete_completed_story(completed_story)
+      {:ok, %CompletedStory{}}
+
+      iex> delete_completed_story(completed_story)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_completed_story(%CompletedStory{} = completed_story) do
+    Repo.delete(completed_story)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking completed_story changes.
+
+  ## Examples
+
+      iex> change_completed_story(completed_story)
+      %Ecto.Changeset{data: %CompletedStory{}}
+
+  """
+  def change_completed_story(%CompletedStory{} = completed_story, attrs \\ %{}) do
+    CompletedStory.changeset(completed_story, attrs)
+  end
 end

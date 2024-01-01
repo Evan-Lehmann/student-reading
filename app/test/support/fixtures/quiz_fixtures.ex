@@ -46,4 +46,18 @@ defmodule App.QuizFixtures do
 
     answer
   end
+
+  @doc """
+  Generate a completed_story.
+  """
+  def completed_story_fixture(attrs \\ %{}) do
+    {:ok, completed_story} =
+      attrs
+      |> Enum.into(%{
+        is_completed: true
+      })
+      |> App.Quiz.create_completed_story()
+
+    completed_story
+  end
 end
