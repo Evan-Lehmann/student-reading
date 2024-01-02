@@ -16,7 +16,19 @@ defmodule AppWeb.AvatarSelection do
 
   def render(assigns) do
     ~H"""
+    <div id="navbar" class="container">
+      <nav class="navbar navbar-expand-lg rounded">
+          <div class="container-fluid">
+          <a class="navbar-brand" draggable="false" href={~p"/"}>
+              <img draggable="false" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
+          </a>
+          <.link class="btn btn-outline-primary" method="delete" href={~p"/users/log_out"}>Log out</.link>
+          </div>
+      </nav>
+    </div>
+    <hr id="line">
     <h1>Avatars</h1>
+
 
     <%= for avatar <- @unlocked_avatars do %>
       <%= if avatar.is_unlocked == true do %>

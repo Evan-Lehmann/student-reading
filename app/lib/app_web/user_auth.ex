@@ -156,7 +156,6 @@ defmodule AppWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
         |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
 
       {:halt, socket}
@@ -181,7 +180,6 @@ defmodule AppWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "Only students can access this page!")
         |> Phoenix.LiveView.redirect(to: ~p"/")
 
       {:halt, socket}
@@ -196,7 +194,6 @@ defmodule AppWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "Must be teacher or student in a class!")
         |> Phoenix.LiveView.redirect(to: ~p"/")
           {:halt, socket}
     end
@@ -215,7 +212,6 @@ defmodule AppWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You've already completed this quiz!")
         |> Phoenix.LiveView.redirect(to: ~p"/quiz_live")
           {:halt, socket}
     end
@@ -247,7 +243,6 @@ defmodule AppWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "Only students can access this page!")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
       |> halt()
@@ -259,7 +254,6 @@ defmodule AppWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "Must be teacher or student in a class!")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
       |> halt()
@@ -276,7 +270,6 @@ defmodule AppWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You've already completed this quiz!")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/quiz_live")
       |> halt()
@@ -294,7 +287,6 @@ defmodule AppWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
       |> halt()

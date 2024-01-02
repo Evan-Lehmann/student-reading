@@ -31,57 +31,66 @@ defmodule AppWeb.Practice do
   def render(assigns) do
     ~H"""
     <%= if @list_mcqs != nil do %>
-      <span class="text-lg"><%= @curr_mcq.content %></span>
-      <img src={@curr_mcq.image} class="w-100 h-60" draggable="false"/>
+      <div id="navbar" class="container">
+          <nav class="navbar navbar-expand-lg rounded">
+              <div class="container-fluid">
+                <a class="navbar-brand" draggable="false" href={~p"/"}>
+                    <img draggable="false" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
+                </a>
+                <.link class="btn btn-outline-primary" method="delete" href={~p"/users/log_out"}>Log out</.link>
+              </div>
+          </nav>
+      </div>
+      <hr id="line">
 
-      <%= for answer <- @curr_answers do %>
-        <%= if @view == nil || @view == "changed" do %>
-          <%= if answer.id == @selected do %>
-            <button disabled class="rounded-lg bg-slate-600 px-2 py-1 text-white">
-              <%= answer.content %>
-            </button>
-            <hr>
-          <% else %>
-            <button class="rounded-lg bg-gray-400 px-2 py-1 hover:bg-slate-800/80 text-white" phx-click="select" phx-value-answer_id={answer.id}>
-              <%= answer.content %>
-            </button>
-            <hr>
-          <% end %>
-        <% else %>
-          <%= if answer.id == @selected do %>
-            <%= if @result == true do %>
-              <button disabled class="rounded-lg bg-emerald-700 px-2 py-1 text-white">
+      <div>
+        <span class="text-lg"><%= @curr_mcq.content %></span>
+        <img src={@curr_mcq.image} class="d-block mx-sm-auto img-fluid" loading="lazy" draggable="false"/>
+
+        <%= for answer <- @curr_answers do %>
+          <%= if @view == nil || @view == "changed" do %>
+            <%= if answer.id == @selected do %>
+              <button disabled class="btn btn-dark">
                 <%= answer.content %>
               </button>
-              <span class="font-bold text-emerald-600">+$25</span>
             <% else %>
-              <button disabled class="rounded-lg bg-red-700 px-2 py-1 text-white">
+              <button class="btn btn-outline-dark" phx-click="select" phx-value-answer_id={answer.id}>
                 <%= answer.content %>
               </button>
-              <span class="font-bold text-red-600">-$25</span>
             <% end %>
-            <hr>
           <% else %>
-            <button class="rounded-lg bg-gray-400 px-2 py-1 text-white" disabled>
-              <%= answer.content %>
-            </button>
-            <hr>
+            <%= if answer.id == @selected do %>
+              <%= if @result == true do %>
+                <button disabled class="btn btn-success">
+                  <%= answer.content %>
+                </button>
+                <span class="font-bold text-emerald-600">+$25</span>
+              <% else %>
+                <button disabled class="btn btn-danger">
+                  <%= answer.content %>
+                </button>
+                <span class="font-bold text-red-600">-$25</span>
+              <% end %>
+            <% else %>
+              <button class="btn btn-dark-outline" disabled>
+                <%= answer.content %>
+              </button>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
 
-      <.simple_form for={@form} phx-submit="check">
-        <%= if @view == "changed"  do %>
-          <.input field={@form[:answer_id]} type="hidden" value={@selected} readonly required />
-          <.button phx-disable-with="Changing" class="w-full">
-            Submit
-          </.button>
-        <% end %>
-      </.simple_form>
+        <.simple_form for={@form} phx-submit="check">
+          <%= if @view == "changed"  do %>
+            <.input field={@form[:answer_id]} type="hidden" value={@selected} readonly required />
+            <.button phx-disable-with="Changing" class="w-full">
+              Submit
+            </.button>
+          <% end %>
+        </.simple_form>
 
-      <.button :if={@view == "checked"} phx-click="next">Next</.button>
+        <.button :if={@view == "checked"} phx-click="next">Next</.button>
 
-
+      </div>
     <% end %>
     """
   end

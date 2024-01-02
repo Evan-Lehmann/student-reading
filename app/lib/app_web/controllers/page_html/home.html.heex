@@ -1,16 +1,50 @@
-<.flash_group flash={@flash} />
-
-<%= if @current_user && @current_user.type == "student" && @current_user.class == nil do %>
-    <div class="p-5">
-        <.link href={~p"/class_settings"} class="text-xl text-blue-700">Join a class to start playing!</.link>
+<%= if @current_user == nil do %>
+    <div id="navbar" class="container">
+        <nav class="navbar navbar-expand-lg rounded">
+            <div class="container-fluid">
+            <a class="navbar-brand" draggable="false" href={~p"/"}>
+                <img draggable="false" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
+            </a>
+            <a class="btn btn-primary" href={~p"/users/log_in"}>Log in</a>
+            </div>
+        </nav>
     </div>
+    <hr id="line">
+
+    <div id="hero" class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+            <img src={~p"/images/placeholder.png"} class="d-block mx-lg-auto img-fluid" alt="Hero Image" width="700" height="500" draggable="false" loading="lazy">
+            </div>
+            <div class="col-lg-6">
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Placeholder Title</h1>
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a type="button" class="btn btn-primary btn-lg px-4 me-md-2" href={~p"/users/register"}>Register</a>
+                <a type="button" class="btn btn-outline-secondary btn-lg px-4" disabled="disabled">Learn more</a>
+            </div>
+            </div>
+        </div>
+    </div>
+<% else %>
+   <div id="navbar" class="container">
+        <nav class="navbar navbar-expand-lg rounded">
+            <div class="container-fluid">
+            <a class="navbar-brand" draggable="false" href={~p"/"}>
+                <img draggable="false" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
+            </a>
+            <.link class="btn btn-outline-primary" method="delete" href={~p"/users/log_out"}>Log out</.link>
+            </div>
+        </nav>
+    </div>
+    <hr id="line">
+
+    <a class="btn btn-primary" href={~p"/practice"}>Practice</a>
+    <a class="btn btn-primary" href={~p"/avatar_selection"}>Avatar Selection</a>
+    <span><%= @current_user.username %></span>
+    <.avatar src={Accounts.get_avatar_image_by_user(@current_user)} rarity={Accounts.get_avatar_rarity_by_user(@current_user)} />
+    <span>$<%= @current_user.cash %></span>
+    <a class="btn btn-primary" href={~p"/class_index"}>Leaderboard</a>
+    <a class="btn btn-primary" href={~p"/class_settings"}>Manage Class</a>
+    <a class="btn btn-primary" href={~p"/quiz_live"}>Quiz</a>
 <% end %>
-
-<%= if @current_user && @current_user.type == "student" && @current_user.class != nil do %>
-    <div class="p-5">
-        <.link href={~p"/quiz_live"} class="rounded-lg bg-zinc-800 px-2 py-1 hover:bg-zinc-800/80 text-white">Join a Game</.link>
-    </div>
-    <div class="p-5">
-        <.link href={~p"/practice"} class="rounded-lg bg-blue-800 px-2 py-1 hover:bg-zinc-800/80 text-white">Practice</.link>
-    </div>
-<% end %> 

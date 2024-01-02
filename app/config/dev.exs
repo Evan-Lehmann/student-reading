@@ -26,7 +26,7 @@ config :app, AppWeb.Endpoint,
   secret_key_base: "nxSjxS+gf6EBvWFbhrplICj3SOUxEVBlqEqp8lheZb32xBJNTYOgKZ97ynWQ6V+V",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
+    sass: {DartSass, :install_and_run, [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]}
   ]
 
 # ## SSL Support

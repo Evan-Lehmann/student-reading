@@ -18,26 +18,39 @@ defmodule AppWeb.QuizLive do
 
   def render(assigns) do
     ~H"""
+       <div id="navbar" class="container">
+        <nav class="navbar navbar-expand-lg rounded">
+            <div class="container-fluid">
+            <a class="navbar-brand" draggable="false" href={~p"/"}>
+                <img draggable="false" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
+            </a>
+            <.link class="btn btn-outline-primary" method="delete" href={~p"/users/log_out"}>Log out</.link>
+            </div>
+        </nav>
+    </div>
+    <hr id="line">
+
+
     <.table :if={@stories} id="stories" rows={@stories}>
       <:col :let={story} label="Title"><%= story.story.title %></:col>
       <:col :let={story} label="Difficulty">
-          <p :if={story.story.difficulty == "easy"} class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+          <p :if={story.story.difficulty == "easy"} class="">
             <%= story.story.difficulty %>
           </p>
-          <p :if={story.story.difficulty == "medium"} class="bg-amber-800/10 text-amber-700 rounded-full px-2 font-medium leading-6">
+          <p :if={story.story.difficulty == "medium"} class="">
             <%= story.story.difficulty %>
           </p>
-          <p :if={story.story.difficulty == "hard"} class="bg-rose-800/10 text-rose-700 rounded-full px-2 font-medium leading-6">
+          <p :if={story.story.difficulty == "hard"} class="">
             <%= story.story.difficulty %>
           </p>
       </:col>
       <:col :let={story}>
         <%= if story.is_completed == false do %>
-          <a href={~p"/quiz/#{story.story.id}"} class="rounded-lg bg-sky-600 px-2 py-1 hover:bg-sky-600/80 text-white">
+          <a href={~p"/quiz/#{story.story.id}"} class="text-primary">
             Start
           </a>
         <% else %>
-          <button disabled class="rounded-lg bg-slate-300 px-2 py-1 opacity-50 text-slate-800">
+          <button disabled class="">
             Already Completed
           </button>
         <% end %>

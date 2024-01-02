@@ -24,13 +24,14 @@ defmodule AppWeb.CustomComponents do
   def avatar(assigns) do
     ~H"""
     <img
+      draggable="false"
       class={[
-        "rounded-full border-4 border-solid
+        "img-thumbnail
         #{get_avatar_color(@rarity)}",
         @class
       ]}
       src={@src}
-      width={@width}
+      width={100}
     />
     """
   end
