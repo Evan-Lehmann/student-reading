@@ -6,18 +6,7 @@ defmodule AppWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
-    <div id="navbar" class="container">
-      <nav class="navbar navbar-expand-lg rounded">
-          <div class="container-fluid">
-          <a class="navbar-brand" draggable="false" href={~p"/"}>
-              <img draggable="false" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
-          </a>
-          </div>
-      </nav>
-    </div>
-    <hr id="line">
-
-    <div class="d-flex flex-column justify-content-center align-items-center py-5">
+    <div class="mx-auto max-w-sm">
       <.header class="text-center">
         Register for an account
         <:subtitle>
@@ -29,8 +18,7 @@ defmodule AppWeb.UserRegistrationLive do
         </:subtitle>
       </.header>
 
-      <div class="px-5 py-3">
-        <.simple_form
+      <.simple_form
         for={@form}
         id="registration_form"
         phx-submit="save"
@@ -38,25 +26,29 @@ defmodule AppWeb.UserRegistrationLive do
         phx-trigger-action={@trigger_submit}
         action={~p"/users/log_in?_action=registered"}
         method="post"
-        >
-          <.input field={@form[:username]} type="text" label="Username" required class="mb-3"  style={"width: 350px;"}/>
-          <.input field={@form[:password]} type="password" label="Password" required class="mb-3" autocomplete="off"/>
-          <.input field={@form[:type]} type="text" label="Account Type" value={@type_selected} class="mb-3 d-none" required readonly autocomplete="off"/>
-          <div class="mb-3">
-            <button :if={@type_selected=="student"} class="btn btn-secondary">Student</button>
-            <button :if={@type_selected != "student"} phx-click="select" phx-value-type={"student"} class="btn btn-outline-secondary">Student</button>
+      >
+        <.error :if={@check_errors}>
+          Oops, something went wrong! Please check the errors below.
+        </.error>
 
-            <button :if={@type_selected=="teacher"} class="btn btn-secondary">Teacher</button>
-            <button :if={@type_selected != "teacher"} phx-click="select" phx-value-type={"teacher"} class="btn btn-outline-secondary">Teacher</button>
-          </div>
-          <.input :if={@type_selected == "teacher"} field={@form[:join_code]} type="text" label="Class Join Code" required class="mb-3"/>
-          <.input :if={@type_selected == "student"} field={@form[:avatar_id]}  type="text" value={"1"} label="Avatar" required class="d-none"/>
-          <.input :if={@type_selected == "student"} field={@form[:cash]} type="number" value={500} readonly required class="d-none"/>
-          <:actions>
-            <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
-          </:actions>
-        </.simple_form>
-      </div>
+        <.input field={@form[:username]} type="text" label="Username" required />
+        <.input field={@form[:password]} type="password" label="Password" required />
+        <.input field={@form[:type]} type="select" label="Account Type" required
+          options={[{"Student", "student"}, {"Teacher", "teacher"}]}>
+        </.input>
+
+        <.input :if={@form[:type].value == "teacher"} field={@form[:join_code]} type="text" label="Class Join Code" required />
+        <.input :if={@form[:type].value == "student"} field={@form[:cash]} type="number" label="Cash" value={500} readonly required />
+        <.input :if={@form[:type].value == "student"} field={@form[:avatar_id]}  type="select" label="Avatar" required
+          options={[{"Astronaut", "1"}, {"Alien", "2"}]}>
+        </.input>
+
+
+
+        <:actions>
+          <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
+        </:actions>
+      </.simple_form>
     </div>
     """
   end
@@ -66,14 +58,10 @@ defmodule AppWeb.UserRegistrationLive do
 
     socket =
       socket
-      |> assign(trigger_submit: false, check_errors: false, type_selected: "none")
+      |> assign(trigger_submit: false, check_errors: false)
       |> assign_form(changeset)
 
-    {:ok, socket}
-  end
-
-  def handle_event("select", %{"type" => type}, socket) do
-    {:noreply, assign(socket, type_selected: type)}
+    {:ok, socket, temporary_assigns: [form: nil]}
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do

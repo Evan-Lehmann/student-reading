@@ -3,19 +3,8 @@ defmodule AppWeb.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <div id="navbar" class="container">
-        <nav class="navbar navbar-expand-lg rounded">
-            <div class="container-fluid">
-            <a class="navbar-brand" draggable="false" href={~p"/"}>
-                <img draggable="false" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
-            </a>
-            </div>
-        </nav>
-    </div>
-    <hr id="line">
-
-    <div class="d-flex flex-column justify-content-center align-items-center py-5">
-      <.header class="text-center mb-3">
+    <div class="mx-auto max-w-sm">
+      <.header class="text-center">
         Sign in to account
         <:subtitle>
           Don't have an account?
@@ -26,21 +15,19 @@ defmodule AppWeb.UserLoginLive do
         </:subtitle>
       </.header>
 
-      <div class="px-5 py-2">
-        <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
-          <.input field={@form[:username]} type="text" label="Username" required class="mb-3" style={"width: 350px;"}/>
-          <.input field={@form[:password]} type="password" label="Password" required class="mb-3" />
+      <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
+        <.input field={@form[:username]} type="text" label="Username" required />
+        <.input field={@form[:password]} type="password" label="Password" required />
 
-          <:actions>
-            <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" class="mb-3" />
-          </:actions>
-          <:actions>
-            <.button phx-disable-with="Signing in..." class="w-full mb-3">
-              Sign in <span aria-hidden="true">→</span>
-            </.button>
-          </:actions>
-        </.simple_form>
-      </div>
+        <:actions>
+          <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
+        </:actions>
+        <:actions>
+          <.button phx-disable-with="Signing in..." class="w-full">
+            Sign in <span aria-hidden="true">→</span>
+          </.button>
+        </:actions>
+      </.simple_form>
     </div>
     """
   end

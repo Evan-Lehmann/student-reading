@@ -15,17 +15,6 @@ defmodule AppWeb.ClassSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <div id="navbar" class="container">
-      <nav class="navbar navbar-expand-lg rounded">
-          <div class="container-fluid">
-          <a class="navbar-brand" draggable="false" href={~p"/"}>
-              <img draggable="false" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
-          </a>
-          <.link class="btn btn-outline-primary" method="delete" href={~p"/users/log_out"}>Log out</.link>
-          </div>
-      </nav>
-    </div>
-    <hr id="line">
     <span class="font-bold text-red-900">Current Class: <%= @current_class %> </span>
 
     <.simple_form for={@code_form} phx-submit="check" >

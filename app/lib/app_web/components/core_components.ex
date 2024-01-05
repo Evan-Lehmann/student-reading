@@ -185,7 +185,6 @@ defmodule AppWeb.CoreComponents do
   """
   attr :for, :any, required: true, doc: "the datastructure for the form"
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
-  attr :autocomplete, :string, default: nil
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -196,10 +195,12 @@ defmodule AppWeb.CoreComponents do
 
   def simple_form(assigns) do
     ~H"""
-    <.form :let={f} for={@for} as={@as} {@rest} autocomplete={@autocomplete}>
-      <%= render_slot(@inner_block, f) %>
-      <div :for={action <- @actions}>
-        <%= render_slot(action, f) %>
+    <.form :let={f} for={@for} as={@as} {@rest}>
+      <div class="mt-10 space-y-8 bg-white">
+        <%= render_slot(@inner_block, f) %>
+        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+          <%= render_slot(action, f) %>
+        </div>
       </div>
     </.form>
     """
@@ -224,7 +225,7 @@ defmodule AppWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 btn btn-primary",
+        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
@@ -264,9 +265,6 @@ defmodule AppWeb.CoreComponents do
   attr :name, :any
   attr :label, :string, default: nil
   attr :value, :any
-  attr :class, :string, default: nil
-  attr :style, :string, default: nil
-  attr :autocomplete, :string, default: nil
 
   attr :type, :string,
     default: "text",
@@ -302,17 +300,16 @@ defmodule AppWeb.CoreComponents do
       assign_new(assigns, :checked, fn -> Phoenix.HTML.Form.normalize_value("checkbox", value) end)
 
     ~H"""
-    <div phx-feedback-for={@name} class={["form-group", @class]} >
+    <div phx-feedback-for={@name}>
       <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
         <input type="hidden" name={@name} value="false" />
         <input
           type="checkbox"
-          style={@style}
           id={@id}
           name={@name}
           value="true"
           checked={@checked}
-          class="form-check-input"
+          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
           {@rest}
         />
         <%= @label %>
@@ -324,13 +321,12 @@ defmodule AppWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name} class={@class}>
+    <div phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
       <select
         id={@id}
-        style={@style}
         name={@name}
-        class="form-select"
+        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
         multiple={@multiple}
         {@rest}
       >
@@ -349,7 +345,6 @@ defmodule AppWeb.CoreComponents do
       <textarea
         id={@id}
         name={@name}
-        style={@style}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
@@ -366,18 +361,18 @@ defmodule AppWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div class={["form-group", @class]} phx-feedback-for={@name}>
+    <div phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
-        style={@style}
         name={@name}
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "form-control",
-          @errors == [] && "",
-          @errors != [] && ""
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
       />
@@ -407,7 +402,7 @@ defmodule AppWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="text-danger phx-no-feedback:hidden">
+    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
       <%= render_slot(@inner_block) %>
     </p>
@@ -462,6 +457,8 @@ defmodule AppWeb.CoreComponents do
     attr :label, :string
   end
 
+  slot :action, doc: "the slot for showing user actions in the last table column"
+
   def table(assigns) do
     assigns =
       with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
@@ -469,27 +466,40 @@ defmodule AppWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="">
-      <table class="table">
-        <thead class="mt-0 mb-0">
+    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
+      <table class="w-[40rem] mt-11 sm:w-full">
+        <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="mt-0 mb-0"><%= col[:label] %></th>
+            <th :for={col <- @col} class="p-0 pr-6 pb-4 font-normal"><%= col[:label] %></th>
+            <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
           </tr>
         </thead>
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="mt-0 mb-0">
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="mt-0 mb-0">
+          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+        >
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["mt-0 mb-0", @row_click && "mt-0 mb-0"]}
+              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
-              <div class="mt-0 mb-0">
-                <span class="mt-0 mb-0 p-0" />
-                <span class={["mt-0 mb-0", i == 0 && "mt-0 mb-0"]}>
+              <div class="block py-4 pr-6">
+                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
                   <%= render_slot(col, @row_item.(row)) %>
+                </span>
+              </div>
+            </td>
+            <td :if={@action != []} class="relative w-14 p-0">
+              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
+                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+                <span
+                  :for={action <- @action}
+                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                >
+                  <%= render_slot(action, @row_item.(row)) %>
                 </span>
               </div>
             </td>
