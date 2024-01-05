@@ -185,6 +185,7 @@ defmodule AppWeb.CoreComponents do
   """
   attr :for, :any, required: true, doc: "the datastructure for the form"
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
+  attr :autocomplete, :string, default: nil
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -195,7 +196,7 @@ defmodule AppWeb.CoreComponents do
 
   def simple_form(assigns) do
     ~H"""
-    <.form :let={f} for={@for} as={@as} {@rest}>
+    <.form :let={f} for={@for} as={@as} {@rest} autocomplete={@autocomplete}>
       <%= render_slot(@inner_block, f) %>
       <div :for={action <- @actions}>
         <%= render_slot(action, f) %>
@@ -264,6 +265,8 @@ defmodule AppWeb.CoreComponents do
   attr :label, :string, default: nil
   attr :value, :any
   attr :class, :string, default: nil
+  attr :style, :string, default: nil
+  attr :autocomplete, :string, default: nil
 
   attr :type, :string,
     default: "text",
@@ -304,11 +307,12 @@ defmodule AppWeb.CoreComponents do
         <input type="hidden" name={@name} value="false" />
         <input
           type="checkbox"
+          style={@style}
           id={@id}
           name={@name}
           value="true"
           checked={@checked}
-          class="form-check-input"}
+          class="form-check-input"
           {@rest}
         />
         <%= @label %>
@@ -324,6 +328,7 @@ defmodule AppWeb.CoreComponents do
       <.label for={@id}><%= @label %></.label>
       <select
         id={@id}
+        style={@style}
         name={@name}
         class="form-select"
         multiple={@multiple}
@@ -344,6 +349,7 @@ defmodule AppWeb.CoreComponents do
       <textarea
         id={@id}
         name={@name}
+        style={@style}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
@@ -364,6 +370,7 @@ defmodule AppWeb.CoreComponents do
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
+        style={@style}
         name={@name}
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
