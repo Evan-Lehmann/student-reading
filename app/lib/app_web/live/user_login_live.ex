@@ -1,14 +1,16 @@
 defmodule AppWeb.UserLoginLive do
   use AppWeb, :live_view
+  import AppWeb.CustomComponents
 
   def render(assigns) do
     ~H"""
+    <.logged_out_nav />
     <div class="mx-auto max-w-sm">
-      <.header class="text-center">
-        Sign in to account
+      <.header class="text-center pt-10">
+        <span class="text-2xl">Sign in to account</span>
         <:subtitle>
           Don't have an account?
-          <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
+          <.link navigate={~p"/users/register"} class="font-semibold text-blue-700 hover:underline">
             Sign up
           </.link>
           for an account now.
@@ -20,10 +22,10 @@ defmodule AppWeb.UserLoginLive do
         <.input field={@form[:password]} type="password" label="Password" required />
 
         <:actions>
-          <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
+          <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" class="" />
         </:actions>
         <:actions>
-          <.button phx-disable-with="Signing in..." class="w-full">
+          <.button phx-disable-with="Signing in..." class="w-full mt-3">
             Sign in <span aria-hidden="true">→</span>
           </.button>
         </:actions>

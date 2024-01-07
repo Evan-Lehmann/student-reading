@@ -1,5 +1,7 @@
 defmodule AppWeb.PageController do
   use AppWeb, :controller
+  import AppWeb.CustomComponents
+
 
   def home(conn, _params) do
     # The home page is often custom made,

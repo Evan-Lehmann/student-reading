@@ -1,17 +1,19 @@
 defmodule AppWeb.UserRegistrationLive do
   use AppWeb, :live_view
+  import AppWeb.CustomComponents
 
   alias App.Accounts
   alias App.Accounts.User
 
   def render(assigns) do
     ~H"""
+    <.logged_out_nav/>
     <div class="mx-auto max-w-sm">
-      <.header class="text-center">
-        Register for an account
+      <.header class="text-center pt-10">
+        <span class="text-2xl">Register for an accounts</span>
         <:subtitle>
           Already registered?
-          <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
+          <.link navigate={~p"/users/log_in"} class="font-semibold text-blue-700 hover:underline">
             Sign in
           </.link>
           to your account now.
@@ -37,16 +39,12 @@ defmodule AppWeb.UserRegistrationLive do
           options={[{"Student", "student"}, {"Teacher", "teacher"}]}>
         </.input>
 
-        <.input :if={@form[:type].value == "teacher"} field={@form[:join_code]} type="text" label="Class Join Code" required />
-        <.input :if={@form[:type].value == "student"} field={@form[:cash]} type="number" label="Cash" value={500} readonly required />
-        <.input :if={@form[:type].value == "student"} field={@form[:avatar_id]}  type="select" label="Avatar" required
-          options={[{"Astronaut", "1"}, {"Alien", "2"}]}>
-        </.input>
-
-
+        <.input :if={@form[:type].value == "teacher"} field={@form[:join_code]} type="text" label="Class Join Code" required/>
+        <.input :if={@form[:type].value == "student"} field={@form[:cash]} style={"display: none;"} type="number" value={500} readonly required/>
+        <.input :if={@form[:type].value == "student"} field={@form[:avatar_id]} style={"display: none;"} type="text" required value={"1"} />
 
         <:actions>
-          <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
+          <.button phx-disable-with="Creating account..." class="w-full mt-3">Create an account</.button>
         </:actions>
       </.simple_form>
     </div>

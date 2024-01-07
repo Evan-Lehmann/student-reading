@@ -2,6 +2,57 @@ defmodule AppWeb.CustomComponents do
   use Phoenix.Component
   use AppWeb, :html
 
+
+  attr :home_page, :boolean, default: nil
+
+  def logged_out_nav(assigns) do
+    ~H"""
+  <div class="container">
+    <nav class="navbar navbar-expand-lg rounded">
+      <div class="container-fluid">
+        <a class="navbar-brand" href={~p"/"}>
+          <img src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
+        </a>
+        <a :if={@home_page} class="btn btn-primary" href={~p"/users/log_in"}>Log in</a>
+      </div>
+    </nav>
+  </div>
+  <hr id="line">
+    """
+  end
+
+  def student_nav(assigns) do
+    ~H"""
+    <div class="container">
+      <nav class="navbar navbar-expand-lg rounded">
+        <div class="container-fluid">
+          <a class="navbar-brand" href={~p"/"}>
+            <img loading="lazy" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
+          </a>
+          <.link method="delete" class="btn btn-primary" href={~p"/users/log_out"}>Log out</.link>
+        </div>
+      </nav>
+    </div>
+    <hr id="line">
+    """
+  end
+
+  def teacher_nav(assigns) do
+    ~H"""
+    <div class="container">
+      <nav class="navbar navbar-expand-lg rounded">
+        <div class="container-fluid">
+          <a class="navbar-brand" href={~p"/"}>
+            <img loading="lazy" src={"https://img.logoipsum.com/245.svg"} alt="Logo"/>
+          </a>
+          <.link method="delete" class="bg-transparent hover:bg-blue-500 text-blue-600 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" href={~p"/users/log_out"}>Log out</.link>
+        </div>
+      </nav>
+    </div>
+    <hr id="line">
+    """
+  end
+
   ## RadioInput
   attr :answer_id, :string, required: true
   attr :answer_content, :string, required: true
@@ -29,6 +80,8 @@ defmodule AppWeb.CustomComponents do
         #{get_avatar_color(@rarity)}",
         @class
       ]}
+      loading="lazy"
+      draggable="false"
       src={@src}
       width={@width}
     />

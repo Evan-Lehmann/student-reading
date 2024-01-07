@@ -1,16 +1,29 @@
 <.flash_group flash={@flash} />
 
-<%= if @current_user && @current_user.type == "student" && @current_user.class == nil do %>
-    <div class="p-5">
-        <.link href={~p"/class_settings"} class="text-xl text-blue-700">Join a class to start playing!</.link>
+<%= if @current_user == nil do %>
+  <.logged_out_nav home_page={true} />
+  <div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row align-items-center g-5 py-5">
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Placeholder Title</h1>
+        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <a type="button" class="btn btn-primary btn-lg px-4 me-md-2" href={~p"/users/register"}>Register</a>
+          <a type="button" class="btn btn-outline-secondary btn-lg px-4" disabled="disabled">Learn more</a>
+        </div>
+      </div>
+      <div class="col-10 col-sm-8 col-lg-6">
+        <img src={~p"/images/placeholder.png"} class="d-block mx-lg-auto img-fluid" alt="Hero Image" width="700" height="500" loading="lazy">
+      </div>
     </div>
+  </div>
+	
 <% end %>
 
-<%= if @current_user && @current_user.type == "student" && @current_user.class != nil do %>
-    <div class="p-5">
-        <.link href={~p"/quiz_live"} class="rounded-lg bg-zinc-800 px-2 py-1 hover:bg-zinc-800/80 text-white">Join a Game</.link>
-    </div>
-    <div class="p-5">
-        <.link href={~p"/practice"} class="rounded-lg bg-blue-800 px-2 py-1 hover:bg-zinc-800/80 text-white">Practice</.link>
-    </div>
-<% end %> 
+<%= if @current_user != nil && @current_user.type == "student" do %>
+  <.student_nav />
+<% end %>
+
+<%= if @current_user != nil && @current_user.type == "teacher" do %>
+  <.teacher_nav />
+<% end %>
