@@ -7,7 +7,7 @@
       <div class="col-lg-6">
         <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Placeholder Title</h1>
         <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <div>
           <a type="button" class="btn btn-primary btn-lg px-4 me-md-2" href={~p"/users/register"}>Register</a>
           <a type="button" class="btn btn-outline-secondary btn-lg px-4" disabled="disabled">Learn more</a>
         </div>
@@ -25,5 +25,20 @@
 <% end %>
 
 <%= if @current_user != nil && @current_user.type == "teacher" do %>
-  <.teacher_nav />
+  <main class="d-flex flex-nowrap">
+    <.sidebar active_tab="class">
+    </.sidebar>
+
+    <div class="d-flex col justify-content-center py-5">
+      <div class="flex-row">
+        <div class="flex-col">
+          <.header>
+            Manage Class
+          </.header>
+        </div>
+        <div class="flex-col">
+        </div>
+      </div>
+    </div>
+  </main>
 <% end %>

@@ -67,7 +67,6 @@ defmodule AppWeb.Router do
       live "/class_settings", ClassSettingsLive
       live "/avatar_selection", AvatarSelection
       live "/quiz_live", QuizLive
-      live "/shop", ShopLive
       live "/practice", Practice
     end
   end
@@ -87,6 +86,7 @@ defmodule AppWeb.Router do
     live_session :require_teacher_or_student_in_class,
       on_mount: [{AppWeb.UserAuth, :require_teacher_or_student_in_class}] do
       live "/class_index", ClassIndexLive
+      live "/shop", ShopLive
     end
 
   end
