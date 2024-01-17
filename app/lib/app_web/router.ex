@@ -88,7 +88,15 @@ defmodule AppWeb.Router do
       live "/class_index", ClassIndexLive
       live "/shop", ShopLive
     end
+  end
 
+  scope "/", AppWeb do
+    pipe_through [:browser, :require_teacher_or_student]
+
+    live_session :require_teacher_or_student,
+      on_mount: [{AppWeb.UserAuth, :require_teacher_or_student}] do
+      live "/settings", SettingsLive
+    end
   end
 
   scope "/", AppWeb do

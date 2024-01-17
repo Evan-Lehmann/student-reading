@@ -21,23 +21,84 @@
 <% end %>
 
 <%= if @current_user != nil && @current_user.type == "student" do %>
-  <.student_nav />
-<% end %>
-
-<%= if @current_user != nil && @current_user.type == "teacher" do %>
   <main class="d-flex flex-nowrap">
-    <.sidebar active_tab="class">
-    </.sidebar>
+    <.student_sidebar active_tab="class">
+    </.student_sidebar>
 
     <div class="d-flex col justify-content-center py-5">
       <div class="flex-row">
         <div class="flex-col">
-          <.header>
+          <.header class="text-center">
+            Join a Class to Begin
+          </.header>
+        </div>
+      </div>
+    </div>
+  </main>
+<% end %>
+
+<%= if @current_user != nil && @current_user.type == "teacher" do %>
+  <main class="d-flex flex-nowrap">
+    <.teacher_sidebar active_tab="class">
+    </.teacher_sidebar>
+
+    <div class="d-flex col justify-content-center py-5">
+      <div class="flex-row">
+        <div class="flex-col">
+          <.header class="text-center">
             Manage Class
           </.header>
         </div>
-        <div class="flex-col">
-        </div>
+
+        <br>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Handle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Larry</td>
+              <td>the Bird</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <.table id="students" rows={@students}>
+          <:col :let={student}>
+            <.avatar src={student.avatar.image} rarity={student.avatar.rarity} class="w-16 h-16" />
+          </:col>
+          <:col :let={student} label="username"><%= student.username %></:col>
+          <:col :let={student} label="cash">
+            <p class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+              $<%= student.cash %>
+            </p>
+          </:col>
+          <:col :if={@current_user.type == "teacher"} :let={student}>
+            <button class="rounded-lg bg-red-600 px-2 py-1 hover:bg-red-600/80 text-white" phx-click="remove" value={student.id}>
+              Delete
+            </button>
+          </:col>
+        </.table>
       </div>
     </div>
   </main>

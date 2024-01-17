@@ -16,14 +16,29 @@ defmodule AppWeb.ShopLive do
   def render(assigns) do
     ~H"""
     <%= if @current_user.type == "student" do %>
-      <p class="text-xl font-bold">Cost: $500</p>
-      <p>Your Balance:
-        <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
-          $<%= @current_user.cash %>
-        </span>
-      </p>
-      <br>
-      <br>
+      <main class="d-flex flex-nowrap">
+        <.student_sidebar active_tab="shop">
+        </.student_sidebar>
+
+        <div class="d-flex col justify-content-center py-5">
+          <div class="flex-row">
+            <div class="flex-col">
+              <.header class="text-center">
+                Shop
+              </.header>
+
+              <p class="text-xl font-bold">Cost: $500</p>
+              <p>Your Balance:
+                <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+                  $<%= @current_user.cash %>
+                </span>
+              </p>
+              <br>
+              <br>
+            </div>
+          </div>
+        </div>
+      </main>
 
       <%= if @new_avatar != nil do %>
         <.button disabled class="opacity-50">Unlock Random Avatar</.button>
@@ -47,13 +62,13 @@ defmodule AppWeb.ShopLive do
       <% end %>
     <% else %>
       <main class="d-flex flex-nowrap">
-        <.sidebar active_tab="rewards">
-        </.sidebar>
+        <.teacher_sidebar active_tab="rewards">
+        </.teacher_sidebar>
 
         <div class="d-flex col justify-content-center py-5">
           <div class="flex-row">
             <div class="flex-col">
-              <.header>
+              <.header class="text-center font-xl">
                 Manage Rewards
               </.header>
             </div>
