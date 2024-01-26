@@ -1,5 +1,6 @@
 defmodule AppWeb.PageController do
   use AppWeb, :controller
+  alias Phoenix.HTML.Form
   import AppWeb.CustomComponents
   alias App.Accounts
 
@@ -14,7 +15,17 @@ defmodule AppWeb.PageController do
         |> assign(:students, students)
         |> render(:home, layout: false)
       else
-        render(conn, :home, layout: false)
+        current_user = conn.assigns[:current_user]
+        if current_user.class != nil do
+          render(conn, :home, layout: false)
+        else
+          conn
+          #|> assign(:code_form, code_form)
+          #|> assign(:class_form, class_form)
+          #|> assign(:display, "none")
+          #|> assign(:class, nil)
+          |> render(:home, layout: false)
+        end
       end
     end
 

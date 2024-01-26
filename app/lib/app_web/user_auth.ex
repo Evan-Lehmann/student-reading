@@ -188,6 +188,38 @@ defmodule AppWeb.UserAuth do
     end
   end
 
+
+  def on_mount(:require_student_not_in_class, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user && socket.assigns.current_user.type == "student" && socket.assigns.current_user.class == nil  do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You can't access this page.")
+        |> Phoenix.LiveView.redirect(to: ~p"/")
+
+      {:halt, socket}
+    end
+  end
+
+  def on_mount(:require_student_in_class, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user && socket.assigns.current_user.type == "student" && socket.assigns.current_user.class != nil  do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You can't access this page.")
+        |> Phoenix.LiveView.redirect(to: ~p"/")
+
+      {:halt, socket}
+    end
+  end
+
+
   def on_mount(:require_teacher_or_student_in_class, _params, session, socket) do
     socket = mount_current_user(socket, session)
 
@@ -198,6 +230,19 @@ defmodule AppWeb.UserAuth do
         socket
         |> Phoenix.LiveView.put_flash(:error, "Must be teacher or student in a class!")
         |> Phoenix.LiveView.redirect(to: ~p"/")
+          {:halt, socket}
+    end
+  end
+
+  def on_mount(:require_teacher_or_student_in_class_or_logged_out, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if (socket.assigns.current_user == nil) || (socket.assigns.current_user && ((socket.assigns.current_user.type == "student" && socket.assigns.current_user.class != nil) || socket.assigns.current_user.type == "teacher")) do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.redirect(to: ~p"/join_class")
           {:halt, socket}
     end
   end
@@ -268,6 +313,30 @@ defmodule AppWeb.UserAuth do
     end
   end
 
+  def require_student_not_in_class(conn, _opts) do
+    if conn.assigns[:current_user] && conn.assigns[:current_user].type == "student" && conn.assigns[:current_user].class == nil do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You can't access this page")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/")
+      |> halt()
+    end
+  end
+
+  def require_student_in_class(conn, _opts) do
+    if conn.assigns[:current_user] && conn.assigns[:current_user].type == "student" && conn.assigns[:current_user].class != nil do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You can't access this page")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/")
+      |> halt()
+    end
+  end
+
   def require_teacher_or_student_in_class(conn, _opts) do
     if conn.assigns[:current_user] && ((conn.assigns[:current_user].type == "student" && conn.assigns[:current_user].class != nil) || conn.assigns[:current_user].type == "teacher") do
       conn
@@ -276,6 +345,17 @@ defmodule AppWeb.UserAuth do
       |> put_flash(:error, "Must be teacher or student in a class!")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
+  def require_teacher_or_student_in_class_or_logged_out(conn, _opts) do
+    if (conn.assigns[:current_user] == nil) || (conn.assigns[:current_user] && ((conn.assigns[:current_user].type == "student" && conn.assigns[:current_user].class != nil) || conn.assigns[:current_user].type == "teacher")) do
+      conn
+    else
+      conn
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/join_class")
       |> halt()
     end
   end

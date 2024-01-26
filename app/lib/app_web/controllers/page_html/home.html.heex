@@ -1,105 +1,88 @@
 <.flash_group flash={@flash} />
 
 <%= if @current_user == nil do %>
-  <.logged_out_nav home_page={true} />
-  <div class="container col-xxl-8 px-4 py-5">
-    <div class="row flex-lg-row align-items-center g-5 py-5">
-      <div class="col-lg-6">
-        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Placeholder Title</h1>
-        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <div>
-          <a type="button" class="btn btn-primary btn-lg px-4 me-md-2" href={~p"/users/register"}>Register</a>
-          <a type="button" class="btn btn-outline-secondary btn-lg px-4" disabled="disabled">Learn more</a>
+      <.logged_out_nav home_page={true} />
+      <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row align-items-center g-5 py-5">
+          <div class="col-lg-6">
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Placeholder Title</h1>
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <div>
+              <a type="button" class="btn btn-primary btn-lg px-4 me-md-2" href={~p"/users/register"}>Register</a>
+              <a type="button" class="btn btn-outline-secondary btn-lg px-4" disabled="disabled">Learn more</a>
+            </div>
+          </div>
+          <div class="col-10 col-sm-8 col-lg-6">
+            <img src={~p"/images/placeholder.png"} class="d-block mx-lg-auto img-fluid" alt="Hero Image" width="700" height="500" loading="lazy">
+          </div>
         </div>
       </div>
-      <div class="col-10 col-sm-8 col-lg-6">
-        <img src={~p"/images/placeholder.png"} class="d-block mx-lg-auto img-fluid" alt="Hero Image" width="700" height="500" loading="lazy">
-      </div>
-    </div>
-  </div>
-	
-<% end %>
+    <% end %>
 
-<%= if @current_user != nil && @current_user.type == "student" do %>
-  <main class="d-flex flex-nowrap">
-    <.student_sidebar active_tab="class">
-    </.student_sidebar>
+    <%= if @current_user != nil && @current_user.type == "student" do %>
+      <%= if @current_user != nil && @current_user.class == nil do %>
+        <main class="d-flex flex-nowrap">
+          <.disabled_sidebar>
+          </.disabled_sidebar>
 
-    <div class="d-flex col justify-content-center py-5">
-      <div class="flex-row">
-        <div class="flex-col">
-          <.header class="text-center">
-            Join a Class to Begin
-          </.header>
+          <div class="d-flex col justify-content-center py-5">
+            <div class="flex-row">
+              <div class="flex-col">
+                <.header class="text-center">
+                  Welcome, <%= @current_user.username %>!
+                </.header>
+                <br>
+
+                <span>Please enter your class join code</span>
+                <br>
+                <.link href="/join_class">Join class here!</.link>
+              </div>
+            </div>
+          </div>
+        </main>
+      <% else %>
+        <main class="d-flex flex-nowrap">
+          <.student_sidebar active_tab="class">
+          </.student_sidebar>
+
+          <div class="d-flex col justify-content-center py-5">
+            <div class="flex-row">
+              <div class="flex-col">
+                <.header class="text-center">
+                  Play
+                </.header>
+                <br>
+
+              </div>
+            </div>
+          </div>
+        </main>
+      <% end %>
+    <% end %>
+
+    <%= if @current_user != nil && @current_user.type == "teacher" do %>
+      <main class="d-flex flex-nowrap">
+        <.teacher_sidebar active_tab="class">
+        </.teacher_sidebar>
+
+        <div class="d-flex col justify-content-center py-5">
+          <div class="flex-row">
+            <div class="flex-col">
+              <.header class="text-center">
+                Manage Class
+              </.header>
+            </div>
+
+            <br>
+
+            <%= if length(@students) > 0 do %>
+              You have students!
+            <% else %>
+              No students yet...<br>
+              They'll appear here when they join
+            <% end %>
+
+          </div>
         </div>
-      </div>
-    </div>
-  </main>
-<% end %>
-
-<%= if @current_user != nil && @current_user.type == "teacher" do %>
-  <main class="d-flex flex-nowrap">
-    <.teacher_sidebar active_tab="class">
-    </.teacher_sidebar>
-
-    <div class="d-flex col justify-content-center py-5">
-      <div class="flex-row">
-        <div class="flex-col">
-          <.header class="text-center">
-            Manage Class
-          </.header>
-        </div>
-
-        <br>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <.table id="students" rows={@students}>
-          <:col :let={student}>
-            <.avatar src={student.avatar.image} rarity={student.avatar.rarity} class="w-16 h-16" />
-          </:col>
-          <:col :let={student} label="username"><%= student.username %></:col>
-          <:col :let={student} label="cash">
-            <p class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
-              $<%= student.cash %>
-            </p>
-          </:col>
-          <:col :if={@current_user.type == "teacher"} :let={student}>
-            <button class="rounded-lg bg-red-600 px-2 py-1 hover:bg-red-600/80 text-white" phx-click="remove" value={student.id}>
-              Delete
-            </button>
-          </:col>
-        </.table>
-      </div>
-    </div>
-  </main>
-<% end %>
+      </main>
+    <% end %>

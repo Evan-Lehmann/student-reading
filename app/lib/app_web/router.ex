@@ -19,8 +19,6 @@ defmodule AppWeb.Router do
 
   scope "/", AppWeb do
     pipe_through :browser
-
-    get "/", PageController, :home
   end
 
   # Other scopes may use custom stacks.
@@ -60,14 +58,22 @@ defmodule AppWeb.Router do
   end
 
   scope "/", AppWeb do
-    pipe_through [:browser, :require_student]
+    pipe_through [:browser, :require_student_in_class]
 
-    live_session :require_student,
-      on_mount: [{AppWeb.UserAuth, :require_student}] do
-      live "/class_settings", ClassSettingsLive
+    live_session :require_student_in_class,
+      on_mount: [{AppWeb.UserAuth, :require_student_in_class}] do
       live "/avatar_selection", AvatarSelection
       live "/quiz_live", QuizLive
       live "/practice", Practice
+    end
+  end
+
+  scope "/", AppWeb do
+    pipe_through [:browser, :require_student_not_in_class]
+
+    live_session :require_student_not_in_class,
+      on_mount: [{AppWeb.UserAuth, :require_student_not_in_class}] do
+      live "/join_class", JoinClass
     end
   end
 
@@ -81,20 +87,18 @@ defmodule AppWeb.Router do
   end
 
   scope "/", AppWeb do
+    pipe_through [:browser, :require_teacher_or_student_in_class_or_logged_out]
+
+    get "/", PageController, :home
+  end
+
+  scope "/", AppWeb do
     pipe_through [:browser, :require_teacher_or_student_in_class]
 
     live_session :require_teacher_or_student_in_class,
       on_mount: [{AppWeb.UserAuth, :require_teacher_or_student_in_class}] do
       live "/class_index", ClassIndexLive
       live "/shop", ShopLive
-    end
-  end
-
-  scope "/", AppWeb do
-    pipe_through [:browser, :require_teacher_or_student]
-
-    live_session :require_teacher_or_student,
-      on_mount: [{AppWeb.UserAuth, :require_teacher_or_student}] do
       live "/settings", SettingsLive
     end
   end

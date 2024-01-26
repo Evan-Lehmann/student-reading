@@ -26,21 +26,29 @@ defmodule AppWeb.SettingsLive do
         <.teacher_sidebar active_tab="settings">
         </.teacher_sidebar>
 
+
         <div class="d-flex col justify-content-center py-5">
           <div class="flex-row">
             <div class="flex-col">
-              <h1 class="text-center">
-                  Settings
-              </h1>
-              <br>
-              <ul class="text-center p-0 m-0">
-                <li>
-                  <span class="text-lg font-semibold leading-8 text-zinc-800">Name: Evan</span>
+            <.header class="text-center">
+                Settings
+              </.header>
+            <br>
+
+            <div>
+              <ul class="text-start p-0 m-0">
+                <li class="mb-2">
+                  Name: <span class="fw-semibold"><%= @current_user.username %></span>
                 </li>
-                <li>
-                  <span class="text-lg font-semibold leading-8 text-zinc-800">Name: Evan</span>
+                <li class="mb-2">
+                  Account Type: <span class="fw-semibold"><%= @current_user.type %></span>
+                </li>
+                <li class="mb-2">
+                  Join Code: <span class="fw-semibold"><%= @current_user.join_code %></span>
                 </li>
               </ul>
+            </div>
+
             </div>
             <div class="flex-col">
             </div>
@@ -49,32 +57,35 @@ defmodule AppWeb.SettingsLive do
       </main>
     <% else %>
 
-      <main class="d-flex flex-nowrap">
+      <main class="d-flex flex-nowrap text-center">
         <.student_sidebar active_tab="settings">
         </.student_sidebar>
 
         <div class="d-flex col justify-content-center py-5">
           <div class="flex-row">
             <div class="flex-col">
-              <h1 class="text-center">
-                  Settings
-              </h1>
+              <.header class="text-center">
+                Settings
+              </.header>
               <br>
 
-              <span class="font-bold text-red-900">Current Class: <%= @current_class %> </span>
-              <.simple_form for={@code_form} phx-submit="check" >
-                <.input field={@code_form[:code]} type="text" required/>
-                <.button>Check</.button>
-              </.simple_form>
+              <div>
+                <ul class="text-start p-0 m-0">
+                  <li class="mb-2">
+                    Name: <span class="fw-semibold"><%= @current_user.username %></span>
+                  </li>
+                  <li class="mb-2">
+                    Account Type: <span class="fw-semibold"><%= @current_user.type %></span>
+                  </li>
+                  <li class="mb-2" :if={@current_user.class != nil}>
+                    Teacher: <span class="fw-semibold"><%= @current_user.class %></span>
+                  </li>
+                  <li class="mb-2" :if={@current_user.class == nil}>
+                    Teacher:
+                  </li>
+                </ul>
+              </div>
 
-              <.simple_form for={@class_form} phx-submit="change" >
-                <.input field={@class_form[:class]} type="text" value={@class} required readonly/>
-                <%= if @class == nil do %>
-                  <.button class="opacity-50">Submit</.button>
-                <% else %>
-                  <.button>Submit</.button>
-                <% end %>
-              </.simple_form>
             </div>
             <div class="flex-col">
             </div>

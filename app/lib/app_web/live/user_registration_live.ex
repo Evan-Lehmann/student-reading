@@ -40,6 +40,7 @@ defmodule AppWeb.UserRegistrationLive do
         </.input>
 
         <.input :if={@form[:type].value == "teacher"} field={@form[:join_code]} type="text" label="Class Join Code" required/>
+
         <.input :if={@form[:type].value == "student"} field={@form[:cash]} style={"display: none;"} type="number" value={500} readonly required/>
         <.input :if={@form[:type].value == "student"} field={@form[:avatar_id]} style={"display: none;"} type="text" required value={"1"} />
 
