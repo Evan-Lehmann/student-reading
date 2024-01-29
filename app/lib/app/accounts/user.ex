@@ -16,6 +16,7 @@ defmodule App.Accounts.User do
     field :confirmed_at, :naive_datetime
 
     belongs_to :avatar, App.Avatars.Avatar
+    has_many :rewards, App.Rewards.Reward
 
     timestamps()
   end

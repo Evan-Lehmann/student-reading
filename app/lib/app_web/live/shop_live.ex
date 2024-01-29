@@ -3,13 +3,14 @@ defmodule AppWeb.ShopLive do
   import AppWeb.CustomComponents
   alias App.Avatars
   alias App.Accounts
+  alias App.Rewards
 
   def mount(_params, _session, socket) do
     user = socket.assigns.current_user
     if user.type == "student" do
       {:ok, assign(socket, new_avatar: nil, locked_avatars_ids: Avatars.list_users_locked_avatars(user.id))}
     else
-      {:ok, socket}
+      {:ok, assign(socket, rewards: Rewards.get_rewards_of_teacher(user.id))}
     end
   end
 
@@ -73,7 +74,19 @@ defmodule AppWeb.ShopLive do
               </.header>
             </div>
             <div class="flex-col">
-            </div>
+              <div class="card" style="width: 12rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">New Avatar</h5>
+                    <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+                      $500
+                    </span>
+                    <br>
+                    <button class="btn btn-primary px-2 py-1" disabled="true">Edit</button>
+                    <button class="btn btn-primary px-2 py-1" disabled="true">Delete</button>
+                  </div>
+                </div>
+              </div>
+              <p :for={reward <- @rewards}> <%= reward.name %></p>
           </div>
         </div>
       </main>

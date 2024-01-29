@@ -11,6 +11,7 @@ defmodule App.Accounts do
   alias App.Quiz.CompletedStory
   alias App.Avatars
   alias App.Quiz
+  alias App.Rewards.Reward
 
   ## Database getters
 
@@ -34,6 +35,12 @@ defmodule App.Accounts do
     Repo.all(from u in User,
       where: u.type == "teacher",
       select: u.username)
+  end
+
+  def list_teacher_ids do
+    Repo.all(from u in User,
+      where: u.type == "teacher",
+      select: u.id)
   end
 
   def list_student_names_in_class(class) do
@@ -141,6 +148,15 @@ defmodule App.Accounts do
         |> Repo.insert()
       end)
     end
+
+    if type == "teacher" do
+      user_id = get_user_by_username(username).id
+
+      %Reward{}
+      |> Reward.changeset(%{"name" => "lorem", "price" => 1000, "image" => "/images/a.PNG", "user_id" => Integer.to_string(user_id)})
+      |> Repo.insert()
+    end
+
     result
   end
 
