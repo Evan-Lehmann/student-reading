@@ -73,6 +73,7 @@ defmodule AppWeb.ShopLive do
                 Manage Rewards
               </.header>
             </div>
+
             <div class="flex-col">
               <div class="card" style="width: 12rem;">
                   <div class="card-body">
@@ -81,17 +82,46 @@ defmodule AppWeb.ShopLive do
                       $500
                     </span>
                     <br>
-                    <button class="btn btn-primary px-2 py-1" disabled="true">Edit</button>
-                    <button class="btn btn-primary px-2 py-1" disabled="true">Delete</button>
                   </div>
-                </div>
               </div>
-              <p :for={reward <- @rewards}> <%= reward.name %></p>
+            </div>
+            <br>
+
+            <div class="flex-col" :for={reward <- @rewards}>
+              <div class="card" style="width: 12rem;">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= reward.name %></h5>
+                      <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+                        $<%= reward.price %>
+                      </span>
+                      <br>
+                      <button phx-click="remove" phx-value-reward_id={reward.id} class="btn btn-outline-primary px-2 py-1 mt-2">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="flex-col">
+              <div class="card" style="width: 12rem;">
+                <button class="btn btn-outline-secondary px-2 py-1" >New</button>
+              </div>
+            </div>
+
           </div>
         </div>
       </main>
     <% end %>
     """
+  end
+
+  def handle_event("remove", %{"reward_id" => reward_id}, socket) do
+    case Rewards.delete_reward_by_id(String.to_integer(reward_id)) do
+      {:ok, _} ->
+        {:noreply, assign(socket, rewards: Rewards.get_rewards_of_teacher(socket.assigns.current_user.id))}
+
+      {:error, _} ->
+        {:noreply, socket}
+    end
   end
 
   def handle_event("accept", _params, socket) do

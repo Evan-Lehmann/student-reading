@@ -96,6 +96,11 @@ defmodule App.Rewards do
     Repo.delete(reward)
   end
 
+  def delete_reward_by_id(id) do
+    reward = Repo.get!(Reward, id)
+    Repo.delete(reward)
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking reward changes.
 
