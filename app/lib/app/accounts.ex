@@ -11,7 +11,6 @@ defmodule App.Accounts do
   alias App.Quiz.CompletedStory
   alias App.Avatars
   alias App.Quiz
-  alias App.Rewards.Reward
 
   ## Database getters
 
@@ -138,23 +137,6 @@ defmodule App.Accounts do
         |> AvatarAccess.changeset(%{"avatar_id" => Integer.to_string(x), "user_id" => Integer.to_string(user_id), "is_unlocked" => "false"})
         |> Repo.insert()
       end)
-
-      stories_ids = Quiz.list_stories_ids
-
-      Enum.each(stories_ids, fn(x) ->
-        user_id = get_user_by_username(username).id
-        %CompletedStory{}
-        |> CompletedStory.changeset(%{"story_id" => Integer.to_string(x), "user_id" => Integer.to_string(user_id), "is_completed" => "false"})
-        |> Repo.insert()
-      end)
-    end
-
-    if type == "teacher" do
-      user_id = get_user_by_username(username).id
-
-      %Reward{}
-      |> Reward.changeset(%{"name" => "lorem", "price" => 1000, "image" => "/images/a.PNG", "user_id" => Integer.to_string(user_id)})
-      |> Repo.insert()
     end
 
     result

@@ -20,13 +20,15 @@ defmodule App.Rewards.Reward do
     reward
     |> cast(attrs, [:name, :price, :image, :user_id])
     |> validate_required([:name, :price, :image, :user_id])
+    |> validate_number(:price, greater_than: 0)
+    |> validate_length(:name, min: 2, max: 26)
     |> validate_image
 
   end
 
   defp validate_image(changeset) do
     changeset
-    |> validate_inclusion(:image, ["/images/a.PNG", "/images/b.PNG"])
+    |> validate_inclusion(:image, ["/images/cup.png", "/images/chips.png", "/images/popcorn.png"])
   end
 
   defp validate_user(changeset) do

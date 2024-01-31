@@ -62,27 +62,45 @@
 
     <%= if @current_user != nil && @current_user.type == "teacher" do %>
       <main class="d-flex flex-nowrap">
-        <.teacher_sidebar active_tab="class">
-        </.teacher_sidebar>
+        <.teacher_sidebar active_tab="class"></.teacher_sidebar>
 
-        <div class="d-flex col justify-content-center py-5">
-          <div class="flex-row">
-            <div class="flex-col">
-              <.header class="text-center">
-                Manage Class
-              </.header>
-            </div>
+        <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
+          <!-- Welcome Header -->
+          <h2 class="h1 mb-2 mt-3 text-center">Manage Class</h2>
 
-            <br>
+          <!-- Table -->
+          <table class="content-table shadow-lg">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Account Level</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Lorem</td>
+                <td>-</td>
+                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
+              </tr>
+              <tr class="active-row">
+                <td>2</td>
+                <td>Ipsum</td>
+                <td>-</td>
+                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Soler</td>
+                <td>-</td>
+                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
+              </tr>
+            </tbody>
+          </table>
 
-            <%= if length(@students) > 0 do %>
-              You have students!
-            <% else %>
-              No students yet...<br>
-              They'll appear here when they join
-            <% end %>
-
-          </div>
         </div>
       </main>
+
     <% end %>

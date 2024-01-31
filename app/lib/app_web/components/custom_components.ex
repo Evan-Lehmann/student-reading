@@ -2,7 +2,6 @@ defmodule AppWeb.CustomComponents do
   use Phoenix.Component
   use AppWeb, :html
 
-
   attr :home_page, :boolean, default: nil
 
   def logged_out_nav(assigns) do

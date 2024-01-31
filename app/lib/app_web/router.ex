@@ -63,7 +63,6 @@ defmodule AppWeb.Router do
     live_session :require_student_in_class,
       on_mount: [{AppWeb.UserAuth, :require_student_in_class}] do
       live "/avatar_selection", AvatarSelection
-      live "/quiz_live", QuizLive
       live "/practice", Practice
     end
   end
@@ -74,15 +73,6 @@ defmodule AppWeb.Router do
     live_session :require_student_not_in_class,
       on_mount: [{AppWeb.UserAuth, :require_student_not_in_class}] do
       live "/join_class", JoinClass
-    end
-  end
-
-  scope "/", AppWeb do
-    pipe_through [:browser, :require_student_and_incompleted_quiz]
-
-    live_session :require_student_and_incompleted_quiz,
-      on_mount: [{AppWeb.UserAuth, :require_student_and_incompleted_quiz}] do
-      live "/quiz/:id", QuizIndex
     end
   end
 

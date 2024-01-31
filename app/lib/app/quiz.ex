@@ -6,8 +6,6 @@ defmodule App.Quiz do
   import Ecto.Query, warn: false
   alias App.Repo
 
-  alias App.Quiz.Story
-  alias App.Quiz.CompletedStory
   alias App.Quiz.McqAnswer
 
   @doc """
@@ -19,19 +17,6 @@ defmodule App.Quiz do
       [%Story{}, ...]
 
   """
-  def list_stories do
-    Repo.all(Story)
-  end
-
-  def list_stories_ids do
-    Repo.all(from s in Story, select: s.id)
-  end
-
-  def list_user_stories(user_id) do
-    from(s in CompletedStory, where: s.user_id == ^user_id)
-    |> Repo.all()
-    |> Repo.preload(:story)
-  end
 
   @doc """
   Gets a single story.
@@ -47,7 +32,6 @@ defmodule App.Quiz do
       ** (Ecto.NoResultsError)
 
   """
-  def get_story!(id), do: Repo.get!(Story, id)
 
   @doc """
   Creates a story.
@@ -61,11 +45,6 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_story(attrs \\ %{}) do
-    %Story{}
-    |> Story.changeset(attrs)
-    |> Repo.insert()
-  end
 
   @doc """
   Updates a story.
@@ -79,11 +58,7 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_story(%Story{} = story, attrs) do
-    story
-    |> Story.changeset(attrs)
-    |> Repo.update()
-  end
+
 
   @doc """
   Deletes a story.
@@ -97,9 +72,6 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_story(%Story{} = story) do
-    Repo.delete(story)
-  end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking story changes.
@@ -110,11 +82,7 @@ defmodule App.Quiz do
       %Ecto.Changeset{data: %Story{}}
 
   """
-  def change_story(%Story{} = story, attrs \\ %{}) do
-    Story.changeset(story, attrs)
-  end
 
-  alias App.Quiz.Question
 
   @doc """
   Returns the list of questions.
@@ -125,9 +93,7 @@ defmodule App.Quiz do
       [%Question{}, ...]
 
   """
-  def list_questions do
-    Repo.all(Question)
-  end
+
 
   @doc """
   Gets a single question.
@@ -143,7 +109,6 @@ defmodule App.Quiz do
       ** (Ecto.NoResultsError)
 
   """
-  def get_question!(id), do: Repo.get!(Question, id)
 
   @doc """
   Creates a question.
@@ -157,11 +122,7 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_question(attrs \\ %{}) do
-    %Question{}
-    |> Question.changeset(attrs)
-    |> Repo.insert()
-  end
+
 
   @doc """
   Updates a question.
@@ -175,11 +136,6 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_question(%Question{} = question, attrs) do
-    question
-    |> Question.changeset(attrs)
-    |> Repo.update()
-  end
 
   def get_answers_of_mcq(mcq_id) do
     from(m in McqAnswer, where: m.mcq_id == ^mcq_id)
@@ -204,9 +160,7 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_question(%Question{} = question) do
-    Repo.delete(question)
-  end
+
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking question changes.
@@ -217,11 +171,7 @@ defmodule App.Quiz do
       %Ecto.Changeset{data: %Question{}}
 
   """
-  def change_question(%Question{} = question, attrs \\ %{}) do
-    Question.changeset(question, attrs)
-  end
 
-  alias App.Quiz.Answer
 
   @doc """
   Returns the list of answers.
@@ -232,9 +182,7 @@ defmodule App.Quiz do
       [%Answer{}, ...]
 
   """
-  def list_answers do
-    Repo.all(Answer)
-  end
+
 
   @doc """
   Gets a single answer.
@@ -250,7 +198,6 @@ defmodule App.Quiz do
       ** (Ecto.NoResultsError)
 
   """
-  def get_answer!(id), do: Repo.get!(Answer, id)
 
   @doc """
   Creates a answer.
@@ -264,11 +211,6 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_answer(attrs \\ %{}) do
-    %Answer{}
-    |> Answer.changeset(attrs)
-    |> Repo.insert()
-  end
 
   @doc """
   Updates a answer.
@@ -282,11 +224,6 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_answer(%Answer{} = answer, attrs) do
-    answer
-    |> Answer.changeset(attrs)
-    |> Repo.update()
-  end
 
   @doc """
   Deletes a answer.
@@ -300,9 +237,6 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_answer(%Answer{} = answer) do
-    Repo.delete(answer)
-  end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking answer changes.
@@ -313,23 +247,8 @@ defmodule App.Quiz do
       %Ecto.Changeset{data: %Answer{}}
 
   """
-  def change_answer(%Answer{} = answer, attrs \\ %{}) do
-    Answer.changeset(answer, attrs)
-  end
-
-  def get_answers_of_question(question_id) do
-    Repo.all(from a in Answer,
-      where: a.question_id == ^question_id)
-  end
-
-  def get_questions_of_story(story_id) do
-    Repo.all(from q in Question,
-      where: q.story_id == ^story_id,
-      select: q.id)
-  end
 
 
-  alias App.Quiz.CompletedStory
 
   @doc """
   Returns the list of completed_stories.
@@ -340,9 +259,7 @@ defmodule App.Quiz do
       [%CompletedStory{}, ...]
 
   """
-  def list_completed_stories do
-    Repo.all(CompletedStory)
-  end
+
 
   @doc """
   Gets a single completed_story.
@@ -358,7 +275,6 @@ defmodule App.Quiz do
       ** (Ecto.NoResultsError)
 
   """
-  def get_completed_story!(id), do: Repo.get!(CompletedStory, id)
 
   @doc """
   Creates a completed_story.
@@ -372,11 +288,6 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_completed_story(attrs \\ %{}) do
-    %CompletedStory{}
-    |> CompletedStory.changeset(attrs)
-    |> Repo.insert()
-  end
 
   @doc """
   Updates a completed_story.
@@ -390,16 +301,9 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_completed_story(%CompletedStory{} = completed_story, attrs) do
-    completed_story
-    |> CompletedStory.changeset(attrs)
-    |> Repo.update()
-  end
 
-  def get_completed_story_by_user_id_and_story_id(user_id, story_id) do
-    Repo.one(from c in CompletedStory,
-      where: c.user_id == ^user_id and c.story_id == ^story_id)
-  end
+
+
 
   @doc """
   Deletes a completed_story.
@@ -413,9 +317,7 @@ defmodule App.Quiz do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_completed_story(%CompletedStory{} = completed_story) do
-    Repo.delete(completed_story)
-  end
+
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking completed_story changes.
@@ -426,9 +328,6 @@ defmodule App.Quiz do
       %Ecto.Changeset{data: %CompletedStory{}}
 
   """
-  def change_completed_story(%CompletedStory{} = completed_story, attrs \\ %{}) do
-    CompletedStory.changeset(completed_story, attrs)
-  end
 
   alias App.Quiz.Mcq
 
