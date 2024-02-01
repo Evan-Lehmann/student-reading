@@ -89,6 +89,7 @@ defmodule AppWeb.Router do
       on_mount: [{AppWeb.UserAuth, :require_teacher_or_student_in_class}] do
       live "/class_index", ClassIndexLive
       live "/shop", ShopLive
+      live "/shop/new", NewItem
       live "/settings", SettingsLive
     end
   end

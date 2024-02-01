@@ -66,8 +66,7 @@ defmodule AppWeb.UserRegistrationLive do
   def handle_event("save", %{"user" => user_params}, socket) do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
-        changeset = Accounts.change_user_registration(user)
-        {:noreply, socket |> assign(trigger_submit: true) |> assign_form(changeset)}
+        {:noreply, socket |> redirect(to: ~p"/shop") |> put_flash(:info, "Item created successfully")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, socket |> assign(check_errors: true) |> assign_form(changeset)}

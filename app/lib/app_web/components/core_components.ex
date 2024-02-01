@@ -422,12 +422,57 @@ defmodule AppWeb.CoreComponents do
         <h1 class="text-lg font-semibold leading-8 text-zinc-800">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class=" text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="text-sm leading-6 text-zinc-600">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
       <div class="flex-none"><%= render_slot(@actions) %></div>
     </header>
+    """
+  end
+
+  @doc ~S"""
+  Renders bootstrap table
+  """
+  attr :id, :string, required: true
+  attr :rows, :list, required: true
+  attr :row_id, :any, default: nil, doc: "the function for generating the row id"
+
+  attr :row_item, :any,
+    default: &Function.identity/1,
+    doc: "the function for mapping each row before calling the :col and :action slots"
+
+  slot :col, required: true do
+    attr :label, :string
+  end
+
+  slot :action, doc: "the slot for showing user actions in the last table column"
+
+  def bootstrap_table(assigns) do
+    ~H"""
+    <table class="content-table shadow-lg">
+      <thead>
+        <tr>
+          <th :for={col <- @col} scope="col"><%= col[:label] %></th>
+        </tr>
+      </thead>
+      <tbody id={@id}>
+        <tr :for={row <- @rows} id={@row_id && @row_id.(row)} >
+          <td :for={{col, i} <- Enum.with_index(@col)}>
+            <%= render_slot(col, @row_item.(row)) %>
+          </td>
+          <td :if={@action != []}>
+            <div>
+              <span
+                :for={action <- @action}
+              >
+                <%= render_slot(action, @row_item.(row)) %>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     """
   end
 

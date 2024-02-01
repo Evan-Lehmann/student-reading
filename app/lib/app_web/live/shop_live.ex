@@ -11,7 +11,7 @@ defmodule AppWeb.ShopLive do
     if user.type == "student" do
       {:ok, assign(socket, new_avatar: nil, locked_avatars_ids: Avatars.list_users_locked_avatars(user.id))}
     else
-      changeset = Rewards.change_reward(%Reward{})
+      changeset = Rewards.change_reward(%Reward{}, %{"user_id" => socket.assigns.current_user.id, "image" => "/images/chips.png"})
       {:ok, socket |> assign(check_errors: false, rewards: Rewards.get_rewards_of_teacher(user.id)) |> assign_form(changeset)}
     end
   end
@@ -70,31 +70,7 @@ defmodule AppWeb.ShopLive do
         </.teacher_sidebar>
 
         <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
-          <h2 class="h1 mb-2 mt-3 text-center">Manage Shop</h2>
-
-          <div class="mt-2 text-start">
-            <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn mb-2 btn-outline-primary">Create New Item</button>
-            <button data-bs-toggle="modal" data-bs-target="#infoModal" class="btn mb-2 btn-outline-secondary">Learn About Point System</button>
-          </div>
-
-          <!-- New Item Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  ...
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h2 class="h1 mb-3 mt-3 text-center">Manage Shop</h2>
 
           <!-- infoModal -->
           <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
@@ -111,69 +87,29 @@ defmodule AppWeb.ShopLive do
             </div>
           </div>
 
+          <.bootstrap_table id="rewards" rows={[%{:name => "New Avatar", :image => "/images/chips.png", :price => 500, :id => nil} | @rewards]}>
+            <:col :let={reward} >
+              <image class="mx-auto d-none d-md-block" style={"width: 46px;height:46px;min-width:46px;"} src={reward.image} />
+            </:col>
+            <:col :let={reward} label="Name"><%= reward.name %></:col>
+            <:col :let={reward} label="Price">
+              <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+                $<%= reward.price %>
+              </span>
+            </:col>
+            <:col :let={reward}><button :if={reward.id != nil} phx-click="remove" phx-value-reward_id={reward.id} class="btn btn-outline-danger">Remove</button></:col>
+          </.bootstrap_table>
 
-          <table class="content-table shadow-lg">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Item</th>
-                <th>Price</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><image class="mx-auto d-none d-md-block" style={"width: 46px;height:46px;min-width:46px;"} src={"/images/chips.png"} /></td>
-                <td>Chips</td>
-                <td>
-                  <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
-                    $1000
-                  </span>
-                </td>
-                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
-              </tr>
-              <tr>
-                <td><image class="mx-auto d-none d-md-block" style={"width: 46px;height:46px;min-width:46px;"} src={"/images/popcorn.png"} /></td>
-                <td>Popcorn</td>
-                <td>
-                  <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
-                    $1500
-                  </span>
-                </td>
-                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
-              </tr>
-              <tr>
-                <td><image class="mx-auto d-none d-md-block" style={"width: 46px;height:46px;min-width:46px;"} src={"/images/cup.png"} /></td>
-                <td>New Avatar</td>
-                <td>
-                  <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
-                    $2500
-                  </span>
-                </td>
-                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="mt-2 text-start">
+            <.link href={~p"/shop/new"} class="btn mb-2 btn-outline-primary">Create New Item</.link>
+            <button data-bs-toggle="modal" data-bs-target="#infoModal" class="btn mb-2 btn-outline-secondary">Learn About Point System</button>
+          </div>
+
 
         </div>
       </main>
     <% end %>
     """
-  end
-
-  def handle_event("save", %{"reward" => reward_params}, socket) do
-    case Rewards.create_reward(reward_params) do
-      {:ok, _} ->
-        changeset = Rewards.change_reward(%Reward{})
-        {:noreply, socket |> assign(rewards: Rewards.get_rewards_of_teacher(socket.assigns.current_user.id)) |> push_event("js-exec", %{to: "#confirm-modal", attr: "data-cancel"}) |> assign_form(changeset)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, socket |> assign_form(changeset)}
-    end
-  end
-
-  def handle_info({:reward_crated, item}, socket) do
-    {:noreply, push_event(socket, "highlight", %{id: "item-#{item.id}"})}
   end
 
   def handle_event("remove", %{"reward_id" => reward_id}, socket) do

@@ -66,39 +66,54 @@
 
         <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
           <!-- Welcome Header -->
-          <h2 class="h1 mb-2 mt-3 text-center">Manage Class</h2>
+          <h1 class="h1 mb-3 mt-3 text-center">Manage Class</h1>
+
+          <div :if={length(@students) == 0}>
+            <p class="lead mb-2 text-muted">Your students will appear here when they join</p>
+            <button data-bs-toggle="modal" data-bs-target="#homeModal" class="btn btn-outline-secondary">How Do My Students Join?</button>
+          </div>
+
+          <!-- homeModal -->
+          <div class="modal fade" id="homeModal" tabindex="-1" aria-labelledby="homeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="homeModalLabel">Joining a Class</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <ul class="space-y-6">
+                    <li>
+                      1. Student visits
+                      <.link navigate={~p"/"} class="font-semibold text-blue-700 hover:underline">localhost:4000</.link> on their device
+                    </li>
+                    <li>  
+                      2. Student registers, selecting student account type
+                    </li>
+                    <li>  
+                      3. Student will be prompted to enter teacher's join code
+                    </li>
+                    <li class="text-muted">
+                      When a teacher is logged in, they may view their own join code (and other account info)
+                      at <.link navigate={~p"/settings"} class="font-semibold text-blue-700 hover:underline">settings</.link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Table -->
-          <table class="content-table shadow-lg">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Account Level</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Lorem</td>
-                <td>-</td>
-                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
-              </tr>
-              <tr class="active-row">
-                <td>2</td>
-                <td>Ipsum</td>
-                <td>-</td>
-                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Soler</td>
-                <td>-</td>
-                <td><button class="btn btn-outline-danger disabled">Remove</button></td>
-              </tr>
-            </tbody>
-          </table>
+          <.bootstrap_table :if={length(@students) > 0} id="students" rows={@students}>
+            <:col :let={student} label="ID"><%= student.id %></:col>
+            <:col :let={student} label="Username"><%= student.username %></:col>
+            <:col :let={student} label="Cash">
+              <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+                $<%= student.cash %>
+              </span>
+            </:col>
+            <:col :let={student}><button class="btn btn-outline-dark">View</button></:col>
+          </.bootstrap_table>
 
         </div>
       </main>
