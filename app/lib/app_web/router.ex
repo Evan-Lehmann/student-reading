@@ -77,6 +77,16 @@ defmodule AppWeb.Router do
   end
 
   scope "/", AppWeb do
+    pipe_through [:browser, :require_teacher_access]
+
+    live_session :require_teacher_access,
+      on_mount: [{AppWeb.UserAuth, :require_teacher_access}] do
+      live "/student/:name", StudentPage
+    end
+  end
+
+
+  scope "/", AppWeb do
     pipe_through [:browser, :require_teacher_or_student_in_class_or_logged_out]
 
     get "/", PageController, :home

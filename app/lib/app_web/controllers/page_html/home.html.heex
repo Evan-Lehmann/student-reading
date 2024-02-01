@@ -112,7 +112,7 @@
                 $<%= student.cash %>
               </span>
             </:col>
-            <:col :let={student}><button class="btn btn-outline-dark">View</button></:col>
+            <:col :let={student}><.link href={~p"/student/#{student.username}"} class="btn btn-outline-dark">View</.link></:col>
           </.bootstrap_table>
 
         </div>
