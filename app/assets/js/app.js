@@ -46,10 +46,3 @@ window.addEventListener("phx:js-exec", ({detail}) => {
     liveSocket.execJS(el, el.getAttribute(detail.attr))
   })
 })
-
-const word = "the"
-
-function playSound(){
-  var sound = new Audio(`/audio/${word}.mp3`);
-  sound.play();
-}

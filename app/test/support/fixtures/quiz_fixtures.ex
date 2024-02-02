@@ -88,4 +88,34 @@ defmodule App.QuizFixtures do
 
     mcq_answer
   end
+
+  @doc """
+  Generate a word.
+  """
+  def word_fixture(attrs \\ %{}) do
+    {:ok, word} =
+      attrs
+      |> Enum.into(%{
+        content: "some content",
+        hint: "some hint",
+        sentence: "some sentence"
+      })
+      |> App.Quiz.create_word()
+
+    word
+  end
+
+  @doc """
+  Generate a level.
+  """
+  def level_fixture(attrs \\ %{}) do
+    {:ok, level} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> App.Quiz.create_level()
+
+    level
+  end
 end

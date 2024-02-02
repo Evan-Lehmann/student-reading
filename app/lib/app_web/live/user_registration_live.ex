@@ -43,7 +43,7 @@ defmodule AppWeb.UserRegistrationLive do
 
         <.input :if={@form[:type].value == "student"} field={@form[:cash]} style={"display: none;"} type="number" value={500} readonly required/>
         <.input :if={@form[:type].value == "student"} field={@form[:avatar_id]} style={"display: none;"} type="text" required value={"1"} />
-
+        <.input :if={@form[:type].value == "student"} field={@form[:level_id]} style={"display: none;"} type="text" required value={"1"} />
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full mt-3">Create an account</.button>
         </:actions>

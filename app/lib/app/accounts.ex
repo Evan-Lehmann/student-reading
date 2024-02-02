@@ -9,6 +9,10 @@ defmodule App.Accounts do
   alias App.Accounts.{User, UserToken}
   alias App.Avatars.AvatarAccess
   alias App.Avatars
+  alias App.Quiz
+  alias App.Quiz.{Word, Level}
+
+
 
   ## Database getters
 
@@ -74,6 +78,13 @@ defmodule App.Accounts do
 
     Repo.one(from u in Ecto.assoc(user, :avatar),
       select: u.image)
+  end
+
+  def get_level_by_user(user) do
+    Ecto.assoc(user, :level)
+
+    Repo.one(from u in Ecto.assoc(user, :level),
+      select: u.number)
   end
 
   def get_avatar_rarity_by_user(user) do

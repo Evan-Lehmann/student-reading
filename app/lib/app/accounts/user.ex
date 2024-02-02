@@ -16,6 +16,7 @@ defmodule App.Accounts.User do
     field :confirmed_at, :naive_datetime
 
     belongs_to :avatar, App.Avatars.Avatar
+    belongs_to :level, App.Quiz.Level
     has_many :rewards, App.Rewards.Reward
 
     timestamps()
@@ -46,7 +47,7 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :password, :type, :avatar_id, :cash, :join_code, :class])
+    |> cast(attrs, [:username, :password, :type, :avatar_id, :cash, :join_code, :class, :level_id])
     |> validate_username(opts)
     |> validate_password(opts)
     |> validate_type(opts)

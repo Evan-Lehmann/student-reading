@@ -12,7 +12,7 @@
 
 alias App.Repo
 alias App.Avatars.Avatar
-alias App.Quiz.{Story, Question, Answer, Mcq, McqAnswer}
+alias App.Quiz.{Word, Level, Mcq, McqAnswer}
 
 %Avatar{
   id: 1,
@@ -182,3 +182,42 @@ alias App.Quiz.{Story, Question, Answer, Mcq, McqAnswer}
             is_correct: false
           }
           |> Repo.insert!()
+
+%Word{
+  id: 1,
+  content: "a",
+  sound: "/audio/a.mp3"
+}
+|> Repo.insert!()
+
+%Word{
+  id: 2,
+  content: "after",
+  sound: "/after/a.mp3"
+}
+|> Repo.insert!()
+
+%Word{
+  id: 3,
+  content: "all",
+  sound: "/all/a.mp3"
+}
+|> Repo.insert!()
+
+%Level{
+  id: 1,
+  number: 1,
+}
+|> Repo.insert!()
+
+%Level{
+  id: 2,
+  number: 2,
+}
+|> Repo.insert!()
+
+%Level{
+  id: 3,
+  number: 3,
+}
+|> Repo.insert!()

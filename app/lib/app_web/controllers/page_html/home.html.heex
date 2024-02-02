@@ -52,7 +52,14 @@
                   Play
                 </.header>
                 <br>
-                <.link href={~p"/practice"}>Play</.link>
+
+                <ul>
+                  <li :for={level <- @levels}>
+                    <p class="m-0 p-0">Level <%= level %></p>
+                    <.link href={~p"/level/#{level}"}>Level <%= level %></.link>
+                  </li>
+                </ul>
+
 
               </div>
             </div>

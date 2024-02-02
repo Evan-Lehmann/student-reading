@@ -1,6 +1,7 @@
 defmodule AppWeb.PageController do
   use AppWeb, :controller
   alias App.Accounts
+  alias App.Quiz
 
   def home(conn, _params) do
     current_user = conn.assigns[:current_user]
@@ -15,7 +16,12 @@ defmodule AppWeb.PageController do
       else
         current_user = conn.assigns[:current_user]
         if current_user.class != nil do
-          render(conn, :home, layout: false)
+          levels = Quiz.list_level_numbers
+          curr_level = Accounts.get_level_by_user(current_user)
+          conn
+          |> assign(:levels, levels)
+          |> assign(:curr_level, curr_level)
+          |> render(:home, layout: false)
         else
           conn
           #|> assign(:code_form, code_form)

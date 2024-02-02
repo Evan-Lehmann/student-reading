@@ -328,4 +328,114 @@ defmodule App.QuizTest do
       assert %Ecto.Changeset{} = Quiz.change_mcq_answer(mcq_answer)
     end
   end
+
+  describe "words" do
+    alias App.Quiz.Word
+
+    import App.QuizFixtures
+
+    @invalid_attrs %{content: nil, hint: nil, sentence: nil}
+
+    test "list_words/0 returns all words" do
+      word = word_fixture()
+      assert Quiz.list_words() == [word]
+    end
+
+    test "get_word!/1 returns the word with given id" do
+      word = word_fixture()
+      assert Quiz.get_word!(word.id) == word
+    end
+
+    test "create_word/1 with valid data creates a word" do
+      valid_attrs = %{content: "some content", hint: "some hint", sentence: "some sentence"}
+
+      assert {:ok, %Word{} = word} = Quiz.create_word(valid_attrs)
+      assert word.content == "some content"
+      assert word.hint == "some hint"
+      assert word.sentence == "some sentence"
+    end
+
+    test "create_word/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Quiz.create_word(@invalid_attrs)
+    end
+
+    test "update_word/2 with valid data updates the word" do
+      word = word_fixture()
+      update_attrs = %{content: "some updated content", hint: "some updated hint", sentence: "some updated sentence"}
+
+      assert {:ok, %Word{} = word} = Quiz.update_word(word, update_attrs)
+      assert word.content == "some updated content"
+      assert word.hint == "some updated hint"
+      assert word.sentence == "some updated sentence"
+    end
+
+    test "update_word/2 with invalid data returns error changeset" do
+      word = word_fixture()
+      assert {:error, %Ecto.Changeset{}} = Quiz.update_word(word, @invalid_attrs)
+      assert word == Quiz.get_word!(word.id)
+    end
+
+    test "delete_word/1 deletes the word" do
+      word = word_fixture()
+      assert {:ok, %Word{}} = Quiz.delete_word(word)
+      assert_raise Ecto.NoResultsError, fn -> Quiz.get_word!(word.id) end
+    end
+
+    test "change_word/1 returns a word changeset" do
+      word = word_fixture()
+      assert %Ecto.Changeset{} = Quiz.change_word(word)
+    end
+  end
+
+  describe "levels" do
+    alias App.Quiz.Level
+
+    import App.QuizFixtures
+
+    @invalid_attrs %{}
+
+    test "list_levels/0 returns all levels" do
+      level = level_fixture()
+      assert Quiz.list_levels() == [level]
+    end
+
+    test "get_level!/1 returns the level with given id" do
+      level = level_fixture()
+      assert Quiz.get_level!(level.id) == level
+    end
+
+    test "create_level/1 with valid data creates a level" do
+      valid_attrs = %{}
+
+      assert {:ok, %Level{} = level} = Quiz.create_level(valid_attrs)
+    end
+
+    test "create_level/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Quiz.create_level(@invalid_attrs)
+    end
+
+    test "update_level/2 with valid data updates the level" do
+      level = level_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %Level{} = level} = Quiz.update_level(level, update_attrs)
+    end
+
+    test "update_level/2 with invalid data returns error changeset" do
+      level = level_fixture()
+      assert {:error, %Ecto.Changeset{}} = Quiz.update_level(level, @invalid_attrs)
+      assert level == Quiz.get_level!(level.id)
+    end
+
+    test "delete_level/1 deletes the level" do
+      level = level_fixture()
+      assert {:ok, %Level{}} = Quiz.delete_level(level)
+      assert_raise Ecto.NoResultsError, fn -> Quiz.get_level!(level.id) end
+    end
+
+    test "change_level/1 returns a level changeset" do
+      level = level_fixture()
+      assert %Ecto.Changeset{} = Quiz.change_level(level)
+    end
+  end
 end

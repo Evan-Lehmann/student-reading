@@ -4,8 +4,8 @@ defmodule AppWeb.Practice do
   alias App.Accounts
   import AppWeb.CustomComponents
 
-  def mount(%{"word" => word}, _session, socket) do
-    {:ok, assign(socket, word: word)}
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, word: "the")}
   end
 
   def render(assigns) do
@@ -17,13 +17,8 @@ defmodule AppWeb.Practice do
         </symbol>
       </svg>
 
-      <div
-        id="app"
-        data-word={"could"}
-        ></div>
-
       <main class="d-flex flex-nowrap">
-        <.teacher_sidebar active_tab="class"></.teacher_sidebar>
+        <.student_sidebar active_tab="class"></.student_sidebar>
 
         <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
           <!-- Welcome Header -->
@@ -36,7 +31,7 @@ defmodule AppWeb.Practice do
           }
           </script>
 
-          <button class="btn" onclick="playSound()">
+          <button class="btn btn-primary " onclick="playSound()">
             <svg class="bi bi-volume-mute-fill" aria-hidden="true" width="48" height="48"><use xlink:href="#audio"/></svg>
           </button>
 

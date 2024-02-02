@@ -63,7 +63,15 @@ defmodule AppWeb.Router do
     live_session :require_student_in_class,
       on_mount: [{AppWeb.UserAuth, :require_student_in_class}] do
       live "/avatar_selection", AvatarSelection
-      live "/practice/:word", Practice
+    end
+  end
+
+  scope "/", AppWeb do
+    pipe_through [:browser, :require_student_and_access]
+
+    live_session :require_student_and_access,
+      on_mount: [{AppWeb.UserAuth, :require_student_and_access}] do
+      live "/level/:number", Practice
     end
   end
 
