@@ -5,6 +5,7 @@ defmodule App.Avatars.Avatar do
   schema "avatars" do
     field :image, :string
     field :rarity, :string
+    has_many :users, App.Accounts.User
 
     timestamps()
   end

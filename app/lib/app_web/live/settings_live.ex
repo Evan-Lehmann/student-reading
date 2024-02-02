@@ -99,7 +99,6 @@ defmodule AppWeb.SettingsLive do
 
   def handle_event("check", %{"user" => %{"code" => code}}, socket) do
     class = Accounts.get_teacher_name_by_join_code(code)
-    IO.inspect(class)
 
     {:noreply, assign(socket, class: class)}
   end

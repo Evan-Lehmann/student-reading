@@ -54,7 +54,7 @@ defmodule AppWeb.JoinClass do
            |> redirect(to: ~p"/")
            |> put_flash(:info, "Class updated successfully")}
 
-        {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, %Ecto.Changeset{} = _changeset} ->
           code_form = to_form(%{"code" => code}, as: "user")
           socket = assign(socket, code_form: code_form)
           {:noreply, socket}

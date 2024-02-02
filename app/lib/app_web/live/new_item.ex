@@ -21,7 +21,7 @@ defmodule AppWeb.NewItem do
           <span aria-hidden="true">←</span> Go back
         </.link>
 
-        <.simple_form for={@form} phx-submit="save">
+        <.simple_form for={@form} phx-submit="save_item">
           <.header>New Item</.header>
           <.input field={@form[:name]} type="text" required/>
           <.input field={@form[:price]} type="number" required/>
@@ -32,7 +32,7 @@ defmodule AppWeb.NewItem do
     """
   end
 
-  def handle_event("save", %{"reward" => reward_params}, socket) do
+  def handle_event("save_item", %{"reward" => reward_params}, socket) do
     complete_reward_params = reward_params |> Map.put("user_id", socket.assigns.current_user.id) |> Map.put("image", "/images/popcorn.png")
     case Rewards.create_reward(complete_reward_params) do
       {:ok, _} ->

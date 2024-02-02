@@ -1,7 +1,5 @@
 defmodule AppWeb.PageController do
   use AppWeb, :controller
-  alias Phoenix.HTML.Form
-  import AppWeb.CustomComponents
   alias App.Accounts
 
   def home(conn, _params) do

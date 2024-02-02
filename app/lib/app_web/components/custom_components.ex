@@ -156,7 +156,7 @@ defmodule AppWeb.CustomComponents do
         </symbol>
       </svg>
 
-      <div class="d-flex flex-column flex-shrink-0 text-bg-dark" style="width: 4.5rem;">
+      <div class="d-flex flex-column flex-shrink-0 text-bg-dark" style="width: 4.5rem;height:100vh;">
           <a disabled="disabled" class="d-block p-3 link-body-emphasis text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="right">
             <img src={"https://img.logoipsum.com/245.svg"} alt="Logo" width="40" height="32"/>
             <span class="visually-hidden">Icon-only</span>
@@ -267,7 +267,7 @@ defmodule AppWeb.CustomComponents do
         </symbol>
       </svg>
 
-      <div class="d-flex flex-column flex-shrink-0 text-bg-dark" style="width: 4.5rem;">
+      <div class="d-flex flex-column flex-shrink-0 text-bg-dark" style="width: 4.5rem;height:100vh;">
           <a disabled="disabled" class="d-block p-3 link-body-emphasis text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="right">
             <img src={"https://img.logoipsum.com/245.svg"} alt="Logo" width="40" height="32"/>
             <span class="visually-hidden">Icon-only</span>
@@ -376,7 +376,7 @@ defmodule AppWeb.CustomComponents do
         </symbol>
       </svg>
 
-      <div class="d-flex flex-column flex-shrink-0 text-bg-dark" style="width: 4.5rem;">
+      <div class="d-flex flex-column flex-shrink-0 text-bg-dark" style="width: 4.5rem;height:100vh;">
           <a disabled="disabled" class="d-block p-3 link-body-emphasis text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="right">
             <img src={"https://img.logoipsum.com/245.svg"} alt="Logo" width="40" height="32"/>
             <span class="visually-hidden">Icon-only</span>

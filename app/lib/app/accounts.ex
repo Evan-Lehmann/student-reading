@@ -8,9 +8,7 @@ defmodule App.Accounts do
 
   alias App.Accounts.{User, UserToken}
   alias App.Avatars.AvatarAccess
-  alias App.Quiz.CompletedStory
   alias App.Avatars
-  alias App.Quiz
 
   ## Database getters
 
@@ -138,7 +136,6 @@ defmodule App.Accounts do
         |> Repo.insert()
       end)
     end
-
     result
   end
 

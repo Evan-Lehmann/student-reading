@@ -23,6 +23,7 @@ defmodule App.Rewards.Reward do
     |> validate_number(:price, greater_than: 0)
     |> validate_length(:name, min: 2, max: 26)
     |> validate_image
+    |> validate_user
 
   end
 
