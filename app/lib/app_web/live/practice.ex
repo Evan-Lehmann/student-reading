@@ -4,120 +4,51 @@ defmodule AppWeb.Practice do
   alias App.Accounts
   import AppWeb.CustomComponents
 
-  def mount(_params, _session, socket) do
-    form = to_form(%{}, as: "mcq_attempt")
-    if connected?(socket) do
-      list_mcqs = Quiz.list_mcqs
-      rand = Enum.random(list_mcqs).id
-      {:ok, assign(socket,
-        form: form,
-        list_mcqs: Quiz.list_mcqs,
-        curr_mcq: Quiz.get_mcq!(rand),
-        curr_answers: Quiz.get_answers_of_mcq(rand),
-        selected: nil,
-        view: nil,
-        result: nil)}
-    else
-      {:ok, assign(socket,
-        form: form,
-        list_mcqs: nil,
-        curr_mcq: nil,
-        curr_answers: nil,
-        selected: nil,
-        view: nil,
-        result: nil)}
-    end
+  def mount(%{"word" => word}, _session, socket) do
+    {:ok, assign(socket, word: word)}
   end
 
   def render(assigns) do
     ~H"""
-    <%= if @list_mcqs != nil do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+        <symbol id="audio" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
+        </symbol>
+      </svg>
+
+      <div
+        id="app"
+        data-word={"could"}
+        ></div>
+
       <main class="d-flex flex-nowrap">
-        <.student_sidebar active_tab="class">
-        </.student_sidebar>
+        <.teacher_sidebar active_tab="class"></.teacher_sidebar>
 
-        <div class="d-flex col justify-content-center py-5">
+        <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
+          <!-- Welcome Header -->
+          <h1 class="h1 mb-3 mt-3 text-center">Practice</h1>
 
-          <span class="text-lg"><%= @curr_mcq.content %></span>
-          <img src={@curr_mcq.image} class="w-100 h-60" draggable="false"/>
+          <script>
+          function playSound(){
+            var sound = new Audio(`/audio/<%= @word %>.mp3`);
+            sound.play();
+          }
+          </script>
 
-          <%= for answer <- @curr_answers do %>
-            <%= if @view == nil || @view == "changed" do %>
-              <%= if answer.id == @selected do %>
-                <button disabled class="rounded-lg bg-slate-600 px-2 py-1 text-white">
-                  <%= answer.content %>
-                </button>
-                <hr>
-              <% else %>
-                <button class="rounded-lg bg-gray-400 px-2 py-1 hover:bg-slate-800/80 text-white" phx-click="select" phx-value-answer_id={answer.id}>
-                  <%= answer.content %>
-                </button>
-                <hr>
-              <% end %>
-            <% else %>
-              <%= if answer.id == @selected do %>
-                <%= if @result == true do %>
-                  <button disabled class="rounded-lg bg-emerald-700 px-2 py-1 text-white">
-                    <%= answer.content %>
-                  </button>
-                  <span class="font-bold text-emerald-600">+$25</span>
-                <% else %>
-                  <button disabled class="rounded-lg bg-red-700 px-2 py-1 text-white">
-                    <%= answer.content %>
-                  </button>
-                  <span class="font-bold text-red-600">-$25</span>
-                <% end %>
-                <hr>
-              <% else %>
-                <button class="rounded-lg bg-gray-400 px-2 py-1 text-white" disabled>
-                  <%= answer.content %>
-                </button>
-                <hr>
-              <% end %>
-            <% end %>
-          <% end %>
+          <button class="btn" onclick="playSound()">
+            <svg class="bi bi-volume-mute-fill" aria-hidden="true" width="48" height="48"><use xlink:href="#audio"/></svg>
+          </button>
 
-          <.simple_form for={@form} phx-submit="check">
-            <%= if @view == "changed"  do %>
-              <.input field={@form[:answer_id]} type="hidden" value={@selected} readonly required />
-              <.button phx-disable-with="Changing" class="w-full">
-                Submit
-              </.button>
-            <% end %>
-          </.simple_form>
+          <p>Hint: 5 letters</p>
+          <input type="text" name="yo" label="Type What You Hear"/>
 
-          <.button :if={@view == "checked"} phx-click="next">Next</.button>
+
+
+
         </div>
       </main>
 
-
-
-
-    <% end %>
     """
-  end
-
-  def handle_event("select", %{"answer_id" => answer_id}, socket) do
-    {:noreply, assign(socket, selected: String.to_integer(answer_id), view: "changed")}
-  end
-
-  def handle_event("check", %{"mcq_attempt" => %{"answer_id" => answer_id}}, socket) do
-    result = Quiz.is_mcq_answer_correct(String.to_integer(answer_id))
-
-    if result == true do
-      Accounts.update_user_cash(socket.assigns.current_user, %{"cash" => Integer.to_string(socket.assigns.current_user.cash + 25)})
-    end
-
-    if result == false do
-      Accounts.update_user_cash(socket.assigns.current_user, %{"cash" => Integer.to_string(socket.assigns.current_user.cash - 15)})
-    end
-
-    {:noreply, assign(socket, view: "checked", result: result)}
-  end
-
-  def handle_event("next", _params, socket) do
-    rand = Enum.random(socket.assigns.list_mcqs).id
-
-    {:noreply, assign(socket, view: nil, selected: nil, result: nil, curr_mcq: Quiz.get_mcq!(rand), curr_answers: Quiz.get_answers_of_mcq(rand))}
   end
 end

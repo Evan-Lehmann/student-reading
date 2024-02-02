@@ -63,7 +63,7 @@ defmodule AppWeb.Router do
     live_session :require_student_in_class,
       on_mount: [{AppWeb.UserAuth, :require_student_in_class}] do
       live "/avatar_selection", AvatarSelection
-      live "/practice", Practice
+      live "/practice/:word", Practice
     end
   end
 

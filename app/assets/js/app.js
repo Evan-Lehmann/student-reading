@@ -47,3 +47,9 @@ window.addEventListener("phx:js-exec", ({detail}) => {
   })
 })
 
+const word = "the"
+
+function playSound(){
+  var sound = new Audio(`/audio/${word}.mp3`);
+  sound.play();
+}
