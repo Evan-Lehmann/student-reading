@@ -16,11 +16,9 @@ defmodule AppWeb.PageController do
       else
         current_user = conn.assigns[:current_user]
         if current_user.class != nil do
-          levels = Quiz.list_level_numbers
-          curr_level = Accounts.get_level_by_user(current_user)
+          students = Accounts.list_students_in_class(current_user.class)
           conn
-          |> assign(:levels, levels)
-          |> assign(:curr_level, curr_level)
+          |> assign(:students, students)
           |> render(:home, layout: false)
         else
           conn

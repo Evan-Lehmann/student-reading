@@ -1,7 +1,6 @@
 defmodule AppWeb.ShopLive do
   use AppWeb, :live_view
   import AppWeb.CustomComponents
-  alias App.Avatars
   alias App.Accounts
   alias App.Rewards
   alias App.Rewards.Reward
@@ -9,7 +8,7 @@ defmodule AppWeb.ShopLive do
   def mount(_params, _session, socket) do
     user = socket.assigns.current_user
     if user.type == "student" do
-      {:ok, assign(socket, new_avatar: nil, locked_avatars_ids: Avatars.list_users_locked_avatars(user.id))}
+      {:ok, assign(socket, rewards: Rewards.get_rewards_of_teacher(Accounts.get_teacher_id_by_name(user.class)))}
     else
       changeset = Rewards.change_reward(%Reward{}, %{"user_id" => socket.assigns.current_user.id, "image" => "/images/chips.png"})
       {:ok, socket |> assign(check_errors: false, rewards: Rewards.get_rewards_of_teacher(user.id)) |> assign_form(changeset)}
@@ -20,49 +19,28 @@ defmodule AppWeb.ShopLive do
     ~H"""
     <%= if @current_user.type == "student" do %>
       <main class="d-flex flex-nowrap">
-        <.student_sidebar active_tab="shop">
+        <.student_sidebar active_tab="rewards">
         </.student_sidebar>
 
-        <div class="d-flex col justify-content-center py-5">
-          <div class="flex-row">
-            <div class="flex-col">
-              <.header class="text-center">
-                Shop
-              </.header>
+        <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
+          <h1 class="h1 mb-3 mt-3 text-center">Shop</h1>
+          <p class="lead">Your Points: <span class="bg-points text-points rounded-full px-2 font-medium leading-6"><%= @current_user.points %></span></p>
 
-              <p class="text-xl font-bold">Cost: $500</p>
-              <p>Your Balance:
-                <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
-                  $<%= @current_user.cash %>
-                </span>
-              </p>
-              <br>
-              <br>
-            </div>
-          </div>
+
+          <.bootstrap_table id="rewards" rows={@rewards}>
+            <:col :let={reward} >
+              <image class="mx-auto d-none d-md-block" style={"width: 46px;height:46px;min-width:46px;"} src={reward.image} />
+            </:col>
+            <:col :let={reward} label="Name"><%= reward.name %></:col>
+            <:col :let={reward} label="Points">
+              <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
+                <%= reward.price %>
+              </span>
+            </:col>
+            <:col :let={reward}><button :if={reward.id != nil} phx-value-reward_id={reward.id} class="btn btn-outline-dark">Buy</button></:col>
+          </.bootstrap_table>
         </div>
       </main>
-
-      <%= if @new_avatar != nil do %>
-        <.button disabled class="opacity-50">Unlock Random Avatar</.button>
-      <% else %>
-        <%= if @current_user.cash < 500 do %>
-          <span class="text-red-700">Insufficient Funds!</span>
-          <.button disabled class="opacity-50">Unlock Random Avatar</.button>
-        <% else %>
-          <%= if length(@locked_avatars_ids) <= 0 do %>
-            <span class="text-teal-700">You have unlocked all avatars!</span>
-            <.button disabled class="opacity-50">Unlock Random Avatar</.button>
-          <% else %>
-            <.button phx-click="unlock">Unlock Random Avatar</.button>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <%= if @new_avatar != nil do %>
-        <.avatar src={@new_avatar.image} class="w-20 h-20" rarity={@new_avatar.rarity} />
-        <.button phx-click="accept">Ok</.button>
-      <% end %>
     <% else %>
 
       <main class="d-flex flex-nowrap">
@@ -70,7 +48,12 @@ defmodule AppWeb.ShopLive do
         </.teacher_sidebar>
 
         <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
-          <h2 class="h1 mb-3 mt-3 text-center">Manage Shop</h2>
+          <h1 class="h1 mb-3 mt-3 text-center">Manage Shop</h1>
+
+          <div class="mt-2 text-start">
+            <.link href={~p"/shop/new"} class="btn mb-2 btn-outline-primary">Create New Item</.link>
+            <button data-bs-toggle="modal" data-bs-target="#infoModal" class="btn mb-2 btn-outline-secondary">Learn About Point System</button>
+          </div>
 
           <!-- infoModal -->
           <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
@@ -87,24 +70,18 @@ defmodule AppWeb.ShopLive do
             </div>
           </div>
 
-          <.bootstrap_table id="rewards" rows={[%{:name => "New Avatar", :image => "/images/chips.png", :price => 500, :id => nil} | @rewards]}>
+          <.bootstrap_table id="rewards" rows={@rewards}>
             <:col :let={reward} >
               <image class="mx-auto d-none d-md-block" style={"width: 46px;height:46px;min-width:46px;"} src={reward.image} />
             </:col>
             <:col :let={reward} label="Name"><%= reward.name %></:col>
-            <:col :let={reward} label="Price">
+            <:col :let={reward} label="Points">
               <span class="bg-green-800/10 text-green-700 rounded-full px-2 font-medium leading-6">
-                $<%= reward.price %>
+                <%= reward.price %>
               </span>
             </:col>
             <:col :let={reward}><button :if={reward.id != nil} phx-click="remove" phx-value-reward_id={reward.id} class="btn btn-outline-danger">Remove</button></:col>
           </.bootstrap_table>
-
-          <div class="mt-2 text-start">
-            <.link href={~p"/shop/new"} class="btn mb-2 btn-outline-primary">Create New Item</.link>
-            <button data-bs-toggle="modal" data-bs-target="#infoModal" class="btn mb-2 btn-outline-secondary">Learn About Point System</button>
-          </div>
-
 
         </div>
       </main>
@@ -118,24 +95,6 @@ defmodule AppWeb.ShopLive do
         {:noreply, assign(socket, rewards: Rewards.get_rewards_of_teacher(socket.assigns.current_user.id))}
 
       {:error, _} ->
-        {:noreply, socket}
-    end
-  end
-
-  def handle_event("accept", _params, socket) do
-    {:noreply, assign(socket, new_avatar: nil)}
-  end
-
-  def handle_event("unlock", _params, socket) do
-    user = socket.assigns.current_user
-    locked_avatars_ids = socket.assigns.locked_avatars_ids
-
-    case Accounts.unlock_avatar(user, locked_avatars_ids) do
-      {{:ok, user}, {:ok, avatar_access}} ->
-        socket = assign(socket, current_user: user, new_avatar: avatar_access.avatar, locked_avatars_ids: Avatars.list_users_locked_avatars(user.id))
-        {:noreply, socket}
-
-      _ ->
         {:noreply, socket}
     end
   end

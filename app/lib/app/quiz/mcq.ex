@@ -5,6 +5,8 @@ defmodule App.Quiz.Mcq do
   schema "mcqs" do
     field :content, :string
     field :image, :string
+    field :audio, :string
+    field :hint, :string
 
     timestamps()
   end
@@ -14,6 +16,5 @@ defmodule App.Quiz.Mcq do
     mcq
     |> cast(attrs, [:content, :image])
     |> validate_required([:content])
-    |> validate_required([:image])
   end
 end

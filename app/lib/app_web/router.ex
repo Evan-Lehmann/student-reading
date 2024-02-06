@@ -58,24 +58,6 @@ defmodule AppWeb.Router do
   end
 
   scope "/", AppWeb do
-    pipe_through [:browser, :require_student_in_class]
-
-    live_session :require_student_in_class,
-      on_mount: [{AppWeb.UserAuth, :require_student_in_class}] do
-      live "/avatar_selection", AvatarSelection
-    end
-  end
-
-  scope "/", AppWeb do
-    pipe_through [:browser, :require_student_and_access]
-
-    live_session :require_student_and_access,
-      on_mount: [{AppWeb.UserAuth, :require_student_and_access}] do
-      live "/level/:number", Practice
-    end
-  end
-
-  scope "/", AppWeb do
     pipe_through [:browser, :require_student_not_in_class]
 
     live_session :require_student_not_in_class,
@@ -93,6 +75,14 @@ defmodule AppWeb.Router do
     end
   end
 
+  scope "/", AppWeb do
+    pipe_through [:browser, :require_teacher]
+
+    live_session :require_teacher,
+      on_mount: [{AppWeb.UserAuth, :require_teacher}] do
+      live "/settings", SettingsLive
+    end
+  end
 
   scope "/", AppWeb do
     pipe_through [:browser, :require_teacher_or_student_in_class_or_logged_out]
@@ -108,7 +98,6 @@ defmodule AppWeb.Router do
       live "/class_index", ClassIndexLive
       live "/shop", ShopLive
       live "/shop/new", NewItem
-      live "/settings", SettingsLive
     end
   end
 

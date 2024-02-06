@@ -5,6 +5,8 @@ defmodule App.Repo.Migrations.CreateMcqs do
     create table(:mcqs) do
       add :content, :string
       add :image, :string
+      add :audio, :string
+      add :hint, :string
 
       timestamps()
     end

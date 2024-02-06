@@ -26,35 +26,25 @@ defmodule AppWeb.SettingsLive do
         <.teacher_sidebar active_tab="settings">
         </.teacher_sidebar>
 
+        <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
+          <h1 class="h1 mb-3 mt-3 text-center">Settings</h1>
 
-        <div class="d-flex col justify-content-center py-5">
-          <div class="flex-row">
-            <div class="flex-col">
-            <.header class="text-center">
-                Settings
-              </.header>
-            <br>
-
-            <div>
-              <ul class="text-start p-0 m-0">
-                <li class="mb-2">
-                  Name: <span class="fw-semibold"><%= @current_user.username %></span>
-                </li>
-                <li class="mb-2">
-                  Account Type: <span class="fw-semibold"><%= @current_user.type %></span>
-                </li>
-                <li class="mb-2">
-                  Join Code: <span class="fw-semibold"><%= @current_user.join_code %></span>
-                </li>
-              </ul>
-            </div>
-
-            </div>
-            <div class="flex-col">
-            </div>
+          <div>
+            <ul class="text-start p-0 m-0">
+              <li class="mb-2">
+                Name: <span class="fw-semibold"><%= @current_user.username %></span>
+              </li>
+              <li class="mb-2">
+                Account Type: <span class="fw-semibold"><%= @current_user.type %></span>
+              </li>
+              <li class="mb-2">
+                Join Code: <span class="fw-semibold"><%= @current_user.join_code %></span>
+              </li>
+            </ul>
           </div>
         </div>
       </main>
+
     <% else %>
 
       <main class="d-flex flex-nowrap text-center">

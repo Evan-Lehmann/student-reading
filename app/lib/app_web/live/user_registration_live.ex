@@ -4,13 +4,14 @@ defmodule AppWeb.UserRegistrationLive do
 
   alias App.Accounts
   alias App.Accounts.User
+  alias App.Avatars
 
   def render(assigns) do
     ~H"""
     <.logged_out_nav/>
     <div class="mx-auto max-w-sm">
       <.header class="text-center pt-10">
-        <span class="text-2xl">Register for an accounts</span>
+        <span class="text-2xl">Register for an account</span>
         <:subtitle>
           Already registered?
           <.link navigate={~p"/users/log_in"} class="font-semibold text-blue-700 hover:underline">
@@ -39,11 +40,8 @@ defmodule AppWeb.UserRegistrationLive do
           options={[{"Student", "student"}, {"Teacher", "teacher"}]}>
         </.input>
 
-        <.input :if={@form[:type].value == "teacher"} field={@form[:join_code]} type="text" label="Class Join Code" required/>
+        <.input :if={@form[:type].value == "teacher"} label="Join Code" field={@form[:join_code]} type="text" required />
 
-        <.input :if={@form[:type].value == "student"} field={@form[:cash]} style={"display: none;"} type="number" value={500} readonly required/>
-        <.input :if={@form[:type].value == "student"} field={@form[:avatar_id]} style={"display: none;"} type="text" required value={"1"} />
-        <.input :if={@form[:type].value == "student"} field={@form[:level_id]} style={"display: none;"} type="text" required value={"1"} />
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full mt-3">Create an account</.button>
         </:actions>
@@ -53,14 +51,14 @@ defmodule AppWeb.UserRegistrationLive do
   end
 
   def mount(_params, _session, socket) do
-    changeset = Accounts.change_user_registration(%User{})
+    changeset = Accounts.change_user_registration(%User{}, %{"type" => "student"})
 
     socket =
       socket
       |> assign(trigger_submit: false, check_errors: false)
       |> assign_form(changeset)
 
-    {:ok, socket, temporary_assigns: [form: nil]}
+    {:ok, socket}
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do

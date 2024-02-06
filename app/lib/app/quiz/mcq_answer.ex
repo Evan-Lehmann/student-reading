@@ -4,9 +4,6 @@ defmodule App.Quiz.McqAnswer do
 
   schema "mcqs_answers" do
     field :content, :string
-    field :is_correct, :boolean
-
-    belongs_to :mcq, App.Quiz.Mcq
 
     timestamps()
   end
@@ -14,9 +11,7 @@ defmodule App.Quiz.McqAnswer do
   @doc false
   def changeset(mcq_answer, attrs) do
     mcq_answer
-    |> cast(attrs, [:content, :mcq_id, :is_correct])
+    |> cast(attrs, [:content])
     |> validate_required([:content])
-    |> validate_required([:is_correct])
-    |> validate_required([:mcq_id])
   end
 end

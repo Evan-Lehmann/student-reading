@@ -14,11 +14,11 @@ defmodule AppWeb.StudentPage do
       </.teacher_sidebar>
 
       <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
-        <h2 class="h1 mb-3 mt-3 text-center">Manage Class</h2>
-        <p class="lead text-muted">Student: <%= @name %></p>
+        <h1 class="h1 mt-3 text-center">Manage Class</h1>
         <.link navigate={~p"/"} class="font-semibold text-blue-700 hover:underline">
-            Go Back
-          </.link>
+          Go Back
+        </.link>
+        <span class="lead mt-3">Student: <%= @name %> </span>
       </div>
 
     </main>

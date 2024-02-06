@@ -259,6 +259,9 @@ defmodule AppWeb.CustomComponents do
           <path fill-rule="evenodd" fill=" #adb5bd " d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/>
           <path fill-rule="evenodd" fill=" #adb5bd " d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/>
         </symbol>
+        <symbol id="home" viewBox="0 0 16 16">
+          <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+        </symbol>
         <symbol id="settings" viewBox="0 0 16 16">
           <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
         </symbol>
@@ -275,11 +278,22 @@ defmodule AppWeb.CustomComponents do
           <ul class="nav nav-pills nav-flush flex-column mb-auto text-start">
             <li class="nav-item">
               <%= if @active_tab == "class" do %>
-                <a href={~p"/"} class="nav-link active py-3 border-bottom rounded-0" aria-current="page" title="Play" data-bs-toggle="tooltip" data-bs-placement="right">
+                <a href={~p"/"} class="nav-link active py-3 border-bottom rounded-0" aria-current="page" title="Class" data-bs-toggle="tooltip" data-bs-placement="right">
+                  <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Class"><use xlink:href="#home"/></svg>
+                </a>
+              <% else %>
+                <a href={~p"/"} class="nav-link py-3 border-bottom rounded-0" aria-current="page" title="Class" data-bs-toggle="tooltip" data-bs-placement="right">
+                  <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Class"><use xlink:href="#home"/></svg>
+                </a>
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= if @active_tab == "play" do %>
+                <a href={~p"/play"} class="nav-link active py-3 border-bottom rounded-0" aria-current="page" title="Play" data-bs-toggle="tooltip" data-bs-placement="right">
                   <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Play"><use xlink:href="#play"/></svg>
                 </a>
               <% else %>
-                <a href={~p"/"} class="nav-link py-3 border-bottom rounded-0" aria-current="page" title="Play" data-bs-toggle="tooltip" data-bs-placement="right">
+                <a href={~p"/play"} class="nav-link py-3 border-bottom rounded-0" aria-current="page" title="Play" data-bs-toggle="tooltip" data-bs-placement="right">
                   <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Play"><use xlink:href="#play"/></svg>
                 </a>
               <% end %>
@@ -292,17 +306,6 @@ defmodule AppWeb.CustomComponents do
               <% else %>
                 <a href={~p"/shop"} class="nav-link py-3 border-bottom rounded-0" title="Rewards" data-bs-toggle="tooltip" data-bs-placement="right">
                   <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Rewards"><use xlink:href="#rewards"/></svg>
-                </a>
-              <% end %>
-            </li>
-            <li>
-              <%= if @active_tab == "settings" do %>
-                <a href={~p"/settings"} class="nav-link active py-3 border-bottom rounded-0" title="Settings" data-bs-toggle="tooltip" data-bs-placement="right">
-                  <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Settings"><use xlink:href="#settings"/></svg>
-                </a>
-              <% else %>
-                <a href={~p"/settings"} class="nav-link py-3 border-bottom rounded-0" title="Settings" data-bs-toggle="tooltip" data-bs-placement="right">
-                  <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Settings"><use xlink:href="#settings"/></svg>
                 </a>
               <% end %>
             </li>
@@ -330,6 +333,9 @@ defmodule AppWeb.CustomComponents do
   def disabled_sidebar(assigns) do
     ~H"""
       <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+        <symbol id="home" viewBox="0 0 16 16">
+          <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+        </symbol>
         <symbol id="bootstrap" viewBox="0 0 118 94">
           <title>Bootstrap</title>
           <path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"></path>
@@ -383,18 +389,18 @@ defmodule AppWeb.CustomComponents do
           </a>
           <ul class="nav nav-pills nav-flush flex-column mb-auto text-start">
             <li class="nav-item">
-              <a href={~p"/"} class="nav-link py-3 border-bottom rounded-0 opacity-50 disabled bg-secondary" aria-current="page" title="Play" data-bs-toggle="tooltip" data-bs-placement="right">
+              <a href={~p"/"} class="nav-link py-3 border-bottom rounded-0 opacity-50 disabled bg-secondary" aria-current="class" title="Class" data-bs-toggle="tooltip" data-bs-placement="right">
+                <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Class"><use xlink:href="#home"/></svg>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href={~p"/play"} class="nav-link py-3 border-bottom rounded-0 opacity-50 disabled bg-secondary" aria-current="page" title="Play" data-bs-toggle="tooltip" data-bs-placement="right">
                 <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Play"><use xlink:href="#play"/></svg>
               </a>
             </li>
             <li>
               <a href={~p"/shop"} class="nav-link py-3 border-bottom rounded-0 opacity-50 disabled bg-secondary" title="Rewards" data-bs-toggle="tooltip" data-bs-placement="right">
                 <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Rewards"><use xlink:href="#rewards"/></svg>
-              </a>
-            </li>
-            <li>
-              <a href={~p"/settings"} class="nav-link py-3 border-bottom rounded-0 opacity-50 disabled bg-secondary" title="Settings" data-bs-toggle="tooltip" data-bs-placement="right">
-                <svg class="bi pe-none d-block mx-auto" width="24" height="24" role="img" aria-label="Settings"><use xlink:href="#settings"/></svg>
               </a>
             </li>
           </ul>
@@ -417,5 +423,4 @@ defmodule AppWeb.CustomComponents do
       </div>
     """
   end
-
 end

@@ -6,17 +6,14 @@ defmodule App.Accounts.User do
 
   schema "users" do
     field :username, :string
-    field :cash, :integer
+    field :points, :integer
     field :type, :string
-    field :join_code, :string
     field :class, :string
-    field :last_score, :integer
+    field :join_code, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
-    belongs_to :avatar, App.Avatars.Avatar
-    belongs_to :level, App.Quiz.Level
     has_many :rewards, App.Rewards.Reward
 
     timestamps()
@@ -47,11 +44,10 @@ defmodule App.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:username, :password, :type, :avatar_id, :cash, :join_code, :class, :level_id])
+    |> cast(attrs, [:username, :password, :type, :points, :class, :join_code])
     |> validate_username(opts)
     |> validate_password(opts)
     |> validate_type(opts)
-    |> validate_join_code(opts)
   end
 
   defp validate_username(changeset, opts) do
@@ -77,12 +73,6 @@ defmodule App.Accounts.User do
     changeset
     |> validate_required([:type])
     |> validate_inclusion(:type, ["student", "teacher"])
-  end
-
-  defp validate_join_code(changeset, _opts) do
-    changeset
-    |> unsafe_validate_unique(:join_code, App.Repo)
-    |> unique_constraint(:join_code)
   end
 
   defp validate_class(changeset) do
@@ -135,15 +125,6 @@ defmodule App.Accounts.User do
     |> validate_password(opts)
   end
 
-  def avatar_id_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:avatar_id])
-    |> case do
-      %{changes: %{avatar_id: _}} = changeset -> changeset
-      %{} = changeset -> add_error(changeset, :avatar_id, "did not change")
-    end
-  end
-
   def class_changeset(user, attrs) do
     user
     |> cast(attrs, [:class])
@@ -163,11 +144,11 @@ defmodule App.Accounts.User do
     end
   end
 
-  def cash_changeset(user, attrs) do
+  def points_changeset(user, attrs) do
     user
-    |> cast(attrs, [:cash])
+    |> cast(attrs, [:points])
     |> case do
-      %{changes: %{cash: _}} = changeset -> changeset
+      %{changes: %{points: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :last_score, "did not change")
     end
   end

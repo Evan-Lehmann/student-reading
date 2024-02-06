@@ -16,17 +16,19 @@ defmodule AppWeb.NewItem do
       </.teacher_sidebar>
 
       <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
-        <h2 class="h1 mb-2 mt-3 text-center">Manage Shop</h2>
-        <.link navigate={~p"/shop"} class="font-semibold text-blue-700">
-          <span aria-hidden="true">←</span> Go back
+        <h1 class="h1 mt-3 text-center">New Item</h1>
+        <.link navigate={~p"/shop"} class="font-semibold text-blue-700 hover:underline">
+          Go Back
         </.link>
 
-        <.simple_form for={@form} phx-submit="save_item">
-          <.header>New Item</.header>
-          <.input field={@form[:name]} type="text" required/>
-          <.input field={@form[:price]} type="number" required/>
-          <.button>Save</.button>
-        </.simple_form>
+        <div style={"width:354px;"}>
+          <.simple_form  for={@form} phx-submit="save_item">
+            <.input field={@form[:name]} label="Item Name" type="text" required/>
+
+            <.input field={@form[:price]} label="Points" type="number" min={250} max={100000} required/>
+            <.button class="w-full mt-3">Check</.button>
+          </.simple_form>
+        </div>
       </div>
     </main>
     """

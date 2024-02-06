@@ -13,30 +13,25 @@ defmodule AppWeb.JoinClass do
 
   def render(assigns) do
     ~H"""
-        <main class="d-flex flex-nowrap">
-          <.disabled_sidebar>
-          </.disabled_sidebar>
+    <main class="d-flex flex-nowrap">
+      <.disabled_sidebar>
+      </.disabled_sidebar>
 
-          <div class="d-flex col justify-content-center py-5">
-            <div class="flex-row">
-              <div class="flex-col">
-                <.header class="text-center">
-                  Welcome, <%= @current_user.username %>!
-                </.header>
-                <span>Please enter your class join code</span>
-                <.error :if={@check_errors==true}>
-                  Oops, something went wrong! Please check the errors below.
-                </.error>
-              </div>
-              <div class="flex-col">
-                <.simple_form for={@code_form} phx-submit="check" phx-change="validate">
-                  <.input field={@code_form[:code]} type="text" required/>
-                  <.button>Check</.button>
-                </.simple_form>
-              </div>
-            </div>
-          </div>
-        </main>
+      <div class="flex-grow-1 d-flex flex-column align-items-center p-4 overflow-scroll">
+        <h1 class="h1 mb-3 mt-3 text-center">Welcome, <%= @current_user.username %>!</h1>
+        <span class="lead text-muted">Enter Your Class Join Code</span>
+
+        <div style={"width:354px;"}>
+          <.simple_form for={@code_form} phx-submit="check" phx-change="validate">
+            <.error :if={@check_errors}>
+              Class not found! Please double check join code.
+            </.error>
+            <.input field={@code_form[:code]} type="text" required/>
+            <.button class="w-full mt-3">Check</.button>
+          </.simple_form>
+        </div>
+      </div>
+    </main>
     """
   end
 

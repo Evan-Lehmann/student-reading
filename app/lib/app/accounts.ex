@@ -7,10 +7,7 @@ defmodule App.Accounts do
   alias App.Repo
 
   alias App.Accounts.{User, UserToken}
-  alias App.Avatars.AvatarAccess
-  alias App.Avatars
   alias App.Quiz
-  alias App.Quiz.{Word, Level}
 
 
 
@@ -51,10 +48,10 @@ defmodule App.Accounts do
   end
 
   def list_students_in_class(class) do
-    (from u in User, where: u.type == "student" and u.class == ^class, order_by: [desc: u.cash])
+    (from u in User, where: u.type == "student" and u.class == ^class, order_by: [desc: u.points])
     |> Repo.all()
-    |> Repo.preload(:avatar)
   end
+
   @doc """
   Gets a user by email and password.
 
@@ -71,27 +68,6 @@ defmodule App.Accounts do
       when is_binary(username) and is_binary(password) do
     user = Repo.get_by(User, username: username)
     if User.valid_password?(user, password), do: user
-  end
-
-  def get_avatar_image_by_user(user) do
-    Ecto.assoc(user, :avatar)
-
-    Repo.one(from u in Ecto.assoc(user, :avatar),
-      select: u.image)
-  end
-
-  def get_level_by_user(user) do
-    Ecto.assoc(user, :level)
-
-    Repo.one(from u in Ecto.assoc(user, :level),
-      select: u.number)
-  end
-
-  def get_avatar_rarity_by_user(user) do
-    Ecto.assoc(user, :avatar)
-
-    Repo.one(from u in Ecto.assoc(user, :avatar),
-      select: u.rarity)
   end
 
 
@@ -128,44 +104,20 @@ defmodule App.Accounts do
   def register_user(attrs) do
     %{"type" => type, "username" => username} = attrs
 
-    result = %User{}
-    |> User.registration_changeset(attrs)
-    |> Repo.insert()
-
     if type == "student" do
-      Enum.each(1..2, fn(x) ->
-        user_id = get_user_by_username(username).id
-        %AvatarAccess{}
-        |> AvatarAccess.changeset(%{"avatar_id" => Integer.to_string(x), "user_id" => Integer.to_string(user_id), "is_unlocked" => "true"})
-        |> Repo.insert()
-      end)
-
-      Enum.each(3..4, fn(x) ->
-        user_id = get_user_by_username(username).id
-        %AvatarAccess{}
-        |> AvatarAccess.changeset(%{"avatar_id" => Integer.to_string(x), "user_id" => Integer.to_string(user_id), "is_unlocked" => "false"})
-        |> Repo.insert()
-      end)
-    end
-    result
-  end
-
-  def unlock_avatar(user, locked_avatars_ids) do
-    if user.cash >= 500 && length(locked_avatars_ids) > 0 do
-
-      rand = Enum.random(Enum.to_list(locked_avatars_ids))
-      avatar_access = Avatars.get_avatar_access_by_avatar_id(user.id, rand)
-      updated_avatars_access = Avatars.update_avatar_access(avatar_access, %{"is_unlocked" => "true"})
-
-      updated_user = user
-      |> User.cash_changeset(%{cash: (user.cash-500)})
-      |> Repo.update()
-
-      {updated_user, updated_avatars_access}
+      new_attrs = Map.put_new(attrs, "points", 500)
+      result = %User{}
+      |> User.registration_changeset(new_attrs)
+      |> Repo.insert()
+      result
     else
-      {:error, :error}
+      result = %User{}
+      |> User.registration_changeset(attrs)
+      |> Repo.insert()
+      result
     end
   end
+
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
@@ -193,13 +145,6 @@ defmodule App.Accounts do
   """
   def change_user_password(user, attrs \\ %{}) do
     User.password_changeset(user, attrs, hash_password: false)
-  end
-
-  @doc """
-
-  """
-  def change_user_avatar(user, attrs \\ %{}) do
-    User.avatar_id_changeset(user, attrs)
   end
 
 
@@ -235,13 +180,6 @@ defmodule App.Accounts do
     end
   end
 
-  @doc """
-  """
-  def update_user(%User{} = user, attrs) do
-    user
-    |> User.avatar_id_changeset(attrs)
-    |> Repo.update()
-  end
 
   def get_teacher_name_by_join_code(join_code) do
     Repo.one(from u in User,
@@ -249,15 +187,22 @@ defmodule App.Accounts do
       select: u.username)
   end
 
+  def get_teacher_id_by_name(class) do
+    Repo.one(from u in User,
+      where: u.username == ^class,
+      select: u.id)
+  end
+
+
   def update_user_class(%User{} = user, attrs) do
     user
     |> User.class_changeset(attrs)
     |> Repo.update()
   end
 
-  def update_user_cash(%User{} = user, attrs) do
+  def update_user_points(%User{} = user, attrs) do
     user
-    |> User.cash_changeset(attrs)
+    |> User.points_changeset(attrs)
     |> Repo.update()
   end
 

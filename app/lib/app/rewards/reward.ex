@@ -20,7 +20,7 @@ defmodule App.Rewards.Reward do
     reward
     |> cast(attrs, [:name, :price, :image, :user_id])
     |> validate_required([:name, :price, :image, :user_id])
-    |> validate_number(:price, greater_than: 0)
+    |> validate_number(:price, greater_than: 249, less_than: 100001)
     |> validate_length(:name, min: 2, max: 26)
     |> validate_image
     |> validate_user
@@ -29,7 +29,7 @@ defmodule App.Rewards.Reward do
 
   defp validate_image(changeset) do
     changeset
-    |> validate_inclusion(:image, ["/images/cup.png", "/images/chips.png", "/images/popcorn.png"])
+    |> validate_inclusion(:image, ["/images/balloons.png", "/images/basketball.png", "/images/candy.png", "/images/check.png", "/images/chips.png", "/images/cup.png", "/images/football.png", "/images/fruit.png", "/images/game.png", "/images/hundred.png", "/images/ipad.png", "/images/juice.png", "/images/lolipop.png", "/images/paw.png", "/images/pizza.png", "/images/popcorn.png", "/images/present.png", "/images/soccer.png", "/images/ticket.png"])
   end
 
   defp validate_user(changeset) do
