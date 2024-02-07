@@ -3,7 +3,7 @@ defmodule App.Repo.Migrations.CreateMcqsAnswers do
 
   def change do
     create table(:mcqs_answers) do
-      add :content, :string
+      add :word, :string
 
       timestamps()
     end

@@ -331,6 +331,29 @@ defmodule App.Quiz do
 
   alias App.Quiz.Mcq
 
+  def get_mcq_by_difficulty_and_last_word(difficulty, last_word) do
+    mcqs= from(m in Mcq, where: m.difficulty == ^difficulty and m.word != ^last_word)
+    |> Repo.all()
+
+    mcq = Enum.random(mcqs)
+    mcq.word
+  end
+
+  def get_inc_words(correct_word) do
+    inc_words = from(m in McqAnswer, where: m.word != ^correct_word, select: m.word)
+    |> Repo.all()
+
+    Enum.take_random(inc_words, 3)
+  end
+
+  def get_mcq_by_difficulty(difficulty) do
+    mcqs= from(m in Mcq, where: m.difficulty == ^difficulty)
+    |> Repo.all()
+
+    mcq = Enum.random(mcqs)
+    mcq.word
+  end
+
   @doc """
   Returns the list of mcqs.
 

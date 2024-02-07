@@ -67,6 +67,16 @@ defmodule AppWeb.Router do
   end
 
   scope "/", AppWeb do
+    pipe_through [:browser, :require_student]
+
+    live_session :require_student,
+      on_mount: [{AppWeb.UserAuth, :require_student}] do
+      live "/play", StartPlay
+      live "/play/easy", PlayEasy
+    end
+  end
+
+  scope "/", AppWeb do
     pipe_through [:browser, :require_teacher_access]
 
     live_session :require_teacher_access,

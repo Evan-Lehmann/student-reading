@@ -3,7 +3,7 @@ defmodule App.Quiz.McqAnswer do
   import Ecto.Changeset
 
   schema "mcqs_answers" do
-    field :content, :string
+    field :word, :string
 
     timestamps()
   end
@@ -11,7 +11,7 @@ defmodule App.Quiz.McqAnswer do
   @doc false
   def changeset(mcq_answer, attrs) do
     mcq_answer
-    |> cast(attrs, [:content])
-    |> validate_required([:content])
+    |> cast(attrs, [:word])
+    |> validate_required([:word])
   end
 end

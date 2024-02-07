@@ -3,10 +3,12 @@ defmodule App.Quiz.Mcq do
   import Ecto.Changeset
 
   schema "mcqs" do
-    field :content, :string
+    field :word, :string
     field :image, :string
     field :audio, :string
     field :hint, :string
+    field :sentence, :string
+    field :difficulty, :string
 
     timestamps()
   end
@@ -14,7 +16,13 @@ defmodule App.Quiz.Mcq do
   @doc false
   def changeset(mcq, attrs) do
     mcq
-    |> cast(attrs, [:content, :image])
-    |> validate_required([:content])
+    |> cast(attrs, [:word, :image, :audio, :hint, :sentence, :difficulty])
+    |> validate_required([:word])
+    |> validate_difficulty
+  end
+
+  defp validate_difficulty(changeset) do
+    changeset
+    |> validate_inclusion(:difficulty, ["easy", "medium", "hard"])
   end
 end

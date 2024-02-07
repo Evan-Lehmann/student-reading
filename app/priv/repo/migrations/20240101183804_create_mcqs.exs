@@ -3,10 +3,12 @@ defmodule App.Repo.Migrations.CreateMcqs do
 
   def change do
     create table(:mcqs) do
-      add :content, :string
+      add :word, :string
       add :image, :string
       add :audio, :string
       add :hint, :string
+      add :sentence, :string
+      add :difficulty, :string
 
       timestamps()
     end
