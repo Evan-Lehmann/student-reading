@@ -48,6 +48,8 @@ defmodule App.Accounts.User do
     |> validate_username(opts)
     |> validate_password(opts)
     |> validate_type(opts)
+    |> unsafe_validate_unique(:join_code, App.Repo)
+    |> unique_constraint(:join_code)
   end
 
   defp validate_username(changeset, opts) do
