@@ -9,7 +9,7 @@ defmodule AppWeb.NewItem do
     curr_image = "/images/present.png"
     other_images = Rewards.get_other_images(curr_image)
     all_images = [curr_image | other_images]
-    {:ok, socket |> assign(check_errors: false, curr_image: curr_image, all_images: all_images, name: nil, price: nil) |> assign_form(changeset)}
+    {:ok, socket |> assign(check_errors: false, curr_image: curr_image, all_images: all_images, reward_params: nil) |> assign_form(changeset)}
   end
 
   def render(assigns) do
@@ -56,7 +56,7 @@ defmodule AppWeb.NewItem do
 
 
         <div style={"width:354px;"}>
-          <.simple_form  for={@form} phx-submit="save_item">
+          <.simple_form  for={@form} phx-submit="save_item" phx-change="validate">
             <.input field={@form[:name]} label="Item Name" type="text" required/>
             <.input field={@form[:price]} label="Points" type="number" min={250} max={100000} required/>
             <.label>Image</.label>
@@ -76,8 +76,13 @@ defmodule AppWeb.NewItem do
     """
   end
 
+  def handle_event("validate", %{"reward" => reward_params}, socket) do
+    {:noreply, assign(socket, reward_params: reward_params)}
+  end
+
   def handle_event("change", %{"new_image" => new_image}, socket) do
-    {:noreply, assign(socket, curr_image: new_image)}
+    changeset = Rewards.change_reward(%Reward{}, socket.assigns.reward_params)
+    {:noreply, assign(socket, curr_image: new_image) |> assign_form(changeset)}
   end
 
   def handle_event("save_item", %{"reward" => reward_params}, socket) do
