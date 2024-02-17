@@ -336,11 +336,18 @@ defmodule App.Quiz do
     |> Repo.all()
 
     mcq = Enum.random(mcqs)
-    mcq.word
+    %{"word" => mcq.word, "hint" => mcq.hint}
   end
 
   def get_inc_words(correct_word) do
     inc_words = from(m in McqAnswer, where: m.word != ^correct_word, select: m.word)
+    |> Repo.all()
+
+    Enum.take_random(inc_words, 3)
+  end
+
+  def get_inc_words(correct_word, hint) do
+    inc_words = from(m in McqAnswer, where: m.word != ^correct_word and m.hint != ^hint, select: m.word)
     |> Repo.all()
 
     Enum.take_random(inc_words, 3)
@@ -351,7 +358,7 @@ defmodule App.Quiz do
     |> Repo.all()
 
     mcq = Enum.random(mcqs)
-    mcq.word
+    %{"word" => mcq.word, "hint" => mcq.hint}
   end
 
   @doc """

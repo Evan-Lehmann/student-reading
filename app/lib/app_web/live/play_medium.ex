@@ -1,4 +1,4 @@
-defmodule AppWeb.PlayEasy do
+defmodule AppWeb.PlayMedium do
   use AppWeb, :live_view
   import AppWeb.CustomComponents
   alias App.Quiz
@@ -7,17 +7,10 @@ defmodule AppWeb.PlayEasy do
   def mount(_params, _session, socket) do
     curr_points = socket.assigns.current_user.points
     if connected?(socket) do
-      %{"word" => mcq_word, "hint" => mcq_hint} = Quiz.get_mcq_by_difficulty("easy")
-
-      if is_nil(mcq_hint) do
-        inc_words = Quiz.get_inc_words(mcq_word)
-        all_words = Enum.shuffle([mcq_word | inc_words])
-        {:ok, assign(socket, word: mcq_word, all_words: all_words, view: nil, result: nil, selected: nil, points: curr_points)}
-      else
-        inc_words = Quiz.get_inc_words(mcq_word, mcq_hint)
-        all_words = Enum.shuffle([mcq_word | inc_words])
-        {:ok, assign(socket, word: mcq_word, all_words: all_words, view: nil, result: nil, selected: nil, points: curr_points)}
-      end
+      mcq_word = Quiz.get_mcq_by_difficulty("easy")
+      inc_words = Quiz.get_inc_words(mcq_word)
+      all_words = Enum.shuffle([mcq_word | inc_words])
+      {:ok, assign(socket, word: mcq_word, all_words: all_words, view: nil, result: nil, selected: nil, points: curr_points)}
     else
       {:ok, assign(socket, word: nil, all_words: nil, view: nil, result: nil, selected: nil, points: curr_points)}
     end
@@ -55,7 +48,7 @@ defmodule AppWeb.PlayEasy do
           }
         </script>
 
-        <button :if={is_nil(@word) == false} onclick={"playSound('#{String.downcase(String.replace(@word, "'", ""))}')"} class="btn btn-regular d-flex align-items-center justify-content-center mb-2 w-full" style={"max-width:500px;min-width:250px;margin-top:25px;"}>
+        <button :if={is_nil(@word) == false} onclick={"playSound('#{@word}')"} class="btn btn-regular d-flex align-items-center justify-content-center mb-2 w-full" style={"max-width:500px;min-width:250px;margin-top:25px;"}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-volume-up-fill m-0 p-0 d-inline-block " viewBox="0 0 16 16">
             <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z"></path>
             <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z"></path>
@@ -83,14 +76,14 @@ defmodule AppWeb.PlayEasy do
                         <button disabled class="btn btn-success w-full">
                           <%= answer %>
                         </button>
-                        <span class="font-bold text-emerald-600">+10</span>
+                        <span class="font-bold text-emerald-600">+25</span>
                       </div>
                     <% else %>
                       <div class="col">
                         <button disabled class="btn btn-danger w-full">
                           <%= answer %>
                         </button>
-                        <span class="font-bold text-red-600">-10</span>
+                        <span class="font-bold text-red-600">-25</span>
                       </div>
                     <% end %>
                   <% else %>
@@ -117,28 +110,22 @@ defmodule AppWeb.PlayEasy do
     result = nil
     if answer == socket.assigns.word do
       result = true
-      points = socket.assigns.points + 10
+      points = socket.assigns.points + 25
       Accounts.update_user_points(socket.assigns.current_user, %{"points" => Integer.to_string(points)})
       {:noreply, assign(socket, view: "checked", result: result, points: points, selected: answer)}
     else
       result = false
-      points = socket.assigns.points - 10
+      points = socket.assigns.points - 25
       Accounts.update_user_points(socket.assigns.current_user, %{"points" => Integer.to_string(points)})
       {:noreply, assign(socket, view: "checked", result: result, points: points, selected: answer)}
     end
   end
 
   def handle_event("next", _params, socket) do
-    %{"word" => mcq_word, "hint" => mcq_hint} = Quiz.get_mcq_by_difficulty_and_last_word("easy", socket.assigns.word)
+    next_word = Quiz.get_mcq_by_difficulty_and_last_word("easy", socket.assigns.word)
+    inc_words = Quiz.get_inc_words(next_word)
+    all_words =  Enum.shuffle([next_word | inc_words])
 
-    if is_nil(mcq_hint) do
-      inc_words = Quiz.get_inc_words(mcq_word)
-      all_words = Enum.shuffle([mcq_word | inc_words])
-      {:noreply, assign(socket, word: mcq_word, inc_words: inc_words, all_words: all_words, view: nil, selected: nil, result: nil)}
-    else
-      inc_words = Quiz.get_inc_words(mcq_word, mcq_hint)
-      all_words = Enum.shuffle([mcq_word | inc_words])
-      {:noreply, assign(socket, word: mcq_word, inc_words: inc_words, all_words: all_words, view: nil, selected: nil, result: nil)}
-    end
+    {:noreply, assign(socket, word: next_word, inc_words: inc_words, all_words: all_words, view: nil, selected: nil, result: nil)}
   end
 end

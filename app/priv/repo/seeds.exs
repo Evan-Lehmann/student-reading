@@ -13,220 +13,146 @@
 alias App.Repo
 alias App.Quiz.{Mcq, McqAnswer}
 
+#non_homophones = ["a", "after", "all", "am", "an", "and", "are", "as", "at", "away", "back", "be", "because", "been", "before", "big", "but", "by", "came", "can", "come", "could", "day", "did", "do", "for", "from", "get", "go", "got", "had", "has", "have", "he", "her", "here", "him", "his", "how", "I", "I'm", "if", "in", "into", "is", "it", "just", "like", "little", "look", "make", "man", "me", "mother", "my", "no", "not", "now", "of", "on", "one", "or", "our", "out", "over", "play", "put", "said", "saw", "see", "she", "so", "that", "the", "them", "they", "this", "up", "us", "very", "was", "we", "went", "were", "what", "when", "where", "who", "will", "with", "you", "your"]
+
+#Enum.each(non_homophones, fn x -> %Mcq{word: x,audio: "/audio/#{x}.mp3", difficulty: "easy"} |> Repo.insert!() && %McqAnswer{word: x} |> Repo.insert!() end)
 
 %Mcq{
-  word: "a",
-  audio: "/audio/a.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "after",
-  audio: "/audio/after.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-
-%Mcq{
-  word: "all",
-  audio: "/audio/all.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "am",
-  audio: "/audio/am.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "an",
-  audio: "/audio/an.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "and",
-  audio: "/audio/and.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "are",
-  audio: "/audio/are.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "as",
-  audio: "/audio/as.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "at",
-  audio: "/audio/at.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "away",
-  audio: "/audio/away.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "back",
-  audio: "/audio/back.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "be",
-  audio: "/audio/be.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "because",
-  audio: "/audio/because.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "been",
-  audio: "/audio/been.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "before",
-  audio: "/audio/before.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "big",
-  audio: "/audio/big.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "but",
-  audio: "/audio/but.mp3",
-  difficulty: "easy"
-}
-|> Repo.insert!()
-
-%Mcq{
-  word: "by",
-  audio: "/audio/by.mp3",
-  difficulty: "easy"
+  word: "don't",
+  audio: "/audio/dont.mp3",
+  difficulty: "easy",
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "a"
+  word: "don't"
+}
+|> Repo.insert!()
+
+%Mcq{
+  word: "I'm",
+  audio: "/audio/im.mp3",
+  difficulty: "easy",
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "after"
+  word: "I'm"
+}
+|> Repo.insert!()
+
+
+%Mcq{
+  word: "I",
+  audio: "/audio/i.mp3",
+  difficulty: "easy",
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "all"
+  word: "I"
+}
+|> Repo.insert!()
+
+%Mcq{
+  word: "their",
+  audio: "/audio/their.mp3",
+  difficulty: "easy",
+  hint: "their"
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "am"
+  word: "their",
+  hint: "their"
+}
+|> Repo.insert!()
+
+
+%Mcq{
+  word: "there",
+  audio: "/audio/there.mp3",
+  difficulty: "easy",
+  hint: "their"
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "an"
+  word: "there",
+  hint: "their"
+}
+|> Repo.insert!()
+
+
+%Mcq{
+  word: "than",
+  audio: "/audio/than.mp3",
+  difficulty: "easy",
+  hint: "than"
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "and"
+  word: "than",
+  hint: "than"
+}
+|> Repo.insert!()
+
+
+%Mcq{
+  word: "then",
+  audio: "/audio/then.mp3",
+  difficulty: "easy",
+  hint: "than"
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "are"
+  word: "then",
+  hint: "than"
+}
+|> Repo.insert!()
+
+
+%Mcq{
+  word: "to",
+  audio: "/audio/to.mp3",
+  difficulty: "easy",
+  hint: "to"
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "as"
+  word: "to",
+  hint: "to"
+}
+|> Repo.insert!()
+
+
+%Mcq{
+  word: "too",
+  audio: "/audio/too.mp3",
+  difficulty: "easy",
+  hint: "to"
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "at"
+  word: "too",
+  hint: "to"
+}
+|> Repo.insert!()
+
+%Mcq{
+  word: "two",
+  audio: "/audio/two.mp3",
+  difficulty: "easy",
+  hint: "to"
 }
 |> Repo.insert!()
 
 %McqAnswer{
-  word: "away"
-}
-|> Repo.insert!()
-
-%McqAnswer{
-  word: "back"
-}
-|> Repo.insert!()
-
-%McqAnswer{
-  word: "be"
-}
-|> Repo.insert!()
-
-%McqAnswer{
-  word: "because"
-}
-|> Repo.insert!()
-
-%McqAnswer{
-  word: "been"
-}
-|> Repo.insert!()
-
-%McqAnswer{
-  word: "before"
-}
-|> Repo.insert!()
-
-%McqAnswer{
-  word: "big"
-}
-|> Repo.insert!()
-
-%McqAnswer{
-  word: "but"
-}
-|> Repo.insert!()
-
-%McqAnswer{
-  word: "by"
+  word: "two",
+  hint: "to"
 }
 |> Repo.insert!()

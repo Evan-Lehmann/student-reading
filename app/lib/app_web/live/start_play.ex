@@ -1,6 +1,5 @@
 defmodule AppWeb.StartPlay do
   use AppWeb, :live_view
-  alias App.Accounts
   import AppWeb.CustomComponents
 
 
@@ -37,7 +36,7 @@ defmodule AppWeb.StartPlay do
           </div>
           <div class="card-body">
             <h5 class="card-title">Vocab + Sentences 🔥</h5>
-            <a href="#" class="btn btn-outline-dark">Start</a>
+            <a  href={~p"/play/medium"} class="btn btn-outline-dark">Start</a>
           </div>
         </div>
 

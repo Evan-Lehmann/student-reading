@@ -4,6 +4,7 @@ defmodule App.Quiz.McqAnswer do
 
   schema "mcqs_answers" do
     field :word, :string
+    field :hint, :string
 
     timestamps()
   end
@@ -11,7 +12,7 @@ defmodule App.Quiz.McqAnswer do
   @doc false
   def changeset(mcq_answer, attrs) do
     mcq_answer
-    |> cast(attrs, [:word])
+    |> cast(attrs, [:word, :hint])
     |> validate_required([:word])
   end
 end

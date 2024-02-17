@@ -73,6 +73,7 @@ defmodule AppWeb.Router do
       on_mount: [{AppWeb.UserAuth, :require_student}] do
       live "/play", StartPlay
       live "/play/easy", PlayEasy
+      live "/play/medium", PlayMedium
     end
   end
 
