@@ -22,7 +22,7 @@ defmodule AppWeb.StartPlay do
             </span>
           </div>
           <div class="card-body">
-            <h5 class="card-title">Vocab</h5>
+            <h5 class="card-title">Multiple Choice</h5>
             <a href={~p"/play/easy"} class="btn btn-outline-dark">Start</a>
           </div>
         </div>
@@ -35,7 +35,7 @@ defmodule AppWeb.StartPlay do
             </span>
           </div>
           <div class="card-body">
-            <h5 class="card-title">Vocab + Sentences 🔥</h5>
+            <h5 class="card-title">Typing 🔥</h5>
             <a  href={~p"/play/medium"} class="btn btn-outline-dark">Start</a>
           </div>
         </div>

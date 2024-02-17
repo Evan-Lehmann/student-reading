@@ -361,6 +361,18 @@ defmodule App.Quiz do
     %{"word" => mcq.word, "hint" => mcq.hint}
   end
 
+  def get_hint_by_word(word) do
+    selected_hint = Repo.one(from u in McqAnswer,
+      where: u.word == ^word,
+      select: u.hint)
+
+    if is_nil(selected_hint) do
+        word
+    else
+        selected_hint
+    end
+  end
+
   @doc """
   Returns the list of mcqs.
 

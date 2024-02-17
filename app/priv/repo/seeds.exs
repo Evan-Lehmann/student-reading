@@ -13,9 +13,9 @@
 alias App.Repo
 alias App.Quiz.{Mcq, McqAnswer}
 
-#non_homophones = ["a", "after", "all", "am", "an", "and", "are", "as", "at", "away", "back", "be", "because", "been", "before", "big", "but", "by", "came", "can", "come", "could", "day", "did", "do", "for", "from", "get", "go", "got", "had", "has", "have", "he", "her", "here", "him", "his", "how", "I", "I'm", "if", "in", "into", "is", "it", "just", "like", "little", "look", "make", "man", "me", "mother", "my", "no", "not", "now", "of", "on", "one", "or", "our", "out", "over", "play", "put", "said", "saw", "see", "she", "so", "that", "the", "them", "they", "this", "up", "us", "very", "was", "we", "went", "were", "what", "when", "where", "who", "will", "with", "you", "your"]
+non_homophones = ["a", "after", "all", "am", "an", "and", "are", "as", "at", "away", "back", "be", "because", "been", "before", "big", "but", "by", "came", "can", "come", "could", "day", "did", "do", "for", "from", "get", "go", "got", "had", "has", "have", "he", "her", "here", "him", "his", "how", "if", "in", "into", "is", "it", "just", "like", "little", "look", "make", "man", "me", "mother", "my", "no", "not", "now", "of", "on", "one", "or", "our", "out", "over", "play", "put", "said", "saw", "see", "she", "so", "that", "the", "them", "they", "this", "up", "us", "very", "was", "we", "went", "were", "what", "when", "where", "who", "will", "with", "you", "your"]
 
-#Enum.each(non_homophones, fn x -> %Mcq{word: x,audio: "/audio/#{x}.mp3", difficulty: "easy"} |> Repo.insert!() && %McqAnswer{word: x} |> Repo.insert!() end)
+Enum.each(non_homophones, fn x -> %Mcq{word: x,audio: "/audio/#{x}.mp3", difficulty: "easy"} |> Repo.insert!() && %McqAnswer{word: x} |> Repo.insert!() end)
 
 %Mcq{
   word: "don't",

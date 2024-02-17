@@ -6,13 +6,15 @@ defmodule AppWeb.PlayMedium do
 
   def mount(_params, _session, socket) do
     curr_points = socket.assigns.current_user.points
+    form = to_form(%{}, as: "user")
     if connected?(socket) do
-      mcq_word = Quiz.get_mcq_by_difficulty("easy")
-      inc_words = Quiz.get_inc_words(mcq_word)
-      all_words = Enum.shuffle([mcq_word | inc_words])
-      {:ok, assign(socket, word: mcq_word, all_words: all_words, view: nil, result: nil, selected: nil, points: curr_points)}
+      %{"word" => mcq_word, "hint" => mcq_hint} = Quiz.get_mcq_by_difficulty("easy")
+      if is_nil(mcq_hint) == false do
+        mcq_word = mcq_hint
+      end
+      {:ok, assign(socket, word: mcq_word, form: form, view: nil, result: nil, selected: nil, points: curr_points)}
     else
-      {:ok, assign(socket, word: nil, all_words: nil, view: nil, result: nil, selected: nil, points: curr_points)}
+      {:ok, assign(socket, word: nil, view: nil, form: form, result: nil, selected: nil, points: curr_points)}
     end
   end
 
@@ -48,7 +50,7 @@ defmodule AppWeb.PlayMedium do
           }
         </script>
 
-        <button :if={is_nil(@word) == false} onclick={"playSound('#{@word}')"} class="btn btn-regular d-flex align-items-center justify-content-center mb-2 w-full" style={"max-width:500px;min-width:250px;margin-top:25px;"}>
+        <button :if={is_nil(@word) == false} onclick={"playSound('#{String.downcase(String.replace(@word, "'", ""))}')"} class="btn btn-regular d-flex align-items-center justify-content-center mb-2 w-full" style={"max-width:500px;min-width:250px;margin-top:25px;"}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-volume-up-fill m-0 p-0 d-inline-block " viewBox="0 0 16 16">
             <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z"></path>
             <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z"></path>
@@ -59,56 +61,36 @@ defmodule AppWeb.PlayMedium do
 
 
 
-        <div class="container px-0" style={"max-width:500px"}>
-          <div class="row">
-            <%= if is_nil(@word) == false do %>
-              <%= for answer <- @all_words do %>
-                <%= if @view == nil do %>
-                  <div class="col">
-                    <button class="btn btn-outline-dark w-full" phx-click="check" phx-value-answer={answer}>
-                      <%= answer %>
-                    </button>
-                  </div>
-                <% else %>
-                  <%= if answer == @selected do %>
-                    <%= if @result == true do %>
-                      <div class="col">
-                        <button disabled class="btn btn-success w-full">
-                          <%= answer %>
-                        </button>
-                        <span class="font-bold text-emerald-600">+25</span>
-                      </div>
-                    <% else %>
-                      <div class="col">
-                        <button disabled class="btn btn-danger w-full">
-                          <%= answer %>
-                        </button>
-                        <span class="font-bold text-red-600">-25</span>
-                      </div>
-                    <% end %>
-                  <% else %>
-                    <div class="col">
-                      <button class="btn btn-outline-dark w-full" disabled>
-                        <%= answer %>
-                      </button>
-                    </div>
-                  <% end %>
-                <% end %>
-              <% end %>
-            <% end %>
-          </div>
+        <div :if={is_nil(@word) == false && is_nil(@view) == true} class="container px-0 mt-2" style={"max-width:400px;"}>
+          <.form for={@form} phx-submit="check">
+            <.input field={@form[:word]} type="text" required />
+            <.button class="w-full mt-3">Check</.button>
+          </.form>
         </div>
 
+        <div :if={@view == "checked"} class="container px-0 mt-2" style={"max-width:400px"}>
+          <%= if @result == true do %>
+            <.input field={@form[:word]} type="text" value={@selected} readonly style={"color:rgb(5 150 105);font-weight: bolder;"}/>
+            <span class="font-bold text-emerald-600">+25</span>
+          <% else %>
+            <.input field={@form[:word]} type="text" value={@selected} readonly style={"color:rgb(220 38 38);font-weight: bolder;"}/>
+            <span class="font-bold text-red-600">-25</span>
+          <% end %>
+        </div>
+
+        <p :if={@view == "checked" && @result == false} class="font-bold">Correct Word: <%= @word %></p>
         <button class="mt-2 lead" :if={@view == "checked"} phx-click="next"><b>Next →</b></button>
+
 
       </div>
     </main>
     """
   end
 
-  def handle_event("check", %{"answer" => answer}, socket) do
+  def handle_event("check", %{"user" => %{"word" => answer}}, socket) do
     result = nil
-    if answer == socket.assigns.word do
+
+    if String.downcase(Quiz.get_hint_by_word(String.downcase(answer))) == String.downcase(Quiz.get_hint_by_word(String.downcase(socket.assigns.word))) do
       result = true
       points = socket.assigns.points + 25
       Accounts.update_user_points(socket.assigns.current_user, %{"points" => Integer.to_string(points)})
@@ -122,10 +104,8 @@ defmodule AppWeb.PlayMedium do
   end
 
   def handle_event("next", _params, socket) do
-    next_word = Quiz.get_mcq_by_difficulty_and_last_word("easy", socket.assigns.word)
-    inc_words = Quiz.get_inc_words(next_word)
-    all_words =  Enum.shuffle([next_word | inc_words])
+    %{"word" => next_word, "hint" => _} = Quiz.get_mcq_by_difficulty_and_last_word("easy", socket.assigns.word)
 
-    {:noreply, assign(socket, word: next_word, inc_words: inc_words, all_words: all_words, view: nil, selected: nil, result: nil)}
+    {:noreply, assign(socket, word: next_word, view: nil, selected: nil, result: nil)}
   end
 end

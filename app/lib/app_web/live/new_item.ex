@@ -9,7 +9,7 @@ defmodule AppWeb.NewItem do
     curr_image = "/images/present.png"
     other_images = Rewards.get_other_images(curr_image)
     all_images = [curr_image | other_images]
-    {:ok, socket |> assign(check_errors: false, curr_image: curr_image, all_images: all_images, reward_params: nil) |> assign_form(changeset)}
+    {:ok, socket |> assign(check_errors: false, curr_image: curr_image, all_images: all_images, reward_params: %{}) |> assign_form(changeset)}
   end
 
   def render(assigns) do

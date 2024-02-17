@@ -5,11 +5,9 @@
       <div class="container col-xxl-8 px-4 py-5">
         <div class="row flex-lg-row align-items-center g-5 py-5">
           <div class="col-lg-6">
-            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Placeholder Title</h1>
-            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Sight Word Practice!</h1>
             <div>
               <a type="button" class="btn btn-primary btn-lg px-4 me-md-2" href={~p"/users/register"}>Register</a>
-              <a type="button" class="btn btn-outline-secondary btn-lg px-4" disabled="disabled">Learn more</a>
             </div>
           </div>
           <div class="col-10 col-sm-8 col-lg-6">
@@ -59,38 +57,7 @@
           <h1 class="h1 mb-3 mt-3 text-center">Manage Class</h1>
 
           <div :if={length(@students) == 0}>
-            <p class="lead mb-2 text-muted">Your students will appear here when they join</p>
-            <button data-bs-toggle="modal" data-bs-target="#homeModal" class="btn btn-outline-secondary">How Do My Students Join?</button>
-          </div>
-
-          <!-- homeModal -->
-          <div class="modal fade" id="homeModal" tabindex="-1" aria-labelledby="homeModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="homeModalLabel">Joining a Class</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <ul class="space-y-6">
-                    <li>
-                      1. Student visits
-                      <.link navigate={~p"/"} class="font-semibold text-blue-700 hover:underline">localhost:4000</.link> on their device
-                    </li>
-                    <li>  
-                      2. Student registers, selecting student account type
-                    </li>
-                    <li>  
-                      3. Student will be prompted to enter teacher's join code
-                    </li>
-                    <li class="text-muted">
-                      When a teacher is logged in, they may view their own join code (and other account info)
-                      at <.link navigate={~p"/settings"} class="font-semibold text-blue-700 hover:underline">settings</.link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <p class="lead mb-2 text-muted">Your students will appear here when they join.</p>
           </div>
 
           <!-- Table -->
