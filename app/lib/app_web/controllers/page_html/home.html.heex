@@ -31,7 +31,7 @@
           <.bootstrap_table id="students" rows={@students}>
             <:col :let={student} label="Username">
               <span :if={@current_user.username == student.username}>
-                <b><%= student.username %></b>
+                <b><%= student.username %></b> (you)
               </span>
               <span :if={@current_user.username != student.username}>
                 <%= student.username %>

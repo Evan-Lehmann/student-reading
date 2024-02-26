@@ -45,7 +45,26 @@ defmodule App.Rewards do
 
   def get_other_images(curr_image) do
     images = ["/images/balloons.png", "/images/basketball.png", "/images/candy.png", "/images/check.png", "/images/chips.png", "/images/cup.png", "/images/football.png", "/images/fruit.png", "/images/game.png", "/images/hundred.png", "/images/ipad.png", "/images/juice.png", "/images/lolipop.png", "/images/paw.png", "/images/pizza.png", "/images/popcorn.png", "/images/present.png", "/images/soccer.png", "/images/ticket.png"]
-    Enum.filter(images, fn x -> x != curr_image end)
+    Enum.filter(images, fn x -> x !=
+    curr_image end)
+  end
+
+  def get_price_by_id(id) do
+    Repo.one(from u in Reward,
+      where: u.id == ^id,
+      select: u.price)
+  end
+
+  def get_name_by_id(id) do
+    Repo.one(from u in Reward,
+      where: u.id == ^id,
+      select: u.name)
+  end
+
+  def get_image_by_id(id) do
+    Repo.one(from u in Reward,
+      where: u.id == ^id,
+      select: u.image)
   end
 
 

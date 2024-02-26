@@ -105,7 +105,7 @@ defmodule App.Accounts do
     %{"type" => type, "username" => username} = attrs
 
     if type == "student" do
-      new_attrs = Map.put_new(attrs, "points", 500)
+      new_attrs = Map.put_new(attrs, "points", 100)
       result = %User{}
       |> User.registration_changeset(new_attrs)
       |> Repo.insert()
